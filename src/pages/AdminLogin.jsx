@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { SectionHeader } from "../components/uiCommon";
+import { SectionHeader } from "../components/UiCommon";
 import { API } from "../api";
 import { 
   Shield, 
