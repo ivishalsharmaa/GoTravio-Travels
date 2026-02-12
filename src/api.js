@@ -1,93 +1,44 @@
-
-//client/src/api.js
+// client/src/api.js
 import axios from "axios";
 
-// Try different ports in case one is busy
-const PORTS_TO_TRY = [5000, 5001, 5002, 5003, 5004];
-let currentBaseURL = "";
+// ✅ YEH LO TUMHARA REAL BACKEND URL
+const BACKEND_URL = "https://gotravio-backend.onrender.com";  // 👈 YEH CHANGE KAR DIYA
 
-// Function to test backend connection
-const testBackendConnection = async (port) => {
-  try {
-    const testURL = `http://localhost:${port}/api/test`;
-    const response = await axios.get(testURL, { timeout: 2000 });
-    return response.data.success ? port : null;
-  } catch (error) {
-    return null;
-  }
-};
-
-// Find working backend port
-const findWorkingBackend = async () => {
-  console.log("🔍 Looking for backend server...");
-  
-  for (const port of PORTS_TO_TRY) {
-    console.log(`Trying port ${port}...`);
-    const result = await testBackendConnection(port);
-    if (result) {
-      console.log(`✅ Found backend on port ${port}`);
-      return `http://localhost:${port}/api`;
-    }
-  }
-  
-  console.warn("⚠️ Backend not found on any port. Using default port 5000");
-  return "http://localhost:5000/api";
-};
-
-// Create API instance
 const API = axios.create({
-  baseURL: "", // Will be set dynamically
+  baseURL: `${BACKEND_URL}/api`,  // https://gotravio-backend.onrender.com/api
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Initialize baseURL
-findWorkingBackend().then(url => {
-  currentBaseURL = url;
-  API.defaults.baseURL = url;
-  console.log(`✅ API baseURL set to: ${url}`);
-}).catch(err => {
-  console.error("❌ Failed to find backend:", err);
-  // Fallback to default
-  API.defaults.baseURL = "http://localhost:5000/api";
-});
-
-// Add interceptors for debugging
+// Request interceptor for logging
 API.interceptors.request.use(
   (config) => {
-    // Use current baseURL if not set
-    if (!config.baseURL && currentBaseURL) {
-      config.baseURL = currentBaseURL;
-    }
     console.log(`📤 ${config.method.toUpperCase()} ${config.baseURL}${config.url}`);
-    if (config.data) {
-      console.log("Request data:", config.data);
-    }
     return config;
   },
   (error) => {
-    console.error("❌ Request error:", error.message);
     return Promise.reject(error);
   }
 );
 
+// Response interceptor for error handling
 API.interceptors.response.use(
   (response) => {
-    console.log(`✅ ${response.status} ${response.config.method.toUpperCase()} ${response.config.url}`);
+    console.log(`✅ ${response.status} ${response.config.url}`);
     return response;
   },
   (error) => {
-    console.error("❌ Response error:");
+    console.error("❌ API Error:");
     if (error.response) {
       console.error("Status:", error.response.status);
       console.error("Data:", error.response.data);
     } else if (error.request) {
-      console.error("No response received. Is backend running?");
-      console.error("Tried URL:", error.config?.baseURL + error.config?.url);
+      console.error("No response from server. Backend URL:", BACKEND_URL);
+      console.error("Check if backend is running on Render");
     } else {
-      console.error("Request setup error:", error.message);
+      console.error("Error:", error.message);
     }
     return Promise.reject(error);
   }
