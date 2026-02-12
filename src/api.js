@@ -6,7 +6,7 @@ const BACKEND_URL = "https://gotravio-backend.onrender.com";  // 👈 YEH CHANGE
 
 const API = axios.create({
   baseURL: `${BACKEND_URL}/api`,  // https://gotravio-backend.onrender.com/api
-  timeout: 10000,
+  timeout: 30000,
   headers: {
     "Content-Type": "application/json",
   },
