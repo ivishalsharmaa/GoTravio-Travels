@@ -28,7 +28,7 @@ const Layout = ({ children }) => {
                   <div className="absolute inset-0 rounded-xl blur-md opacity-70"></div>
                   <div className="relative w-14 h-14 rounded-xl bg-white overflow-hidden flex items-center justify-center">
                     <img 
-                      src="../src/assets/logo.png"  // Change this to your logo file path
+                      src="public/logo.png"  // Change this to your logo file path
                       alt="GoTravio Logo" 
                       className="w-full h-full object-contain p-1"
                     />
