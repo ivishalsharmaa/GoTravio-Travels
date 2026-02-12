@@ -85,7 +85,7 @@ const Navbar = () => {
                   {/* LOGO CONTAINER */}
                   <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
                     <img 
-                      src="public/logo.png"
+                      src="/logo.png"
                       alt="GoTravio Logo" 
                       className="w-full h-full object-contain p-1"
                     />
