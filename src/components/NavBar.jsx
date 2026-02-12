@@ -93,7 +93,7 @@ const Navbar = () => {
                 </div>
                 
                 {/* BRAND TEXT - DESKTOP - MINIMAL GAP */}
-                <div className="hidden sm:block -ml-3">
+                <div className="hidden sm:block -ml-7">
                   <p className="font-bold text-xl text-gray-900 leading-tight">
                     GoTravio
                   </p>
