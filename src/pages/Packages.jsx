@@ -126,7 +126,7 @@ const CircularCarousel = ({ packages }) => {
   const activePackage = packages[activeIndex] || packages[0];
 
   return (
-    <div className="relative w-full max-w-6xl mx-auto px-4 py-12">
+    <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Carousel Controls */}
       <div className="flex items-center justify-center gap-6 mb-8">
         <button
@@ -321,7 +321,7 @@ const CircularCarousel = ({ packages }) => {
 
       {/* Active Package Details */}
       {activePackage && (
-        <div className="mt-12 text-center">
+        <div className="mt-12 text-center px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto">
             <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
               {activePackage.title}
@@ -684,8 +684,9 @@ const HeroSection = ({ scrollToPackages, scrollToCarousel }) => {
         <div className="absolute bottom-10 right-10 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 py-24">
-        {/* Coming Soon Heading - Inside the purple theme */}
+      {/* FIXED: Added responsive padding classes for proper right alignment */}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        {/* Coming Soon Heading */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-3 mb-4">
             <div className="animate-pulse">
@@ -858,7 +859,8 @@ const QuickStats = () => {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12 md:py-16">
+    // FIXED: Added responsive padding classes
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, idx) => (
           <div key={idx} className="group relative">
@@ -979,7 +981,8 @@ const CustomPackageCTA = () => {
 
   return (
     <>
-      <section className="py-16 px-4 bg-gradient-to-br from-gray-50 to-white">
+      {/* FIXED: Added responsive padding classes */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-6xl mx-auto">
           <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-blue-900 rounded-3xl overflow-hidden shadow-2xl">
             <div className="grid lg:grid-cols-2 items-center">
@@ -1261,25 +1264,15 @@ const Packages = () => {
     setShowEnquiryForm(true);
   };
 
-  // Debug component to see what's happening
-  const DebugInfo = () => {
-    return (
-      <div>
-      </div>
-    );
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      {/* Debug info - remove in production */}
-      <DebugInfo />
-      
       <HeroSection scrollToPackages={scrollToPackages} scrollToCarousel={scrollToCarousel} />
       <QuickStats />
       
       {/* Circular Carousel Section */}
       <section id="circular-carousel" className="py-16 bg-gradient-to-b from-white to-indigo-50/30">
-        <div className="text-center mb-12">
+        {/* FIXED: Added responsive padding classes */}
+        <div className="text-center mb-12 px-4 sm:px-6 lg:px-8">
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 py-2 mb-4">
             <Sparkles size={16} className="text-indigo-500" />
             <span className="text-sm font-medium text-indigo-700">Featured Packages</span>
@@ -1307,13 +1300,13 @@ const Packages = () => {
         )}
       </section>
       
-      {/* Package Filter */}
-      <div className="max-w-7xl mx-auto px-4 mt-8">
+      {/* FIXED: Added responsive padding classes */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         <PackageTypeFilter activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
       </div>
       
-      {/* Search Bar */}
-      <div className="max-w-3xl mx-auto px-4 mt-4 mb-8">
+      {/* FIXED: Added responsive padding classes */}
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 mb-8">
         <div className="relative">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
           <input
@@ -1326,9 +1319,9 @@ const Packages = () => {
         </div>
       </div>
       
-      {/* Error Message */}
+      {/* FIXED: Added responsive padding classes */}
       {error && (
-        <div className="max-w-7xl mx-auto px-4 mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
             <p className="text-yellow-700">
               ⚠️ {error}. Showing demo packages. Check if backend is running on port 5000.
@@ -1338,7 +1331,8 @@ const Packages = () => {
       )}
       
       {/* Packages Grid Section */}
-      <section id="packages-grid" className="py-12 px-4">
+      {/* FIXED: Added responsive padding classes */}
+      <section id="packages-grid" className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {filteredPackages.length === 0 ? (
             <div className="text-center py-16 bg-gradient-to-br from-white to-gray-50 rounded-3xl border border-gray-200/50">
@@ -1373,7 +1367,7 @@ const Packages = () => {
             </div>
           ) : (
             <>
-              <div className="flex items-center justify-between mb-8">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
                 <div>
                   <h2 className="text-3xl font-bold text-gray-900">
                     All Packages
@@ -1382,6 +1376,15 @@ const Packages = () => {
                     {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
                     {packages.length === getDemoPackages().length && " (Demo Data)"}
                   </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-gray-500">Sort by:</span>
+                  <select className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <option>Popularity</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                    <option>Duration</option>
+                  </select>
                 </div>
               </div>
               
