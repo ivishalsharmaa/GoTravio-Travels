@@ -76,33 +76,33 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* ============================ */}
-            {/* LOGO SECTION - GAP REDUCED */}
+            {/* LOGO SECTION - UPDATED */}
             {/* ============================ */}
-            <div className="flex items-center">
-              <NavLink to="/" className="flex items-center group">
+            <div className="flex items-center gap-3">
+              <NavLink to="/" className="flex items-center gap-3 group">
                 <div className="relative">
                   <div className="absolute inset-0 rounded-xl blur-md opacity-70 group-hover:blur-lg transition-all"></div>
                   {/* LOGO CONTAINER */}
                   <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
                     <img 
-                      src="public/logo.png"
+                      src="/logo.png"
                       alt="GoTravio Logo" 
                       className="w-full h-full object-contain p-1"
                     />
                   </div>
                 </div>
                 
-                {/* BRAND TEXT - MINIMAL GAP */}
-                <div className="hidden sm:block -ml-1">
-                  {/* REMOVED GRADIENT - SOLID BLACK */}
-                  <p className="font-bold text-xl text-gray-900 leading-tight">
+                {/* BRAND TEXT - NOW PURE BLACK */}
+                <div className="hidden sm:block">
+                  {/* REMOVED GRADIENT - NOW SOLID BLACK */}
+                  <p className="font-bold text-xl text-gray-900">
                     GoTravio
                   </p>
-                  <p className="text-[10px] text-gray-500 leading-tight -mt-0.5">Travel Excellence</p>
+                  <p className="text-xs text-gray-500">Travel Excellence</p>
                 </div>
                 
-                {/* Mobile brand text - minimal gap */}
-                <div className="block sm:hidden -ml-1.5">
+                {/* Mobile brand text - visible only on smallest screens */}
+                <div className="block sm:hidden">
                   <p className="font-bold text-lg text-gray-900">
                     GoTravio
                   </p>
