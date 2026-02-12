@@ -76,40 +76,27 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* ============================ */}
-            {/* LOGO SECTION - MINIMAL GAP */}
+            {/* LOGO SECTION - UPDATED */}
             {/* ============================ */}
-            <div className="flex items-center">
-              <NavLink to="/" className="flex items-center group">
+            <div className="flex items-center gap-3">
+              <NavLink to="/" className="flex items-center gap-3 group">
                 <div className="relative">
                   <div className="absolute inset-0 rounded-xl blur-md opacity-70 group-hover:blur-lg transition-all"></div>
                   {/* LOGO CONTAINER */}
-                  <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <div className="relative w-14 h-14 rounded-xl bg-white overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
+                    {/* Replace "your-logo.svg" with your actual logo file name */}
                     <img 
-                      src="public/logo.png"
+                      src="public/logo.png"  // Change this to your logo file path
                       alt="GoTravio Logo" 
                       className="w-full h-full object-contain p-1"
                     />
                   </div>
                 </div>
-                
-                {/* BRAND TEXT - DESKTOP - MINIMAL GAP */}
-                <div className="hidden sm:block -ml-7">
-                  <p className="font-bold text-xl text-gray-900 leading-tight">
+                <div className="hidden sm:block">
+                  <p className="font-bold text-xl bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">
                     GoTravio
                   </p>
-                  <p className="text-[10px] text-gray-700 leading-tight -mt-0.5 font-medium">
-                    Travel Excellence
-                  </p>
-                </div>
-                
-                {/* BRAND TEXT - MOBILE - MINIMAL GAP */}
-                <div className="flex flex-col sm:hidden -ml-3">
-                  <p className="font-bold text-lg text-gray-900 leading-tight">
-                    GoTravio
-                  </p>
-                  <p className="text-[9px] text-gray-700 leading-tight -mt-0.5 font-medium">
-                    Travel Excellence
-                  </p>
+                  <p className="text-xs text-gray-500">Travel Excellence</p>
                 </div>
               </NavLink>
             </div>
@@ -117,7 +104,7 @@ const Navbar = () => {
             {/* END LOGO SECTION */}
             {/* ============================ */}
 
-            {/* Desktop Navigation - Hidden on mobile/tablet */}
+            {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => (
                 <NavLink
@@ -210,17 +197,16 @@ const Navbar = () => {
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              aria-label="Toggle menu"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu - Responsive */}
+        {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="lg:hidden bg-white border-t border-gray-200 shadow-2xl animate-slideDown">
-            <div className="px-4 py-6 space-y-1 max-h-[calc(100vh-80px)] overflow-y-auto">
+            <div className="px-4 py-6 space-y-1">
               {navLinks.map((link) => (
                 <NavLink
                   key={link.to}
@@ -241,11 +227,9 @@ const Navbar = () => {
 
               {/* Admin Links in Mobile */}
               <div className="pt-4 mt-4 border-t border-gray-200">
-                <p className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Account
-                </p>
                 {isLoggedIn ? (
                   <>
+                    <p className="px-4 py-2 text-sm text-gray-500">Admin Panel</p>
                     {adminLinks.map((link) => (
                       <NavLink
                         key={link.to}
@@ -286,7 +270,7 @@ const Navbar = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-medium mt-4 hover:shadow-lg transition-all"
+                className="flex items-center gap-3 px-4 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-medium mt-4"
               >
                 <span className="text-lg">💬</span>
                 Chat on WhatsApp
@@ -296,10 +280,10 @@ const Navbar = () => {
         )}
       </header>
 
-      {/* Spacer for fixed navbar - Responsive */}
-      <div className="h-16 sm:h-20 lg:h-24"></div>
+      {/* Spacer for fixed navbar */}
+      <div className="h-20 lg:h-24"></div>
 
-      {/* Animation CSS */}
+      {/* Add animation CSS */}
       <style jsx>{`
         @keyframes slideDown {
           from {
@@ -315,14 +299,10 @@ const Navbar = () => {
         .animate-slideDown {
           animation: slideDown 0.3s ease-out forwards;
         }
-        
-        /* Smooth scrolling for mobile menu */
-        .overflow-y-auto {
-          -webkit-overflow-scrolling: touch;
-        }
       `}</style>
     </>
   );
 };
 
 export default Navbar;
+
