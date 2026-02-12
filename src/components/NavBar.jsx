@@ -86,7 +86,7 @@ const Navbar = () => {
                   <div className="relative w-14 h-14 rounded-xl bg-white overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
                     {/* Replace "your-logo.svg" with your actual logo file name */}
                     <img 
-                      src="public/logo.png"  // Change this to your logo file path
+                      src="public/logo.svg"  // Change this to your logo file path
                       alt="GoTravio Logo" 
                       className="w-full h-full object-contain p-1"
                     />
