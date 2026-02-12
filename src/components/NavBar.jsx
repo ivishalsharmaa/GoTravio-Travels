@@ -76,7 +76,7 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* ============================ */}
-            {/* LOGO SECTION - WITH VISIBLE TAGLINE ON MOBILE */}
+            {/* LOGO SECTION - MINIMAL GAP */}
             {/* ============================ */}
             <div className="flex items-center">
               <NavLink to="/" className="flex items-center group">
@@ -92,8 +92,8 @@ const Navbar = () => {
                   </div>
                 </div>
                 
-                {/* BRAND TEXT - DESKTOP */}
-                <div className="hidden sm:block -ml-1">
+                {/* BRAND TEXT - DESKTOP - MINIMAL GAP */}
+                <div className="hidden sm:block -ml-3">
                   <p className="font-bold text-xl text-gray-900 leading-tight">
                     GoTravio
                   </p>
@@ -102,8 +102,8 @@ const Navbar = () => {
                   </p>
                 </div>
                 
-                {/* BRAND TEXT - MOBILE (NOW WITH VISIBLE TAGLINE) */}
-                <div className="flex flex-col sm:hidden -ml-1.5">
+                {/* BRAND TEXT - MOBILE - MINIMAL GAP */}
+                <div className="flex flex-col sm:hidden -ml-3">
                   <p className="font-bold text-lg text-gray-900 leading-tight">
                     GoTravio
                   </p>
