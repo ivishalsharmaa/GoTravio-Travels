@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Phone,
@@ -39,6 +39,43 @@ const Home = () => {
     message: ""
   });
 
+  // Carousel images data
+  const carouselImages = [
+    {
+      url: "https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=1600",
+      alt: "Travel consultation session"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1600",
+      alt: "Beautiful travel destination"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?q=80&w=1600",
+      alt: "Travel planning"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1488085061387-422e29b40080?q=80&w=1600",
+      alt: "Adventure travel"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1530789253388-582c481c54b0?q=80&w=1600",
+      alt: "Luxury travel"
+    }
+  ];
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Auto-rotate carousel every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === carouselImages.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   // Services data
   const services = [
     {
@@ -67,13 +104,13 @@ const Home = () => {
     },
   ];
 
-  // Contact options
+  // Contact options - UPDATED with your phone number and email
   const contactOptions = [
     {
       icon: <MessageCircle className="w-8 h-8" />,
       title: "WhatsApp Chat",
       desc: "Quick responses for enquiries and document sharing",
-      action: () => window.open('https://wa.me/916371106588?text=Hi%20TripRoute,%20I%20need%20travel%20assistance', '_blank'),
+      action: () => window.open('https://wa.me/919023884833?text=Hi%20GOTravio,%20I%20need%20travel%20assistance', '_blank'),
       features: ["Instant messaging", "File sharing", "Quick queries"],
       color: "border-green-200 bg-green-50 hover:bg-green-100"
     },
@@ -89,7 +126,7 @@ const Home = () => {
       icon: <Headphones className="w-8 h-8" />,
       title: "Email Support",
       desc: "Comprehensive planning with detailed itineraries",
-      action: () => window.location.href = 'mailto:support@triproute.com',
+      action: () => window.location.href = 'mailto:gotravio.travel@gmail.com?subject=Travel%20Assistance%20Enquiry&body=Hi%20GOTravio%20Team,%0A%0AI%20need%20assistance%20with%20my%20travel%20plans.%0A%0ARegards,%0A[Your%20Name]',
       features: ["Documented process", "Detailed responses", "Record keeping"],
       color: "border-purple-200 bg-purple-50 hover:bg-purple-100"
     },
@@ -154,8 +191,8 @@ const Home = () => {
     setSubmitStatus({ type: null, message: "" });
 
     try {
-      // Basic validation
-      if (!enquiryData.name || !enquiryData.service || !enquiryData.phone) {
+      // Basic validation - including email as required
+      if (!enquiryData.name || !enquiryData.service || !enquiryData.phone || !enquiryData.email) {
         throw new Error('Please fill in all required fields');
       }
 
@@ -163,6 +200,12 @@ const Home = () => {
       const phoneRegex = /^[+]?[0-9\s-]{10,}$/;
       if (!phoneRegex.test(enquiryData.phone)) {
         throw new Error('Please enter a valid phone number');
+      }
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(enquiryData.email)) {
+        throw new Error('Please enter a valid email address');
       }
 
       console.log('Submitting enquiry:', enquiryData);
@@ -258,7 +301,7 @@ const Home = () => {
         </div>
       )}
 
-      {/* ================= HERO ================= */}
+      {/* ================= HERO WITH AUTO CAROUSEL ================= */}
       <section className="relative bg-gradient-to-br from-indigo-900 via-blue-800 to-purple-900 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-72 h-72 bg-blue-500 rounded-full blur-3xl"></div>
@@ -267,6 +310,7 @@ const Home = () => {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left Content - Text Section */}
             <div className="text-white space-y-8">
               <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-5 py-2.5 rounded-full text-sm font-semibold">
                 <Zap className="w-4 h-4 animate-pulse" />
@@ -281,7 +325,7 @@ const Home = () => {
               </h1>
 
               <p className="text-blue-100 text-lg leading-relaxed max-w-xl">
-                TripRoute provides human-powered assistance for cab rentals, train & flight tickets, 
+                GoTravio provides human-powered assistance for cab rentals, train & flight tickets, 
                 and custom tour packages. Real experts handle your travel enquiries.
               </p>
 
@@ -318,24 +362,37 @@ const Home = () => {
               </div>
             </div>
 
+            {/* Right Content - Auto Carousel (No Controls, No Indicators) */}
             <div className="relative">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                <img
-                  src="https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=1600"
-                  alt="Travel consultation session"
-                  className="w-full h-[500px] object-cover hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+                {/* Carousel Images - Auto changing only */}
+                <div className="relative w-full h-[300px] sm:h-[400px] md:h-[450px] lg:h-[500px]">
+                  {carouselImages.map((image, index) => (
+                    <div
+                      key={index}
+                      className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                        index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                      }`}
+                    >
+                      <img
+                        src={image.url}
+                        alt={image.alt}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              {/* Floating Feature Cards */}
-              <div className="absolute -bottom-6 -left-6 bg-white p-5 rounded-2xl shadow-2xl max-w-xs animate-float">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-indigo-100 rounded-lg">
-                    <Heart className="w-5 h-5 text-indigo-600" />
+              {/* Floating Feature Cards - Responsive */}
+              <div className="absolute -bottom-6 -left-4 sm:-left-6 bg-white p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl shadow-2xl max-w-[200px] sm:max-w-xs animate-float">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="p-1.5 sm:p-2 bg-indigo-100 rounded-lg">
+                    <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600" />
                   </div>
                   <div>
-                    <p className="font-bold text-slate-900">Personal Service</p>
+                    <p className="font-bold text-sm sm:text-base text-slate-900">Personal Service</p>
                     <p className="text-xs text-slate-500">Dedicated agent handling</p>
                   </div>
                 </div>
@@ -386,7 +443,7 @@ const Home = () => {
       </section>
 
       {/* ================= SERVICES ENHANCED ================= */}
-      <section className="py-16 sm:py-20">
+      <section className="py-16 sm:py-20 bg-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
@@ -546,10 +603,10 @@ const Home = () => {
                   <p className="text-xs text-slate-500 mt-2">Include country code. We'll contact you on WhatsApp</p>
                 </div>
 
-                {/* Email Field (Optional) */}
+                {/* Email Field - Now Mandatory */}
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Email Address (Optional)
+                    Email Address *
                   </label>
                   <div className="relative">
                     <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -560,8 +617,10 @@ const Home = () => {
                       onChange={handleInputChange}
                       placeholder="your.email@example.com"
                       className="w-full pl-12 pr-4 py-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent hover:border-slate-400 transition-colors"
+                      required
                     />
                   </div>
+                  <p className="text-xs text-slate-500 mt-2">We'll send confirmation and updates to your email</p>
                 </div>
 
                 {/* 4. Additional Information */}
@@ -622,7 +681,7 @@ const Home = () => {
       </section>
 
       {/* ================= BENEFITS ================= */}
-      <section className="py-16 sm:py-20 bg-white">
+      <section className="py-16 sm:py-20 bg-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
