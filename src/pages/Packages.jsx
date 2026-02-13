@@ -56,7 +56,7 @@ const CircularCarousel = ({ packages }) => {
   
   const totalPackages = packages.length;
   const radius = 180;
-  const mobileRadius = 120;
+  const mobileRadius = 100;
   const angleStep = (2 * Math.PI) / totalPackages;
 
   useEffect(() => {
@@ -126,34 +126,34 @@ const CircularCarousel = ({ packages }) => {
   const activePackage = packages[activeIndex] || packages[0];
 
   return (
-    <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 overflow-hidden">
       {/* Carousel Controls */}
-      <div className="flex items-center justify-center gap-6 mb-8">
+      <div className="flex items-center justify-center gap-3 sm:gap-6 mb-6 sm:mb-8">
         <button
           onClick={handlePrev}
-          className="p-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 shadow-lg hover:shadow-xl transition-all"
+          className="p-2 sm:p-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 shadow-lg hover:shadow-xl transition-all"
         >
-          <ChevronLeft size={24} />
+          <ChevronLeft size={20} className="sm:w-6 sm:h-6" />
         </button>
         
         <button
           onClick={() => setIsPaused(!isPaused)}
-          className="p-3 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white hover:from-orange-600 hover:to-pink-600 shadow-lg hover:shadow-xl transition-all"
+          className="p-2 sm:p-3 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white hover:from-orange-600 hover:to-pink-600 shadow-lg hover:shadow-xl transition-all"
         >
-          {isPaused ? <Play size={24} /> : <Pause size={24} />}
+          {isPaused ? <Play size={20} className="sm:w-6 sm:h-6" /> : <Pause size={20} className="sm:w-6 sm:h-6" />}
         </button>
         
         <button
           onClick={handleNext}
-          className="p-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 shadow-lg hover:shadow-xl transition-all"
+          className="p-2 sm:p-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 shadow-lg hover:shadow-xl transition-all"
         >
-          <ChevronRightIcon size={24} />
+          <ChevronRightIcon size={20} className="sm:w-6 sm:h-6" />
         </button>
       </div>
 
       {/* Carousel Container */}
       <div 
-        className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center"
+        className="relative w-full h-[350px] sm:h-[400px] md:h-[500px] flex items-center justify-center"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -202,7 +202,7 @@ const CircularCarousel = ({ packages }) => {
                       <div className="p-4 bg-white">
                         <div className="flex items-start justify-between mb-2">
                           <h3 className="font-bold text-gray-900 text-sm truncate">{pkg.title}</h3>
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-1 flex-shrink-0">
                             <Star size={12} className="text-yellow-400 fill-yellow-400" />
                             <span className="text-xs font-bold">4.5</span>
                           </div>
@@ -218,7 +218,7 @@ const CircularCarousel = ({ packages }) => {
                             <Clock size={10} />
                             <span>{pkg.days || pkg.duration} days</span>
                           </div>
-                          <div className="text-sm font-bold text-orange-600">
+                          <div className="text-sm font-bold text-orange-600 flex-shrink-0">
                             ₹{pkg.priceFrom?.toLocaleString() || pkg.price?.toLocaleString() || "Custom"}
                           </div>
                         </div>
@@ -239,11 +239,11 @@ const CircularCarousel = ({ packages }) => {
 
         {/* Mobile Layout */}
         <div className="block md:hidden relative w-full h-full">
-          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 w-64">
+          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 w-56 sm:w-64">
             {activePackage && (
               <div className="rounded-2xl overflow-hidden border-2 border-orange-500 shadow-2xl">
                 <div className="relative">
-                  <div className="h-40 overflow-hidden">
+                  <div className="h-32 sm:h-40 overflow-hidden">
                     <img
                       src={activePackage.imageUrl || activePackage.image || activePackage.images?.[0] || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=400"}
                       alt={activePackage.title}
@@ -251,24 +251,24 @@ const CircularCarousel = ({ packages }) => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                   </div>
-                  <div className="p-4 bg-white">
+                  <div className="p-3 sm:p-4 bg-white">
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-bold text-gray-900">{activePackage.title}</h3>
-                      <div className="flex items-center gap-1">
+                      <h3 className="font-bold text-gray-900 text-sm sm:text-base truncate pr-2">{activePackage.title}</h3>
+                      <div className="flex items-center gap-1 flex-shrink-0">
                         <Star size={14} className="text-yellow-400 fill-yellow-400" />
-                        <span className="font-bold">4.5</span>
+                        <span className="font-bold text-sm">4.5</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 text-gray-600 text-sm mb-3">
+                    <div className="flex items-center gap-2 text-gray-600 text-xs sm:text-sm mb-3">
                       <MapPin size={14} />
-                      <span>{activePackage.location || activePackage.destination}</span>
+                      <span className="truncate">{activePackage.location || activePackage.destination}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <div className="text-sm text-gray-500 flex items-center gap-2">
+                      <div className="text-xs sm:text-sm text-gray-500 flex items-center gap-2">
                         <Clock size={14} />
                         <span>{activePackage.days || activePackage.duration} days</span>
                       </div>
-                      <div className="text-lg font-bold text-orange-600">
+                      <div className="text-base sm:text-lg font-bold text-orange-600">
                         ₹{activePackage.priceFrom?.toLocaleString() || activePackage.price?.toLocaleString() || "Custom"}
                       </div>
                     </div>
@@ -279,69 +279,71 @@ const CircularCarousel = ({ packages }) => {
           </div>
 
           {/* Side Cards for Mobile */}
-          {packages.map((pkg, index) => {
-            if (index === activeIndex) return null;
-            
-            const offset = index > activeIndex ? 1 : -1;
-            
-            return (
-              <button
-                key={pkg._id || pkg.id || index}
-                onClick={() => handleCardClick(index)}
-                className="absolute top-1/2 transform -translate-y-1/2 z-20"
-                style={{
-                  left: `calc(50% + ${offset * 100}px)`,
-                  opacity: 0.7,
-                  transform: `translateY(-50%) scale(0.8)`,
-                }}
-              >
-                <div className="w-48 rounded-xl overflow-hidden border border-gray-200 shadow-lg">
-                  <div className="h-24 overflow-hidden">
-                    <img
-                      src={pkg.imageUrl || pkg.image || pkg.images?.[0] || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=400"}
-                      alt={pkg.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="p-3 bg-white">
-                    <h4 className="font-bold text-gray-900 text-xs truncate">{pkg.title}</h4>
-                    <div className="flex items-center justify-between mt-1">
-                      <div className="text-xs text-gray-500">{pkg.days || pkg.duration}d</div>
-                      <div className="text-xs font-bold text-orange-600">
-                        ₹{pkg.priceFrom?.toLocaleString() || pkg.price?.toLocaleString()}
+          <div className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 flex justify-between px-2">
+            {packages.map((pkg, index) => {
+              if (index === activeIndex) return null;
+              if (Math.abs(index - activeIndex) > 1) return null;
+              
+              const isLeft = index < activeIndex;
+              
+              return (
+                <button
+                  key={pkg._id || pkg.id || index}
+                  onClick={() => handleCardClick(index)}
+                  className="z-20"
+                  style={{
+                    opacity: 0.7,
+                    transform: `scale(0.7)`,
+                  }}
+                >
+                  <div className={`w-28 sm:w-36 rounded-xl overflow-hidden border border-gray-200 shadow-lg ${isLeft ? 'mr-auto' : 'ml-auto'}`}>
+                    <div className="h-16 sm:h-20 overflow-hidden">
+                      <img
+                        src={pkg.imageUrl || pkg.image || pkg.images?.[0] || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=400"}
+                        alt={pkg.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="p-2 bg-white">
+                      <h4 className="font-bold text-gray-900 text-xs truncate">{pkg.title}</h4>
+                      <div className="flex items-center justify-between mt-1">
+                        <div className="text-xs text-gray-500">{pkg.days || pkg.duration}d</div>
+                        <div className="text-xs font-bold text-orange-600 truncate">
+                          ₹{pkg.priceFrom?.toLocaleString() || pkg.price?.toLocaleString()}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </button>
-            );
-          })}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
       {/* Active Package Details */}
       {activePackage && (
-        <div className="mt-12 text-center px-4 sm:px-6 lg:px-8">
+        <div className="mt-8 sm:mt-12 text-center px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto">
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
               {activePackage.title}
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
               {activePackage.description}
             </p>
             
-            <div className="flex flex-wrap gap-4 justify-center mb-8">
-              <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full">
-                <MapPin size={16} className="text-blue-600" />
-                <span className="text-sm font-medium">{activePackage.location || activePackage.destination}</span>
+            <div className="flex flex-wrap gap-2 sm:gap-4 justify-center mb-6 sm:mb-8">
+              <div className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full">
+                <MapPin size={14} className="sm:w-4 sm:h-4 text-blue-600" />
+                <span className="text-xs sm:text-sm font-medium truncate max-w-[120px] sm:max-w-none">{activePackage.location || activePackage.destination}</span>
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-50 to-pink-50 rounded-full">
-                <Clock size={16} className="text-orange-600" />
-                <span className="text-sm font-medium">{activePackage.days || activePackage.duration} days</span>
+              <div className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-orange-50 to-pink-50 rounded-full">
+                <Clock size={14} className="sm:w-4 sm:h-4 text-orange-600" />
+                <span className="text-xs sm:text-sm font-medium">{activePackage.days || activePackage.duration} days</span>
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-50 to-emerald-50 rounded-full">
-                <Users size={16} className="text-green-600" />
-                <span className="text-sm font-medium">{activePackage.tag || "All Groups"}</span>
+              <div className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-green-50 to-emerald-50 rounded-full">
+                <Users size={14} className="sm:w-4 sm:h-4 text-green-600" />
+                <span className="text-xs sm:text-sm font-medium">{activePackage.tag || "All Groups"}</span>
               </div>
             </div>
             
@@ -349,26 +351,26 @@ const CircularCarousel = ({ packages }) => {
               href={`https://wa.me/916371106588?text=Hi,%20I'm%20interested%20in%20the%20${encodeURIComponent(activePackage.title)}%20package`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105"
+              className="inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-8 py-2.5 sm:py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-bold text-sm sm:text-base shadow-lg hover:shadow-xl transition-all hover:scale-105"
             >
-              <MessageCircle size={20} />
+              <MessageCircle size={18} className="sm:w-5 sm:h-5" />
               Book This Package
-              <ChevronRightIcon size={20} />
+              <ChevronRightIcon size={18} className="sm:w-5 sm:h-5" />
             </a>
           </div>
         </div>
       )}
 
       {/* Package Indicators */}
-      <div className="flex justify-center gap-2 mt-8">
+      <div className="flex justify-center gap-1.5 sm:gap-2 mt-6 sm:mt-8">
         {packages.map((_, index) => (
           <button
             key={index}
             onClick={() => handleCardClick(index)}
-            className={`w-2 h-2 rounded-full transition-all ${
+            className={`transition-all ${
               index === activeIndex 
-                ? 'w-6 bg-gradient-to-r from-orange-500 to-pink-500' 
-                : 'bg-gray-300 hover:bg-gray-400'
+                ? 'w-4 sm:w-6 h-1.5 sm:h-2 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full' 
+                : 'w-1.5 sm:w-2 h-1.5 sm:h-2 bg-gray-300 hover:bg-gray-400 rounded-full'
             }`}
           />
         ))}
@@ -408,12 +410,10 @@ const PackageEnquiryForm = ({ selectedPackage, onClose }) => {
     setSubmitStatus({ type: null, message: "" });
 
     try {
-      // Validation
       if (!formData.name || !formData.phone) {
         throw new Error('Please fill in all required fields');
       }
 
-      // Prepare enquiry data
       const enquiryData = {
         name: formData.name,
         service: `Package: ${formData.packageName}`,
@@ -428,7 +428,6 @@ Message: ${formData.message || 'No additional message'}`
 
       console.log('Submitting package enquiry:', enquiryData);
 
-      // Send to backend
       const response = await API.post("/enquiry", enquiryData);
       
       if (response.data.success) {
@@ -437,7 +436,6 @@ Message: ${formData.message || 'No additional message'}`
           message: 'Package enquiry submitted successfully! Our team will contact you within 1-2 hours.'
         });
 
-        // Reset form
         setTimeout(() => {
           setFormData({
             name: "",
@@ -468,119 +466,114 @@ Message: ${formData.message || 'No additional message'}`
 
   return (
     <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-      <div className="bg-gradient-to-r from-orange-600 to-pink-600 text-white p-6">
+      <div className="bg-gradient-to-r from-orange-600 to-pink-600 text-white p-4 sm:p-6">
         <div className="flex items-start justify-between">
           <div>
-            <h3 className="text-xl font-bold mb-2">Enquire About This Package</h3>
-            <p className="text-orange-100 text-sm">{selectedPackage?.title}</p>
+            <h3 className="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Enquire About This Package</h3>
+            <p className="text-orange-100 text-xs sm:text-sm truncate max-w-[200px] sm:max-w-full">{selectedPackage?.title}</p>
           </div>
           {onClose && (
             <button
               onClick={onClose}
-              className="text-white hover:text-orange-200"
+              className="text-white hover:text-orange-200 p-1"
             >
-              <X size={20} />
+              <X size={18} className="sm:w-5 sm:h-5" />
             </button>
           )}
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-6 space-y-4">
+      <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-3 sm:space-y-4">
         {submitStatus.type && (
-          <div className={`p-4 ${submitStatus.type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'} border rounded-xl`}>
-            <div className="flex items-center gap-3">
+          <div className={`p-3 sm:p-4 ${submitStatus.type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'} border rounded-xl`}>
+            <div className="flex items-center gap-2 sm:gap-3">
               {submitStatus.type === 'success' ? (
-                <CheckCircle className="w-5 h-5 text-green-600" />
+                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" />
               ) : (
-                <AlertCircle className="w-5 h-5 text-red-600" />
+                <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 flex-shrink-0" />
               )}
-              <p className={`text-sm ${submitStatus.type === 'success' ? 'text-green-700' : 'text-red-700'}`}>
+              <p className={`text-xs sm:text-sm ${submitStatus.type === 'success' ? 'text-green-700' : 'text-red-700'}`}>
                 {submitStatus.message}
               </p>
             </div>
           </div>
         )}
 
-        {/* Package Info */}
-        <div className="bg-gray-50 p-4 rounded-xl">
-          <div className="flex items-center gap-3">
-            <PackageIcon className="text-orange-500" size={20} />
-            <div>
-              <p className="font-medium text-gray-900">{selectedPackage?.title}</p>
-              <p className="text-sm text-gray-600">{selectedPackage?.location || selectedPackage?.destination} • {selectedPackage?.days || selectedPackage?.duration} days</p>
+        <div className="bg-gray-50 p-3 sm:p-4 rounded-xl">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <PackageIcon className="text-orange-500 flex-shrink-0" size={18} />
+            <div className="min-w-0 flex-1">
+              <p className="font-medium text-gray-900 text-sm sm:text-base truncate">{selectedPackage?.title}</p>
+              <p className="text-xs sm:text-sm text-gray-600 truncate">{selectedPackage?.location || selectedPackage?.destination} • {selectedPackage?.days || selectedPackage?.duration} days</p>
             </div>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
-          {/* Name */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700">
               Full Name *
             </label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full pl-9 sm:pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 placeholder="Your name"
                 required
               />
             </div>
           </div>
 
-          {/* Phone */}
           <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700">
               Phone Number *
             </label>
             <div className="relative">
-              <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
               <input
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full pl-9 sm:pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 placeholder="+91 98765 43210"
                 required
               />
             </div>
           </div>
 
-          {/* Email */}
           <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700">
               Email Address
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full pl-9 sm:pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 placeholder="your@email.com"
               />
             </div>
           </div>
 
-          {/* Travelers */}
           <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700">
               Number of Travelers
             </label>
             <div className="relative">
-              <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
               <select
                 name="travellers"
                 value={formData.travellers}
                 onChange={handleChange}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none"
+                className="w-full pl-9 sm:pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none"
               >
                 {[1,2,3,4,5,6,7,8,9,10].map(num => (
                   <option key={num} value={num}>{num} {num === 1 ? 'person' : 'people'}</option>
@@ -589,82 +582,78 @@ Message: ${formData.message || 'No additional message'}`
             </div>
           </div>
 
-          {/* Budget */}
           <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700">
               Budget (per person)
             </label>
             <div className="relative">
-              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
               <input
                 type="text"
                 name="budget"
                 value={formData.budget}
                 onChange={handleChange}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full pl-9 sm:pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 placeholder="e.g., ₹25,000"
               />
             </div>
           </div>
 
-          {/* Travel Date */}
           <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700">
               Preferred Travel Date
             </label>
             <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
               <input
                 type="date"
                 name="travelDate"
                 value={formData.travelDate}
                 onChange={handleChange}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full pl-9 sm:pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               />
             </div>
           </div>
         </div>
 
-        {/* Message */}
         <div className="space-y-1">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-xs sm:text-sm font-medium text-gray-700">
             Additional Requirements
           </label>
           <div className="relative">
-            <FileText className="absolute left-3 top-3 text-gray-400" size={16} />
+            <FileText className="absolute left-3 top-3 text-gray-400" size={14} />
             <textarea
               name="message"
               value={formData.message}
               onChange={handleChange}
               rows={3}
-              className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+              className="w-full pl-9 sm:pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
               placeholder="Any special requests, dietary requirements, or additional information..."
             />
           </div>
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white py-3 rounded-lg font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white py-2.5 sm:py-3 rounded-lg font-medium text-sm sm:text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isSubmitting ? (
             <>
-              <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+              <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-2 border-white border-t-transparent"></div>
               Submitting...
             </>
           ) : (
             <>
-              <Send size={18} />
+              <Send size={16} className="sm:w-[18px] sm:h-[18px]" />
               Submit Enquiry
             </>
           )}
         </button>
 
-        <div className="text-center pt-2">
+        <div className="text-center pt-1 sm:pt-2">
           <p className="text-xs text-gray-500">
-            <Shield className="inline mr-1" size={12} />
+            <Shield className="inline mr-1" size={10} />
             Your information is secure. We'll contact you within 1-2 hours.
           </p>
         </div>
@@ -680,87 +669,86 @@ const HeroSection = ({ scrollToPackages, scrollToCarousel }) => {
     <section className="relative bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 text-white overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-orange-500/10"></div>
-        <div className="absolute top-10 left-10 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-10 left-10 w-64 h-64 sm:w-96 sm:h-96 bg-pink-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-10 right-10 w-64 h-64 sm:w-96 sm:h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
       </div>
 
-      {/* FIXED: Added responsive padding classes for proper right alignment */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        {/* Coming Soon Heading */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-3 mb-4">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-24">
+        <div className="text-center mb-8 sm:mb-12 md:mb-16">
+          <div className="inline-flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
             <div className="animate-pulse">
-              <Sparkles size={24} className="text-yellow-300" />
+              <Sparkles size={18} className="sm:w-6 sm:h-6 text-yellow-300" />
             </div>
-            <h2 className="text-5xl font-bold bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent">
               COMING SOON
             </h2>
             <div className="animate-pulse">
-              <Sparkles size={24} className="text-yellow-300" />
+              <Sparkles size={18} className="sm:w-6 sm:h-6 text-yellow-300" />
             </div>
           </div>
-          <p className="text-xl text-blue-100 mb-4">
+          <p className="text-base sm:text-lg md:text-xl text-blue-100 mb-2 sm:mb-4 px-4">
             Exciting new features and destinations are on the way!
           </p>
-          <p className="text-lg text-blue-200 max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg text-blue-200 max-w-3xl mx-auto px-4">
             Stay tuned for amazing updates. In the meantime, explore our current packages or request a custom trip.
           </p>
         </div>
 
-        <div className="text-center max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-            <Sparkles size={16} className="text-yellow-300" />
-            <span className="text-sm font-medium">10+ Curated Tour Packages</span>
+        <div className="text-center max-w-4xl mx-auto px-4">
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-4 sm:mb-6">
+            <Sparkles size={14} className="sm:w-4 sm:h-4 text-yellow-300" />
+            <span className="text-xs sm:text-sm font-medium">6+ Curated Tour Packages</span>
           </div>
           
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+          {/* ONLY THE MAIN HEADING SIZE IS INCREASED ON MOBILE */}
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-7xl font-bold mb-6 sm:mb-8 md:mb-10 leading-tight">
             Discover Amazing
-            <span className="block text-orange-300 mt-2">Travel Experiences</span>
+            <span className="block text-orange-300 mt-2 sm:mt-3 md:mt-4">Travel Experiences</span>
           </h1>
           
-          <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 md:mb-10 max-w-2xl mx-auto px-4">
             Choose from our 6+ expertly curated tour packages or let us design a fully customized itinerary just for you.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-10 md:mb-12 px-4">
             <button 
               onClick={scrollToCarousel}
-              className="group relative bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+              className="group relative bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base md:text-lg flex items-center justify-center gap-2 sm:gap-3 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
             >
               <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
-              <Globe className="relative z-10 group-hover:animate-pulse" size={22} /> 
+              <Globe className="relative z-10 group-hover:animate-pulse" size={18} /> 
               <span className="relative z-10">View Packages</span>
             </button>
             <button 
               onClick={scrollToPackages}
-              className="group relative bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+              className="group relative bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base md:text-lg flex items-center justify-center gap-2 sm:gap-3 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
             >
               <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
-              <Grid className="relative z-10 group-hover:animate-pulse" size={22} /> 
+              <Grid className="relative z-10 group-hover:animate-pulse" size={18} /> 
               <span className="relative z-10">Browse All</span>
             </button>
             <a 
               href="https://wa.me/916371106588"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+              className="group relative bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base md:text-lg flex items-center justify-center gap-2 sm:gap-3 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
             >
               <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
-              <MessageCircle className="relative z-10" size={22} /> 
+              <MessageCircle className="relative z-10" size={18} /> 
               <span className="relative z-10">Custom Trip</span>
             </a>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 max-w-3xl mx-auto px-4">
             {[
-              { icon: <Award size={20} />, text: "Packages", color: "text-yellow-400" },
-              { icon: <Shield size={20} />, text: "Flexible Plans", color: "text-green-400" },
-              { icon: <TrendingUp size={20} />, text: "Best Value", color: "text-pink-400" },
-              { icon: <Clock size={20} />, text: "24/7 Support", color: "text-blue-400" },
+              { icon: <Award size={16} className="sm:w-5 sm:h-5" />, text: "Packages", color: "text-yellow-400" },
+              { icon: <Shield size={16} className="sm:w-5 sm:h-5" />, text: "Flexible Plans", color: "text-green-400" },
+              { icon: <TrendingUp size={16} className="sm:w-5 sm:h-5" />, text: "Best Value", color: "text-pink-400" },
+              { icon: <Clock size={16} className="sm:w-5 sm:h-5" />, text: "24/7 Support", color: "text-blue-400" },
             ].map((badge, idx) => (
-              <div key={idx} className="flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
-                <div className={`${badge.color}`}>{badge.icon}</div>
-                <span className="text-sm font-medium">{badge.text}</span>
+              <div key={idx} className="flex items-center gap-2 sm:gap-3 bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10">
+                <div className={`${badge.color} flex-shrink-0`}>{badge.icon}</div>
+                <span className="text-xs sm:text-sm font-medium truncate">{badge.text}</span>
               </div>
             ))}
           </div>
@@ -789,42 +777,57 @@ const Grid = ({ size }) => (
   </svg>
 );
 
-// Package Type Filters Component
+// Package Type Filters Component - WITH NAMES RESTORED
 const PackageTypeFilter = ({ activeFilter, setActiveFilter }) => {
   const filters = [
-    { id: "all", label: "All Packages", icon: <Globe size={16} />, count: 10 },
-    { id: "domestic", label: "Domestic", icon: <MapPin size={16} />, count: 6 },
-    { id: "international", label: "International", icon: <Globe size={16} />, count: 4 },
-    { id: "honeymoon", label: "Honeymoon", icon: <Heart size={16} />, count: 3 },
-    { id: "adventure", label: "Adventure", icon: <Mountain size={16} />, count: 4 },
-    { id: "family", label: "Family", icon: <Users size={16} />, count: 5 },
+    { id: "all", label: "All Packages", icon: <Globe size={14} />, count: 10 },
+    { id: "domestic", label: "Domestic", icon: <MapPin size={14} />, count: 6 },
+    { id: "international", label: "International", icon: <Globe size={14} />, count: 4 },
+    { id: "honeymoon", label: "Honeymoon", icon: <Heart size={14} />, count: 3 },
+    { id: "adventure", label: "Adventure", icon: <Mountain size={14} />, count: 4 },
+    { id: "family", label: "Family", icon: <Users size={14} />, count: 5 },
   ];
 
+  const [showAllFilters, setShowAllFilters] = useState(false);
+  const visibleFilters = showAllFilters ? filters : filters.slice(0, 4);
+
   return (
-    <div className="flex flex-wrap gap-2 mb-8 justify-center">
-      {filters.map((filter) => (
+    <div className="flex flex-col items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+      <div className="flex flex-wrap gap-2 justify-center">
+        {visibleFilters.map((filter) => (
+          <button
+            key={filter.id}
+            onClick={() => setActiveFilter(filter.id)}
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full transition-all text-xs sm:text-sm ${
+              activeFilter === filter.id
+                ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg"
+                : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
+            }`}
+          >
+            <span className={activeFilter === filter.id ? "text-white" : "text-gray-500"}>
+              {filter.icon}
+            </span>
+            <span className="font-medium">{filter.label}</span>
+            <span className={`text-[10px] sm:text-xs px-1.5 py-0.5 rounded-full ${
+              activeFilter === filter.id 
+                ? "bg-white/20 text-white" 
+                : "bg-gray-100 text-gray-600"
+            }`}>
+              {filter.count}
+            </span>
+          </button>
+        ))}
+      </div>
+      
+      {filters.length > 4 && (
         <button
-          key={filter.id}
-          onClick={() => setActiveFilter(filter.id)}
-          className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
-            activeFilter === filter.id
-              ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg"
-              : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
-          }`}
+          onClick={() => setShowAllFilters(!showAllFilters)}
+          className="text-xs sm:text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1"
         >
-          <span className={activeFilter === filter.id ? "text-white" : "text-gray-500"}>
-            {filter.icon}
-          </span>
-          <span className="font-medium">{filter.label}</span>
-          <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-            activeFilter === filter.id 
-              ? "bg-white/20 text-white" 
-              : "bg-gray-100 text-gray-600"
-          }`}>
-            {filter.count}
-          </span>
+          {showAllFilters ? 'Show Less' : `+${filters.length - 4} More Filters`}
+          <ChevronRightIcon size={14} className={`transform transition-transform ${showAllFilters ? 'rotate-90' : ''}`} />
         </button>
-      ))}
+      )}
     </div>
   );
 };
@@ -835,47 +838,46 @@ const QuickStats = () => {
     { 
       value: "6+", 
       label: "Curated Packages",
-      icon: <Globe className="text-indigo-500" size={20} />,
+      icon: <Globe className="text-indigo-500" size={18} />,
       desc: "Domestic & international"
     },
     { 
       value: "15+", 
       label: "Destinations",
-      icon: <MapPin className="text-green-500" size={20} />,
+      icon: <MapPin className="text-green-500" size={18} />,
       desc: "Across India & abroad"
     },
     { 
       value: "95%", 
       label: "Satisfaction",
-      icon: <Star className="text-yellow-500" size={20} />,
+      icon: <Star className="text-yellow-500" size={18} />,
       desc: "Rated 4.5+ stars"
     },
     { 
       value: "Custom", 
       label: "Trip Planning",
-      icon: <Sparkles className="text-pink-500" size={20} />,
+      icon: <Sparkles className="text-pink-500" size={18} />,
       desc: "Fully personalized"
     },
   ];
 
   return (
-    // FIXED: Added responsive padding classes
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         {stats.map((stat, idx) => (
           <div key={idx} className="group relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white rounded-2xl transform group-hover:scale-105 transition-all duration-300"></div>
-            <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 group-hover:border-indigo-300/50 transition-all">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="p-2 bg-gradient-to-br from-indigo-50 to-white rounded-xl">
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white rounded-xl sm:rounded-2xl transform group-hover:scale-105 transition-all duration-300"></div>
+            <div className="relative bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 border border-gray-200/50 group-hover:border-indigo-300/50 transition-all">
+              <div className="flex flex-col xs:flex-row items-center xs:items-start gap-2 sm:gap-4 mb-1 sm:mb-3">
+                <div className="p-1.5 sm:p-2 bg-gradient-to-br from-indigo-50 to-white rounded-lg sm:rounded-xl flex-shrink-0">
                   {stat.icon}
                 </div>
-                <div>
-                  <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
-                  <div className="text-sm font-medium text-gray-700">{stat.label}</div>
+                <div className="text-center xs:text-left">
+                  <div className="text-lg sm:text-2xl md:text-3xl font-bold text-gray-900">{stat.value}</div>
+                  <div className="text-xs sm:text-sm font-medium text-gray-700">{stat.label}</div>
                 </div>
               </div>
-              <p className="text-xs text-gray-500">{stat.desc}</p>
+              <p className="text-[10px] sm:text-xs text-gray-500 text-center xs:text-left hidden xs:block">{stat.desc}</p>
             </div>
           </div>
         ))}
@@ -896,8 +898,8 @@ const PackageCard = ({ pkg, onEnquire }) => {
 
   return (
     <>
-      <div className="group relative bg-white rounded-3xl overflow-hidden border border-gray-200/50 group-hover:border-orange-300 transition-all duration-500 shadow-sm group-hover:shadow-2xl">
-        <div className="relative h-64 overflow-hidden">
+      <div className="group relative bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-gray-200/50 group-hover:border-orange-300 transition-all duration-500 shadow-sm group-hover:shadow-2xl">
+        <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
           <img
             src={pkg.imageUrl || pkg.image || pkg.images?.[0] || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1200"}
             alt={pkg.title}
@@ -905,64 +907,62 @@ const PackageCard = ({ pkg, onEnquire }) => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
           
-          <div className="absolute top-4 left-4">
-            <span className="px-3 py-1 bg-gradient-to-r from-orange-600 to-pink-600 text-white text-xs font-bold rounded-full">
+          <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
+            <span className="px-2 sm:px-3 py-1 bg-gradient-to-r from-orange-600 to-pink-600 text-white text-[10px] sm:text-xs font-bold rounded-full">
               {pkg.tag || pkg.category || "Popular"}
             </span>
           </div>
 
-          <div className="absolute bottom-4 left-4">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-black/60 backdrop-blur-sm rounded-full text-white text-sm">
-              <Clock size={14} />
+          <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4">
+            <div className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 bg-black/60 backdrop-blur-sm rounded-full text-white text-[10px] sm:text-xs">
+              <Clock size={12} className="sm:w-3 sm:h-3" />
               <span>{pkg.days || pkg.duration} days</span>
             </div>
           </div>
         </div>
 
-        <div className="p-6">
-          <div className="flex items-start justify-between mb-3">
-            <div>
-              <h3 className="font-bold text-xl text-gray-900 mb-1 group-hover:text-indigo-700 transition-colors">
+        <div className="p-4 sm:p-5 md:p-6">
+          <div className="flex items-start justify-between mb-2 sm:mb-3">
+            <div className="min-w-0 flex-1 pr-2">
+              <h3 className="font-bold text-base sm:text-lg md:text-xl text-gray-900 mb-1 group-hover:text-indigo-700 transition-colors truncate">
                 {pkg.title}
               </h3>
-              <div className="flex items-center gap-2 text-gray-600 text-sm">
-                <MapPin size={14} />
-                <span>{pkg.location || pkg.destination}</span>
+              <div className="flex items-center gap-1 sm:gap-2 text-gray-600 text-xs sm:text-sm">
+                <MapPin size={12} className="flex-shrink-0" />
+                <span className="truncate">{pkg.location || pkg.destination}</span>
               </div>
             </div>
-            <div className="flex items-center gap-1">
-              <Star size={16} className="text-yellow-400 fill-yellow-400" />
-              <span className="font-bold text-gray-900">4.5</span>
+            <div className="flex items-center gap-1 flex-shrink-0">
+              <Star size={14} className="sm:w-4 sm:h-4 text-yellow-400 fill-yellow-400" />
+              <span className="font-bold text-gray-900 text-xs sm:text-sm">4.5</span>
             </div>
           </div>
 
-          <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+          <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2">
             {pkg.description || "Experience amazing destinations with our expertly curated package."}
           </p>
 
-          <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+          <div className="flex flex-col xs:flex-row xs:items-center justify-between pt-3 sm:pt-4 border-t border-gray-100 gap-2 xs:gap-0">
             <div>
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
                 ₹{pkg.priceFrom?.toLocaleString() || pkg.price?.toLocaleString() || "On Request"}
               </div>
-              <div className="text-xs text-gray-500">per person</div>
+              <div className="text-[10px] sm:text-xs text-gray-500">per person</div>
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={handleEnquire}
-                className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg font-medium flex items-center gap-2 transition-all hover:scale-105"
-              >
-                <MessageCircle size={18} />
-                Enquire Now
-              </button>
-            </div>
+            <button
+              onClick={handleEnquire}
+              className="w-full xs:w-auto px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg font-medium text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 transition-all hover:scale-105"
+            >
+              <MessageCircle size={14} className="sm:w-4 sm:h-4" />
+              Enquire Now
+            </button>
           </div>
         </div>
       </div>
 
       {showEnquiryForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="max-w-md w-full">
+          <div className="w-full max-w-md">
             <PackageEnquiryForm 
               selectedPackage={pkg}
               onClose={() => setShowEnquiryForm(false)}
@@ -981,47 +981,46 @@ const CustomPackageCTA = () => {
 
   return (
     <>
-      {/* FIXED: Added responsive padding classes */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-white">
+      <section className="py-10 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-6xl mx-auto">
-          <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-blue-900 rounded-3xl overflow-hidden shadow-2xl">
+          <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-blue-900 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
             <div className="grid lg:grid-cols-2 items-center">
-              <div className="p-8 md:p-12 text-white">
-                <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                  <Sparkles size={16} className="text-yellow-300" />
-                  <span className="text-sm font-medium">Custom Trip Planning</span>
+              <div className="p-6 sm:p-8 md:p-10 lg:p-12 text-white">
+                <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-4 sm:mb-6">
+                  <Sparkles size={14} className="sm:w-4 sm:h-4 text-yellow-300" />
+                  <span className="text-xs sm:text-sm font-medium">Custom Trip Planning</span>
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">
                   Don't See What You're Looking For?
                 </h2>
-                <p className="text-blue-100 mb-8">
+                <p className="text-blue-100 text-sm sm:text-base mb-6 sm:mb-8">
                   Let our travel experts design a completely personalized itinerary tailored to your preferences, budget, and schedule.
                 </p>
-                <div className="space-y-4">
+                <div className="space-y-2 sm:space-y-3">
                   {[
                     "100% Customizable itineraries",
                     "Flexible dates & destinations",
                     "Personal travel consultant",
                     "Best price guarantee"
                   ].map((feature, idx) => (
-                    <div key={idx} className="flex items-center gap-3">
-                      <CheckCircle size={18} className="text-green-300" />
-                      <span>{feature}</span>
+                    <div key={idx} className="flex items-center gap-2 sm:gap-3">
+                      <CheckCircle size={16} className="sm:w-[18px] sm:h-[18px] text-green-300 flex-shrink-0" />
+                      <span className="text-xs sm:text-sm">{feature}</span>
                     </div>
                   ))}
                 </div>
               </div>
               
-              <div className="bg-white p-8 md:p-12">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Request Custom Package</h3>
+              <div className="bg-white p-6 sm:p-8 md:p-10 lg:p-12">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Request Custom Package</h3>
                 <button
                   onClick={() => setShowForm(true)}
-                  className="w-full bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2"
+                  className="w-full bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white py-2.5 sm:py-3 rounded-lg font-medium text-sm sm:text-base transition-all flex items-center justify-center gap-2"
                 >
-                  <MessageCircle size={20} />
+                  <MessageCircle size={18} className="sm:w-5 sm:h-5" />
                   Get Custom Quote
                 </button>
-                <p className="text-sm text-gray-600 mt-4 text-center">
+                <p className="text-xs sm:text-sm text-gray-600 mt-3 sm:mt-4 text-center">
                   Our travel expert will contact you within 1 hour
                 </p>
               </div>
@@ -1031,43 +1030,43 @@ const CustomPackageCTA = () => {
       </section>
 
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="max-w-md w-full">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
+          <div className="w-full max-w-md my-4 sm:my-8">
             <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6">
+              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 sm:p-6">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-xl font-bold mb-2">Custom Package Request</h3>
-                    <p className="text-indigo-100 text-sm">Tell us your dream trip details</p>
+                    <h3 className="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Custom Package Request</h3>
+                    <p className="text-indigo-100 text-xs sm:text-sm">Tell us your dream trip details</p>
                   </div>
                   <button
                     onClick={() => setShowForm(false)}
-                    className="text-white hover:text-indigo-200"
+                    className="text-white hover:text-indigo-200 p-1"
                   >
-                    <X size={20} />
+                    <X size={18} className="sm:w-5 sm:h-5" />
                   </button>
                 </div>
               </div>
               
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 <a
                   href="https://wa.me/916371106588?text=Hi,%20I%20want%20a%20custom%20travel%20package.%20Please%20contact%20me."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 mb-4"
+                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-2.5 sm:py-3 rounded-lg font-medium text-sm sm:text-base transition-all flex items-center justify-center gap-2 mb-3 sm:mb-4"
                 >
-                  <MessageCircle size={20} />
+                  <MessageCircle size={18} className="sm:w-5 sm:h-5" />
                   WhatsApp for Custom Package
                 </a>
                 
-                <p className="text-sm text-gray-600 text-center">
+                <p className="text-xs sm:text-sm text-gray-600 text-center">
                   For custom packages, we prefer to discuss details directly on WhatsApp for better planning.
                 </p>
                 
-                <div className="mt-6 pt-6 border-t border-gray-200">
+                <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200">
                   <div className="text-center">
-                    <Phone className="inline mr-2 text-gray-400" size={16} />
-                    <span className="text-sm text-gray-600">Or call: +91 90238 84833</span>
+                    <Phone className="inline mr-1.5 sm:mr-2 text-gray-400" size={14} />
+                    <span className="text-xs sm:text-sm text-gray-600">Or call: +91 90238 84833</span>
                   </div>
                 </div>
               </div>
@@ -1079,7 +1078,7 @@ const CustomPackageCTA = () => {
   );
 };
 
-// ================= 10 DEMO PACKAGES =================
+// ================= 6 DEMO PACKAGES =================
 
 const getDemoPackages = () => [
   {
@@ -1174,7 +1173,6 @@ const Packages = () => {
         console.log("API Response data:", response.data);
         
         if (response.data && Array.isArray(response.data)) {
-          // Transform data to ensure it has all required fields
           const transformedPackages = response.data.map(pkg => ({
             _id: pkg._id || pkg.id || Math.random().toString(36).substr(2, 9),
             id: pkg.id || pkg._id || Math.random().toString(36).substr(2, 9),
@@ -1211,7 +1209,6 @@ const Packages = () => {
         console.log("Error details:", error.response?.data);
         setError(`Failed to load packages from server: ${error.message}`);
         
-        // Use demo packages as fallback
         loadDemoPackages();
       } finally {
         setIsLoading(false);
@@ -1270,60 +1267,56 @@ const Packages = () => {
       <QuickStats />
       
       {/* Circular Carousel Section */}
-      <section id="circular-carousel" className="py-16 bg-gradient-to-b from-white to-indigo-50/30">
-        {/* FIXED: Added responsive padding classes */}
-        <div className="text-center mb-12 px-4 sm:px-6 lg:px-8">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 py-2 mb-4">
-            <Sparkles size={16} className="text-indigo-500" />
-            <span className="text-sm font-medium text-indigo-700">Featured Packages</span>
+      <section id="circular-carousel" className="py-10 sm:py-12 md:py-16 bg-gradient-to-b from-white to-indigo-50/30">
+        <div className="text-center mb-8 sm:mb-10 md:mb-12 px-4 sm:px-6 lg:px-8">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
+            <Sparkles size={14} className="sm:w-4 sm:h-4 text-indigo-500" />
+            <span className="text-xs sm:text-sm font-medium text-indigo-700">Featured Packages</span>
           </div>
-          <h2 className="text-4xl font-bold text-gray-900 mb-3">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3 px-4">
             Explore Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Top Destinations</span>
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-4">
             Browse through our most popular packages with interactive circular carousel
           </p>
         </div>
         
         {isLoading ? (
-          <div className="text-center py-20">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
-            <p className="mt-4 text-gray-600">Loading amazing packages...</p>
+          <div className="text-center py-12 sm:py-16 md:py-20 px-4">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 border-t-2 border-b-2 border-indigo-600"></div>
+            <p className="mt-3 sm:mt-4 text-sm sm:text-base text-gray-600">Loading amazing packages...</p>
           </div>
         ) : packages.length > 0 ? (
-          <CircularCarousel packages={packages.slice(0, 8)} />
+          <CircularCarousel packages={packages.slice(0, 6)} />
         ) : (
-          <div className="text-center py-12">
-            <Globe size={64} className="mx-auto text-gray-300 mb-4" />
-            <p className="text-gray-600">No packages available yet</p>
+          <div className="text-center py-8 sm:py-10 md:py-12 px-4">
+            <Globe size={48} className="sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto text-gray-300 mb-3 sm:mb-4" />
+            <p className="text-sm sm:text-base text-gray-600">No packages available yet</p>
           </div>
         )}
       </section>
       
-      {/* FIXED: Added responsive padding classes */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 sm:mt-6 md:mt-8">
         <PackageTypeFilter activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
       </div>
       
-      {/* FIXED: Added responsive padding classes */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 mb-8">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 sm:mt-6 mb-6 sm:mb-8">
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
           <input
             type="text"
             placeholder="Search packages by destination, theme, or duration..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-4 bg-white rounded-xl border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none shadow-sm"
+            className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-4 bg-white rounded-lg sm:rounded-xl border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none text-sm sm:text-base shadow-sm"
           />
         </div>
       </div>
       
-      {/* FIXED: Added responsive padding classes */}
       {error && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-            <p className="text-yellow-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-8">
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg sm:rounded-xl p-3 sm:p-4">
+            <p className="text-xs sm:text-sm text-yellow-700">
               ⚠️ {error}. Showing demo packages. Check if backend is running on port 5000.
             </p>
           </div>
@@ -1331,26 +1324,25 @@ const Packages = () => {
       )}
       
       {/* Packages Grid Section */}
-      {/* FIXED: Added responsive padding classes */}
-      <section id="packages-grid" className="py-12 px-4 sm:px-6 lg:px-8">
+      <section id="packages-grid" className="py-8 sm:py-10 md:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {filteredPackages.length === 0 ? (
-            <div className="text-center py-16 bg-gradient-to-br from-white to-gray-50 rounded-3xl border border-gray-200/50">
-              <Globe size={64} className="mx-auto text-gray-300 mb-4" />
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">No packages found</h3>
-              <p className="text-gray-600 mb-6 max-w-md mx-auto">
+            <div className="text-center py-10 sm:py-12 md:py-16 bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl border border-gray-200/50 px-4">
+              <Globe size={48} className="sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto text-gray-300 mb-3 sm:mb-4" />
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2">No packages found</h3>
+              <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 max-w-md mx-auto">
                 {searchTerm 
                   ? `No packages match "${searchTerm}". Try a different search or browse all packages.`
                   : "Packages will be added soon. Contact us for custom trip planning."
                 }
               </p>
-              <div className="flex gap-4 justify-center">
+              <div className="flex flex-col xs:flex-row gap-3 justify-center px-4">
                 <button
                   onClick={() => {
                     setActiveFilter("all");
                     setSearchTerm("");
                   }}
-                  className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-medium"
+                  className="w-full xs:w-auto px-5 sm:px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-medium text-sm sm:text-base"
                 >
                   View All Packages
                 </button>
@@ -1358,28 +1350,28 @@ const Packages = () => {
                   href="https://wa.me/916371106588"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-6 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg font-medium flex items-center gap-2"
+                  className="w-full xs:w-auto px-5 sm:px-6 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg font-medium text-sm sm:text-base flex items-center justify-center gap-2"
                 >
-                  <MessageCircle size={18} />
+                  <MessageCircle size={16} className="sm:w-[18px] sm:h-[18px]" />
                   WhatsApp for Custom Trip
                 </a>
               </div>
             </div>
           ) : (
             <>
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
+              <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between mb-6 sm:mb-8 gap-3 sm:gap-4">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900">
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
                     All Packages
                   </h2>
-                  <p className="text-gray-600">
+                  <p className="text-xs sm:text-sm text-gray-600">
                     {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
                     {packages.length === getDemoPackages().length && " (Demo Data)"}
                   </p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-sm text-gray-500">Sort by:</span>
-                  <select className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                <div className="flex items-center gap-2 sm:gap-3 w-full xs:w-auto">
+                  <span className="text-xs sm:text-sm text-gray-500 whitespace-nowrap">Sort by:</span>
+                  <select className="w-full xs:w-auto px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                     <option>Popularity</option>
                     <option>Price: Low to High</option>
                     <option>Price: High to Low</option>
@@ -1388,7 +1380,7 @@ const Packages = () => {
                 </div>
               </div>
               
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
                 {filteredPackages.map((pkg) => (
                   <PackageCard key={pkg._id} pkg={pkg} onEnquire={handleEnquireClick} />
                 ))}
@@ -1398,13 +1390,11 @@ const Packages = () => {
         </div>
       </section>
 
-      {/* Custom Package CTA */}
       <CustomPackageCTA />
       
-      {/* Enquiry Form Modal */}
       {showEnquiryForm && selectedPackage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
+          <div className="w-full max-w-md my-4 sm:my-8">
             <PackageEnquiryForm 
               selectedPackage={selectedPackage}
               onClose={() => {
@@ -1421,12 +1411,12 @@ const Packages = () => {
         href="https://wa.me/916371106588"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-40 group"
+        className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-40 group"
       >
         <div className="relative">
           <div className="absolute inset-0 bg-green-500 rounded-full blur-lg group-hover:blur-xl transition-all opacity-70"></div>
-          <div className="relative bg-gradient-to-br from-green-500 to-green-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110">
-            <MessageCircle size={28} />
+          <div className="relative bg-gradient-to-br from-green-500 to-green-600 text-white p-3 sm:p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110">
+            <MessageCircle size={22} className="sm:w-7 sm:h-7" />
           </div>
         </div>
       </a>

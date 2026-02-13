@@ -363,32 +363,33 @@ const Tickets = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white overflow-x-hidden">
       {/* Hero Section - Dark Bluish Theme */}
       <section className="relative bg-gradient-to-br from-indigo-950 via-blue-900 to-purple-900 text-white overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-indigo-500/10"></div>
-          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-72 sm:h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-48 h-48 sm:w-72 sm:h-72 bg-indigo-500/10 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-24">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-24">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <Sparkles size={16} className="text-blue-300" />
-              <span className="text-sm font-medium">Travel Ticket Enquiry</span>
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-4 sm:mb-6">
+              <Sparkles size={14} className="sm:w-4 sm:h-4 text-blue-300" />
+              <span className="text-xs sm:text-sm font-medium">Travel Ticket Enquiry</span>
             </div>
             
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+            {/* MAIN HEADING KEPT EXACTLY SAME - NO CHANGES */}
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 leading-tight px-4">
               Get Confirmed
               <span className="block text-blue-300 mt-2">Travel Tickets</span>
             </h1>
             
-            <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 mb-6 sm:mb-8 md:mb-10 max-w-2xl mx-auto px-4">
               Expert assistance for train and flight bookings across India and worldwide.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-10 md:mb-12 px-4">
               <button 
                 onClick={() => {
                   const formElement = document.getElementById('enquiry-form');
@@ -396,35 +397,35 @@ const Tickets = () => {
                     formElement.scrollIntoView({behavior: 'smooth'});
                   }
                 }}
-                className="group relative bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                className="group relative bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base md:text-lg flex items-center justify-center gap-2 sm:gap-3 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
               >
                 <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
-                <TicketIcon className="relative z-10 group-hover:animate-pulse" size={22} /> 
+                <TicketIcon className="relative z-10 group-hover:animate-pulse" size={18} /> 
                 <span className="relative z-10">Enquire for Tickets</span>
               </button>
               <a 
                 href="https://wa.me/919023884833"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                className="group relative bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base md:text-lg flex items-center justify-center gap-2 sm:gap-3 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
               >
                 <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
-                <MessageCircle className="relative z-10" size={22} /> 
+                <MessageCircle className="relative z-10" size={18} /> 
                 <span className="relative z-10">Instant WhatsApp Quote</span>
               </a>
             </div>
 
             {/* Trust Indicators */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 max-w-3xl mx-auto px-4">
               {[
-                { icon: <ShieldCheck size={20} />, text: "Verified Service", color: "text-blue-400" },
-                { icon: <Clock size={20} />, text: "Quick Response", color: "text-indigo-400" },
-                { icon: <TrendingUp size={20} />, text: "Best Price", color: "text-teal-400" },
-                { icon: <Target size={20} />, text: "High Success Rate", color: "text-purple-400" },
+                { icon: <ShieldCheck size={16} className="sm:w-5 sm:h-5" />, text: "Verified Service", color: "text-blue-400" },
+                { icon: <Clock size={16} className="sm:w-5 sm:h-5" />, text: "Quick Response", color: "text-indigo-400" },
+                { icon: <TrendingUp size={16} className="sm:w-5 sm:h-5" />, text: "Best Price", color: "text-teal-400" },
+                { icon: <Target size={16} className="sm:w-5 sm:h-5" />, text: "High Success Rate", color: "text-purple-400" },
               ].map((badge, idx) => (
-                <div key={idx} className="flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
-                  <div className={`${badge.color}`}>{badge.icon}</div>
-                  <span className="text-sm font-medium">{badge.text}</span>
+                <div key={idx} className="flex items-center gap-2 sm:gap-3 bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 border border-white/10">
+                  <div className={`${badge.color} flex-shrink-0`}>{badge.icon}</div>
+                  <span className="text-[10px] sm:text-xs md:text-sm font-medium truncate">{badge.text}</span>
                 </div>
               ))}
             </div>
@@ -433,47 +434,47 @@ const Tickets = () => {
       </section>
 
       {/* Quick Stats */}
-      <div className="max-w-7xl mx-auto px-4 py-12 md:py-16">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 md:py-12 lg:py-16">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
           {[
             { 
               value: "100+", 
               label: "Happy Travelers",
-              icon: <Users className="text-blue-500" size={20} />,
+              icon: <Users className="text-blue-500" size={16} />,
               desc: "Trusted service"
             },
             { 
               value: "99.2%", 
               label: "Success Rate",
-              icon: <Target className="text-indigo-500" size={20} />,
+              icon: <Target className="text-indigo-500" size={16} />,
               desc: "Confirmed tickets"
             },
             { 
               value: "15-20 min", 
               label: "Avg Response",
-              icon: <Clock className="text-teal-500" size={20} />,
+              icon: <Clock className="text-teal-500" size={16} />,
               desc: "Quick replies"
             },
             { 
               value: "24/7", 
               label: "Support",
-              icon: <PhoneCall className="text-blue-500" size={20} />,
+              icon: <PhoneCall className="text-blue-500" size={16} />,
               desc: "Always available"
             },
           ].map((stat, idx) => (
             <div key={idx} className="group relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white rounded-2xl transform group-hover:scale-105 transition-all duration-300"></div>
-              <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 group-hover:border-blue-300/50 transition-all">
-                <div className="flex items-center gap-4 mb-3">
-                  <div className="p-2 bg-gradient-to-br from-blue-50 to-white rounded-xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white rounded-xl sm:rounded-2xl transform group-hover:scale-105 transition-all duration-300"></div>
+              <div className="relative bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6 border border-gray-200/50 group-hover:border-blue-300/50 transition-all">
+                <div className="flex items-center gap-2 sm:gap-3 md:gap-4 mb-1 sm:mb-2 md:mb-3">
+                  <div className="p-1.5 sm:p-2 bg-gradient-to-br from-blue-50 to-white rounded-lg sm:rounded-xl">
                     {stat.icon}
                   </div>
                   <div>
-                    <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
-                    <div className="text-sm font-medium text-gray-700">{stat.label}</div>
+                    <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">{stat.value}</div>
+                    <div className="text-[10px] sm:text-xs md:text-sm font-medium text-gray-700">{stat.label}</div>
                   </div>
                 </div>
-                <p className="text-xs text-gray-500">{stat.desc}</p>
+                <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-500 hidden xs:block">{stat.desc}</p>
               </div>
             </div>
           ))}
@@ -481,63 +482,63 @@ const Tickets = () => {
       </div>
 
       {/* Benefits Section */}
-      <section className="py-12 px-4 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-8 sm:py-10 md:py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
-              <Star size={16} className="text-blue-500" />
-              <span className="text-sm font-medium text-blue-700">Why Choose Us</span>
+          <div className="text-center mb-6 sm:mb-8 md:mb-10">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
+              <Star size={14} className="sm:w-4 sm:h-4 text-blue-500" />
+              <span className="text-xs sm:text-sm font-medium text-blue-700">Why Choose Us</span>
             </div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-3">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3 px-4">
               The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Travel Advantage</span>
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-4">
               Expert assistance for all your train and flight ticket needs
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
             {[
               {
-                icon: <ShieldCheck className="text-blue-600" size={24} />,
+                icon: <ShieldCheck className="text-blue-600" size={20} />,
                 title: "Expert Assistance",
                 description: "Our travel experts have 10+ years experience in finding confirmed tickets",
                 features: ["Tatkal booking experts", "Best flight deals", "Seat optimization"]
               },
               {
-                icon: <TrendingUp className="text-indigo-600" size={24} />,
+                icon: <TrendingUp className="text-indigo-600" size={20} />,
                 title: "Best Price Guarantee",
                 description: "We compare multiple options to ensure you get the best fares",
                 features: ["No hidden charges", "Transparent pricing", "Price match guarantee"]
               },
               {
-                icon: <Clock className="text-teal-600" size={24} />,
+                icon: <Clock className="text-teal-600" size={20} />,
                 title: "Quick Response",
                 description: "Get options within 15 minutes. 24/7 service available",
                 features: ["Instant WhatsApp replies", "Flight tracking", "Emergency booking"]
               },
               {
-                icon: <CheckCircle className="text-purple-600" size={24} />,
+                icon: <CheckCircle className="text-purple-600" size={20} />,
                 title: "100% Verified",
                 description: "Safe and secure ticket booking with verified partners",
                 features: ["Secure payment", "Ticket verification", "Booking confirmation"]
               }
             ].map((benefit, idx) => (
               <div key={idx} className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-50 rounded-2xl transform group-hover:scale-[1.02] transition-all duration-300 shadow-sm group-hover:shadow-lg"></div>
-                <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 group-hover:border-blue-300 transition-all">
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50">
+                <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-50 rounded-xl sm:rounded-2xl transform group-hover:scale-[1.02] transition-all duration-300 shadow-sm group-hover:shadow-lg"></div>
+                <div className="relative bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-gray-200/50 group-hover:border-blue-300 transition-all">
+                  <div className="flex flex-col xs:flex-row items-start gap-3 sm:gap-4">
+                    <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 flex-shrink-0">
                       {benefit.icon}
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-xl text-gray-900 mb-2">{benefit.title}</h3>
-                      <p className="text-gray-600 mb-4">{benefit.description}</p>
-                      <div className="space-y-2">
+                    <div className="flex-1 w-full xs:w-auto">
+                      <h3 className="font-bold text-base sm:text-lg md:text-xl text-gray-900 mb-1 sm:mb-2">{benefit.title}</h3>
+                      <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3 md:mb-4">{benefit.description}</p>
+                      <div className="space-y-1 sm:space-y-2">
                         {benefit.features.map((feature, fIdx) => (
-                          <div key={fIdx} className="flex items-center gap-2">
-                            <Check size={14} className="text-blue-500 flex-shrink-0" />
-                            <span className="text-sm text-gray-700">{feature}</span>
+                          <div key={fIdx} className="flex items-start gap-1.5 sm:gap-2">
+                            <Check size={12} className="sm:w-3 sm:h-3 text-blue-500 flex-shrink-0 mt-0.5" />
+                            <span className="text-[11px] sm:text-xs text-gray-700">{feature}</span>
                           </div>
                         ))}
                       </div>
@@ -551,88 +552,88 @@ const Tickets = () => {
       </section>
 
       {/* Main Form Section */}
-      <section id="enquiry-form" className="py-16 px-4">
+      <section id="enquiry-form" className="py-10 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
-              <Zap size={16} className="text-blue-500" />
-              <span className="text-sm font-medium text-blue-700">Quick & Easy Enquiry</span>
+          <div className="text-center mb-8 sm:mb-10 md:mb-12">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
+              <Zap size={14} className="sm:w-4 sm:h-4 text-blue-500" />
+              <span className="text-xs sm:text-sm font-medium text-blue-700">Quick & Easy Enquiry</span>
             </div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-3">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3 px-4">
               Get Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Custom Quote</span>
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-4">
               Fill in your journey details and receive the best options from our travel experts
             </p>
           </div>
           
-          <div className="bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-2xl overflow-hidden border border-gray-200/50">
+          <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden border border-gray-200/50">
             {/* Form Header */}
-            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-6">
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
+            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-4 sm:p-5 md:p-6">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 sm:mb-5 md:mb-6 gap-3 sm:gap-4">
                 <div>
-                  <h3 className="text-2xl font-bold text-white">Travel Ticket Enquiry Form</h3>
-                  <p className="text-blue-100">Get expert assistance for confirmed tickets</p>
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white">Travel Ticket Enquiry Form</h3>
+                  <p className="text-xs sm:text-sm text-blue-100">Get expert assistance for confirmed tickets</p>
                 </div>
                 <div className="hidden md:flex items-center gap-2">
-                  <Sparkles size={20} className="text-blue-300" />
-                  <span className="text-sm font-medium text-white">Quick Response Guaranteed</span>
+                  <Sparkles size={18} className="text-blue-300" />
+                  <span className="text-xs sm:text-sm font-medium text-white">Quick Response Guaranteed</span>
                 </div>
               </div>
 
               {/* Ticket Type Toggle */}
-              <div className="flex space-x-1 bg-white/20 backdrop-blur-sm rounded-xl p-1 max-w-md">
+              <div className="flex flex-col xs:flex-row space-x-0 xs:space-x-1 space-y-2 xs:space-y-0 bg-white/20 backdrop-blur-sm rounded-lg sm:rounded-xl p-1 max-w-full xs:max-w-md">
                 <button
                   type="button"
                   onClick={() => handleTicketTypeChange("train")}
-                  className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-300 flex items-center justify-center gap-2 ${
+                  className={`flex-1 py-2 sm:py-3 px-3 sm:px-4 rounded-lg font-medium transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-2 text-xs sm:text-sm ${
                     ticketType === "train" 
                       ? "bg-white text-blue-600 shadow-lg" 
                       : "text-white/80 hover:text-white hover:bg-white/10"
                   }`}
                 >
-                  <Train size={20} />
+                  <Train size={16} className="sm:w-5 sm:h-5" />
                   Train Tickets
                 </button>
                 <button
                   type="button"
                   onClick={() => handleTicketTypeChange("flight")}
-                  className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-300 flex items-center justify-center gap-2 ${
+                  className={`flex-1 py-2 sm:py-3 px-3 sm:px-4 rounded-lg font-medium transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-2 text-xs sm:text-sm ${
                     ticketType === "flight" 
                       ? "bg-white text-blue-600 shadow-lg" 
                       : "text-white/80 hover:text-white hover:bg-white/10"
                   }`}
                 >
-                  <Plane size={20} />
+                  <Plane size={16} className="sm:w-5 sm:h-5" />
                   Flight Tickets
                 </button>
               </div>
             </div>
 
             {/* Form Content */}
-            <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-6">
+            <form onSubmit={handleSubmit} className="p-4 sm:p-5 md:p-6 lg:p-8 space-y-4 sm:space-y-5 md:space-y-6">
               {/* Journey Details Card */}
-              <div className="bg-gradient-to-br from-blue-50/50 to-white rounded-2xl p-6 border border-blue-100/50">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
-                    {ticketType === "train" ? <Train size={24} className="text-blue-600" /> : <Plane size={24} className="text-blue-600" />}
+              <div className="bg-gradient-to-br from-blue-50/50 to-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-blue-100/50">
+                <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-5 md:mb-6">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
+                    {ticketType === "train" ? <Train size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6 text-blue-600" /> : <Plane size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6 text-blue-600" />}
                   </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 truncate">
                       {ticketType === "train" ? "Train Journey Details" : "Flight Journey Details"}
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-xs sm:text-sm text-gray-600 truncate">
                       {ticketType === "train" ? "Where and when you want to travel by train" : "Where and when you want to fly"}
                     </p>
                   </div>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-5 md:space-y-6">
                   {/* From/To Locations */}
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
-                        <MapPin size={16} className="text-blue-500" />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
+                    <div className="space-y-1 sm:space-y-2">
+                      <label className="block text-[10px] sm:text-xs md:text-sm font-medium text-gray-700 flex items-center gap-1 sm:gap-2">
+                        <MapPin size={12} className="sm:w-3 sm:h-3 md:w-4 md:h-4 text-blue-500" />
                         {ticketType === "train" ? "From Station *" : "From City/Airport *"}
                       </label>
                       <div className="relative">
@@ -640,23 +641,23 @@ const Tickets = () => {
                           name="from"
                           value={form.from}
                           onChange={handleChange}
-                          className={`w-full rounded-xl border ${errors.from ? 'border-red-500' : 'border-gray-300'} px-4 py-3 pl-11 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none`}
+                          className={`w-full rounded-lg sm:rounded-xl border ${errors.from ? 'border-red-500' : 'border-gray-300'} px-3 sm:px-4 py-2 sm:py-3 pl-8 sm:pl-10 text-xs sm:text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none`}
                           placeholder={ticketType === "train" ? "Enter departure station" : "Enter departure city or airport"}
                         />
                         {ticketType === "train" ? (
-                          <Train className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                          <Train className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                         ) : (
-                          <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                          <Globe className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                         )}
                       </div>
                       {errors.from && (
-                        <p className="text-red-500 text-sm mt-1">{errors.from}</p>
+                        <p className="text-red-500 text-[10px] sm:text-xs mt-1">{errors.from}</p>
                       )}
                     </div>
 
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
-                        <Navigation size={16} className="text-indigo-500" />
+                    <div className="space-y-1 sm:space-y-2">
+                      <label className="block text-[10px] sm:text-xs md:text-sm font-medium text-gray-700 flex items-center gap-1 sm:gap-2">
+                        <Navigation size={12} className="sm:w-3 sm:h-3 md:w-4 md:h-4 text-indigo-500" />
                         {ticketType === "train" ? "To Station *" : "To City/Airport *"}
                       </label>
                       <div className="relative">
@@ -664,17 +665,17 @@ const Tickets = () => {
                           name="to"
                           value={form.to}
                           onChange={handleChange}
-                          className={`w-full rounded-xl border ${errors.to ? 'border-red-500' : 'border-gray-300'} px-4 py-3 pl-11 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none`}
+                          className={`w-full rounded-lg sm:rounded-xl border ${errors.to ? 'border-red-500' : 'border-gray-300'} px-3 sm:px-4 py-2 sm:py-3 pl-8 sm:pl-10 text-xs sm:text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none`}
                           placeholder={ticketType === "train" ? "Enter destination station" : "Enter destination city or airport"}
                         />
                         {ticketType === "train" ? (
-                          <Train className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                          <Train className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                         ) : (
-                          <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                          <Globe className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                         )}
                       </div>
                       {errors.to && (
-                        <p className="text-red-500 text-sm mt-1">{errors.to}</p>
+                        <p className="text-red-500 text-[10px] sm:text-xs mt-1">{errors.to}</p>
                       )}
                     </div>
                   </div>
@@ -684,17 +685,17 @@ const Tickets = () => {
                     <button
                       type="button"
                       onClick={switchLocations}
-                      className="p-3 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-blue-700 transition-all"
+                      className="p-1.5 sm:p-2 md:p-3 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-blue-700 transition-all"
                     >
-                      <ArrowUpDown size={20} />
+                      <ArrowUpDown size={14} className="sm:w-4 sm:h-4 md:w-5 md:h-5" />
                     </button>
                   </div>
 
                   {/* Date and Service/Trip Type */}
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
-                        <Calendar size={16} className="text-indigo-500" />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
+                    <div className="space-y-1 sm:space-y-2">
+                      <label className="block text-[10px] sm:text-xs md:text-sm font-medium text-gray-700 flex items-center gap-1 sm:gap-2">
+                        <Calendar size={12} className="sm:w-3 sm:h-3 md:w-4 md:h-4 text-indigo-500" />
                         {ticketType === "train" ? "Travel Date *" : "Departure Date *"}
                       </label>
                       <div className="relative">
@@ -704,20 +705,20 @@ const Tickets = () => {
                           value={form.date}
                           onChange={handleChange}
                           min={getMinDate()}
-                          className={`w-full rounded-xl border ${errors.date ? 'border-red-500' : 'border-gray-300'} px-4 py-3 pl-11 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none`}
+                          className={`w-full rounded-lg sm:rounded-xl border ${errors.date ? 'border-red-500' : 'border-gray-300'} px-3 sm:px-4 py-2 sm:py-3 pl-8 sm:pl-10 text-xs sm:text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none`}
                           required
                         />
-                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                        <Calendar className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                       </div>
                       {errors.date && (
-                        <p className="text-red-500 text-sm mt-1">{errors.date}</p>
+                        <p className="text-red-500 text-[10px] sm:text-xs mt-1">{errors.date}</p>
                       )}
                     </div>
 
                     {ticketType === "train" ? (
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
-                          <Zap size={16} className="text-teal-500" />
+                      <div className="space-y-1 sm:space-y-2">
+                        <label className="block text-[10px] sm:text-xs md:text-sm font-medium text-gray-700 flex items-center gap-1 sm:gap-2">
+                          <Zap size={12} className="sm:w-3 sm:h-3 md:w-4 md:h-4 text-teal-500" />
                           Service Type *
                         </label>
                         <div className="relative">
@@ -725,19 +726,19 @@ const Tickets = () => {
                             name="serviceType"
                             value={form.serviceType}
                             onChange={handleChange}
-                            className="w-full rounded-xl border border-gray-300 px-4 py-3 pl-11 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
+                            className="w-full rounded-lg sm:rounded-xl border border-gray-300 px-3 sm:px-4 py-2 sm:py-3 pl-8 sm:pl-10 text-xs sm:text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none appearance-none bg-white"
                           >
                             {TRAIN_SERVICE_TYPES.map(type => (
                               <option key={type} value={type}>{type}</option>
                             ))}
                           </select>
-                          <Zap className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                          <Zap className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                         </div>
                       </div>
                     ) : (
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
-                          <ArrowRightLeft size={16} className="text-teal-500" />
+                      <div className="space-y-1 sm:space-y-2">
+                        <label className="block text-[10px] sm:text-xs md:text-sm font-medium text-gray-700 flex items-center gap-1 sm:gap-2">
+                          <ArrowRightLeft size={12} className="sm:w-3 sm:h-3 md:w-4 md:h-4 text-teal-500" />
                           Trip Type *
                         </label>
                         <div className="relative">
@@ -745,13 +746,13 @@ const Tickets = () => {
                             name="tripType"
                             value={form.tripType}
                             onChange={handleChange}
-                            className="w-full rounded-xl border border-gray-300 px-4 py-3 pl-11 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
+                            className="w-full rounded-lg sm:rounded-xl border border-gray-300 px-3 sm:px-4 py-2 sm:py-3 pl-8 sm:pl-10 text-xs sm:text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none appearance-none bg-white"
                           >
                             {FLIGHT_TRIP_TYPES.map(type => (
                               <option key={type} value={type}>{type}</option>
                             ))}
                           </select>
-                          <ArrowRightLeft className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                          <ArrowRightLeft className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                         </div>
                       </div>
                     )}
@@ -759,9 +760,9 @@ const Tickets = () => {
 
                   {/* Return Date for Flight Round Trip */}
                   {ticketType === "flight" && form.tripType === "Round Trip" && (
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
-                        <Calendar size={16} className="text-indigo-500" />
+                    <div className="space-y-1 sm:space-y-2">
+                      <label className="block text-[10px] sm:text-xs md:text-sm font-medium text-gray-700 flex items-center gap-1 sm:gap-2">
+                        <Calendar size={12} className="sm:w-3 sm:h-3 md:w-4 md:h-4 text-indigo-500" />
                         Return Date *
                       </label>
                       <div className="relative">
@@ -771,20 +772,20 @@ const Tickets = () => {
                           value={form.returnDate}
                           onChange={handleChange}
                           min={form.date || getMinDate()}
-                          className={`w-full rounded-xl border ${errors.returnDate ? 'border-red-500' : 'border-gray-300'} px-4 py-3 pl-11 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none`}
+                          className={`w-full rounded-lg sm:rounded-xl border ${errors.returnDate ? 'border-red-500' : 'border-gray-300'} px-3 sm:px-4 py-2 sm:py-3 pl-8 sm:pl-10 text-xs sm:text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none`}
                         />
-                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                        <Calendar className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                       </div>
                       {errors.returnDate && (
-                        <p className="text-red-500 text-sm mt-1">{errors.returnDate}</p>
+                        <p className="text-red-500 text-[10px] sm:text-xs mt-1">{errors.returnDate}</p>
                       )}
                     </div>
                   )}
 
                   {/* Class and Passengers */}
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
+                    <div className="space-y-1 sm:space-y-2">
+                      <label className="block text-[10px] sm:text-xs md:text-sm font-medium text-gray-700">
                         {ticketType === "train" ? "Travel Class" : "Flight Class"}
                       </label>
                       <div className="relative">
@@ -792,7 +793,7 @@ const Tickets = () => {
                           name={ticketType === "train" ? "travelClass" : "flightClass"}
                           value={ticketType === "train" ? form.travelClass : form.flightClass}
                           onChange={handleChange}
-                          className="w-full rounded-xl border border-gray-300 px-4 py-3 pl-11 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
+                          className="w-full rounded-lg sm:rounded-xl border border-gray-300 px-3 sm:px-4 py-2 sm:py-3 pl-8 sm:pl-10 text-xs sm:text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none appearance-none bg-white"
                         >
                           <option value="">Select Class</option>
                           {ticketType === "train" 
@@ -805,16 +806,16 @@ const Tickets = () => {
                           }
                         </select>
                         {ticketType === "train" ? (
-                          <Train className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                          <Train className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                         ) : (
-                          <Plane className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                          <Plane className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                         )}
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
-                        <Users size={16} className="text-blue-500" />
+                    <div className="space-y-1 sm:space-y-2">
+                      <label className="block text-[10px] sm:text-xs md:text-sm font-medium text-gray-700 flex items-center gap-1 sm:gap-2">
+                        <Users size={12} className="sm:w-3 sm:h-3 md:w-4 md:h-4 text-blue-500" />
                         Passengers *
                       </label>
                       <div className="relative">
@@ -822,38 +823,38 @@ const Tickets = () => {
                           name="passengers"
                           value={form.passengers}
                           onChange={handleChange}
-                          className="w-full rounded-xl border border-gray-300 px-4 py-3 pl-11 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
+                          className="w-full rounded-lg sm:rounded-xl border border-gray-300 px-3 sm:px-4 py-2 sm:py-3 pl-8 sm:pl-10 text-xs sm:text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none appearance-none bg-white"
                         >
                           {[1,2,3,4,5,6].map(num => (
                             <option key={num} value={num}>{num} {num === 1 ? 'Passenger' : 'Passengers'}</option>
                           ))}
                         </select>
-                        <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                        <Users className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                       </div>
                     </div>
                   </div>
 
-                  {/* Passenger Names - Always show for initial count */}
-                  <div className="space-y-4">
-                    <label className="block text-sm font-medium text-gray-700">
+                  {/* Passenger Names */}
+                  <div className="space-y-3 sm:space-y-4">
+                    <label className="block text-[10px] sm:text-xs md:text-sm font-medium text-gray-700">
                       Passenger Names *
                     </label>
-                    <div className="grid md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       {passengerNames.map((name, index) => (
-                        <div key={index} className="space-y-2">
+                        <div key={index} className="space-y-1 sm:space-y-2">
                           <div className="relative">
                             <input
                               value={name}
                               onChange={(e) => handlePassengerNameChange(index, e.target.value)}
                               data-passenger-index={index}
-                              className={`w-full rounded-xl border ${errors[`passenger_${index}`] ? 'border-red-500' : 'border-gray-300'} px-4 py-3 pl-11 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none`}
+                              className={`w-full rounded-lg sm:rounded-xl border ${errors[`passenger_${index}`] ? 'border-red-500' : 'border-gray-300'} px-3 sm:px-4 py-2 sm:py-3 pl-8 sm:pl-10 text-xs sm:text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none`}
                               placeholder={`Passenger ${index + 1} Full Name`}
                               required
                             />
-                            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                            <User className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                           </div>
                           {errors[`passenger_${index}`] && (
-                            <p className="text-red-500 text-sm mt-1">{errors[`passenger_${index}`]}</p>
+                            <p className="text-red-500 text-[10px] sm:text-xs mt-1">{errors[`passenger_${index}`]}</p>
                           )}
                         </div>
                       ))}
@@ -863,21 +864,21 @@ const Tickets = () => {
               </div>
 
               {/* Contact Details Card */}
-              <div className="bg-gradient-to-br from-indigo-50/50 to-white rounded-2xl p-6 border border-indigo-100/50">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-100 to-indigo-200 rounded-xl flex items-center justify-center">
-                    <PhoneCall size={24} className="text-indigo-600" />
+              <div className="bg-gradient-to-br from-indigo-50/50 to-white rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-indigo-100/50">
+                <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-5 md:mb-6">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-br from-indigo-100 to-indigo-200 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
+                    <PhoneCall size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6 text-indigo-600" />
                   </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900">Contact Details</h3>
-                    <p className="text-gray-600">Where should we contact you?</p>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 truncate">Contact Details</h3>
+                    <p className="text-xs sm:text-sm text-gray-600 truncate">Where should we contact you?</p>
                   </div>
                 </div>
 
-                <div className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700">
+                <div className="space-y-4 sm:space-y-5 md:space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
+                    <div className="space-y-1 sm:space-y-2">
+                      <label className="block text-[10px] sm:text-xs md:text-sm font-medium text-gray-700">
                         Mobile Number *
                       </label>
                       <div className="relative">
@@ -885,19 +886,19 @@ const Tickets = () => {
                           name="phone"
                           value={form.phone}
                           onChange={handleChange}
-                          className={`w-full rounded-xl border ${errors.phone ? 'border-red-500' : 'border-gray-300'} px-4 py-3 pl-11 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none`}
+                          className={`w-full rounded-lg sm:rounded-xl border ${errors.phone ? 'border-red-500' : 'border-gray-300'} px-3 sm:px-4 py-2 sm:py-3 pl-8 sm:pl-10 text-xs sm:text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none`}
                           placeholder="Enter 10-digit mobile number"
                           required
                         />
-                        <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                        <Phone className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                       </div>
                       {errors.phone && (
-                        <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+                        <p className="text-red-500 text-[10px] sm:text-xs mt-1">{errors.phone}</p>
                       )}
                     </div>
 
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700">
+                    <div className="space-y-1 sm:space-y-2">
+                      <label className="block text-[10px] sm:text-xs md:text-sm font-medium text-gray-700">
                         Email (Optional)
                       </label>
                       <div className="relative">
@@ -906,16 +907,16 @@ const Tickets = () => {
                           name="email"
                           value={form.email}
                           onChange={handleChange}
-                          className="w-full rounded-xl border border-gray-300 px-4 py-3 pl-11 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
+                          className="w-full rounded-lg sm:rounded-xl border border-gray-300 px-3 sm:px-4 py-2 sm:py-3 pl-8 sm:pl-10 text-xs sm:text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
                           placeholder="your.email@example.com"
                         />
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                        <Mail className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
                       </div>
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                  <div className="space-y-1 sm:space-y-2">
+                    <label className="block text-[10px] sm:text-xs md:text-sm font-medium text-gray-700">
                       Preferred Time (Optional)
                     </label>
                     <input
@@ -923,12 +924,12 @@ const Tickets = () => {
                       name="preferredTime"
                       value={form.preferredTime}
                       onChange={handleChange}
-                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
+                      className="w-full rounded-lg sm:rounded-xl border border-gray-300 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                  <div className="space-y-1 sm:space-y-2">
+                    <label className="block text-[10px] sm:text-xs md:text-sm font-medium text-gray-700">
                       Special Requests (Optional)
                     </label>
                     <textarea
@@ -936,7 +937,7 @@ const Tickets = () => {
                       value={form.specialRequest}
                       onChange={handleChange}
                       rows={3}
-                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
+                      className="w-full rounded-lg sm:rounded-xl border border-gray-300 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
                       placeholder="Any special requirements or preferences..."
                     />
                   </div>
@@ -944,12 +945,12 @@ const Tickets = () => {
               </div>
 
               {/* Info Card */}
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-200">
-                <div className="flex items-start gap-3">
-                  <Check size={20} className="text-blue-600 mt-0.5" />
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg sm:rounded-xl p-3 sm:p-4 border border-blue-200">
+                <div className="flex items-start gap-2 sm:gap-3">
+                  <Check size={14} className="sm:w-4 sm:h-4 text-blue-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="text-sm font-medium text-gray-900">What happens next?</p>
-                    <ul className="text-xs text-gray-600 mt-2 space-y-1">
+                    <p className="text-xs sm:text-sm font-medium text-gray-900">What happens next?</p>
+                    <ul className="text-[10px] sm:text-xs text-gray-600 mt-1 sm:mt-2 space-y-0.5 sm:space-y-1">
                       <li>✓ Our {ticketType} ticket expert contacts you within 15 minutes</li>
                       <li>✓ Receive best available options & prices</li>
                       <li>✓ Get confirmed ticket booking assistance</li>
@@ -961,22 +962,22 @@ const Tickets = () => {
 
               {/* Status Display */}
               {status.message && (
-                <div className={`rounded-xl p-4 border ${
+                <div className={`rounded-lg sm:rounded-xl p-3 sm:p-4 border ${
                   status.type === "success" 
                     ? "bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200 text-blue-800" 
                     : status.type === "error"
                     ? "bg-gradient-to-r from-red-50 to-red-100 border-red-200 text-red-800"
                     : "bg-gradient-to-r from-indigo-50 to-indigo-100 border-indigo-200 text-indigo-800"
                 }`}>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
                     {status.type === "success" ? (
-                      <CheckCircle size={20} />
+                      <CheckCircle size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
                     ) : status.type === "error" ? (
-                      <AlertCircle size={20} />
+                      <AlertCircle size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
                     ) : (
-                      <Loader2 className="animate-spin" size={20} />
+                      <Loader2 className="animate-spin" size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
                     )}
-                    <span className="text-sm font-medium">{status.message}</span>
+                    <span className="text-[11px] sm:text-xs md:text-sm font-medium">{status.message}</span>
                   </div>
                 </div>
               )}
@@ -985,26 +986,26 @@ const Tickets = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-4 rounded-xl font-bold text-lg disabled:opacity-70 transition-all duration-300 hover:shadow-xl group"
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3 sm:py-3.5 md:py-4 rounded-lg sm:rounded-xl font-bold text-sm sm:text-base md:text-lg disabled:opacity-70 transition-all duration-300 hover:shadow-xl group"
               >
                 {isSubmitting ? (
-                  <span className="flex items-center justify-center gap-3">
-                    <Loader2 className="animate-spin" size={20} />
+                  <span className="flex items-center justify-center gap-2 sm:gap-3">
+                    <Loader2 className="animate-spin" size={16} className="sm:w-5 sm:h-5" />
                     Submitting Enquiry...
                   </span>
                 ) : (
-                  <span className="flex items-center justify-center gap-3">
-                    <MessageCircle size={20} />
+                  <span className="flex items-center justify-center gap-2 sm:gap-3">
+                    <MessageCircle size={16} className="sm:w-5 sm:h-5" />
                     Submit {ticketType === "train" ? "Train" : "Flight"} Ticket Enquiry
-                    <ChevronRight className="group-hover:translate-x-1 transition-transform" size={18} />
+                    <ChevronRight className="group-hover:translate-x-1 transition-transform" size={14} className="sm:w-4 sm:h-4" />
                   </span>
                 )}
               </button>
             </form>
           </div>
 
-          <div className="text-center mt-8">
-            <p className="text-sm text-gray-500">
+          <div className="text-center mt-6 sm:mt-8 px-4">
+            <p className="text-[11px] sm:text-xs md:text-sm text-gray-500">
               💬 Prefer to talk? WhatsApp us at{" "}
               <a href="https://wa.me/916371106588" className="text-blue-600 font-medium hover:text-blue-800">
                 +91 63711 06588
@@ -1015,59 +1016,59 @@ const Tickets = () => {
       </section>
 
       {/* Process Section */}
-      <section className="py-16 px-4 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-10 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-8 sm:mb-10 md:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 px-4">
               How It <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Works</span>
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-4">
               Simple process from enquiry to confirmed tickets
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
             {[
               {
                 number: "01",
                 title: "Submit Enquiry",
                 description: "Fill the form with your journey details",
-                icon: <TicketIcon size={24} />
+                icon: <TicketIcon size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6" />
               },
               {
                 number: "02",
                 title: "Expert Contact",
                 description: "Get call from travel specialist within 15 min",
-                icon: <Phone size={24} />
+                icon: <Phone size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6" />
               },
               {
                 number: "03",
                 title: "Get Options",
                 description: "Receive best available tickets & prices",
-                icon: <CheckCircle size={24} />
+                icon: <CheckCircle size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6" />
               },
               {
                 number: "04",
                 title: "Confirm Booking",
                 description: "Book tickets with 24/7 support",
-                icon: <ShieldCheck size={24} />
+                icon: <ShieldCheck size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6" />
               },
             ].map((step, idx) => (
               <div key={idx} className="relative">
                 {idx < 3 && (
                   <div className="hidden lg:block absolute top-12 left-3/4 w-full h-0.5 bg-gradient-to-r from-blue-200 to-indigo-200"></div>
                 )}
-                <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-6 border border-gray-200/50 shadow-sm hover:shadow-lg transition-shadow">
-                  <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl text-white font-bold text-xl mb-4">
+                <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-gray-200/50 shadow-sm hover:shadow-lg transition-shadow">
+                  <div className="inline-flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 lg:w-14 lg:h-14 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg sm:rounded-xl text-white font-bold text-sm sm:text-base md:text-lg lg:text-xl mb-3 sm:mb-4">
                     {step.number}
                   </div>
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="p-2 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                    <div className="p-1.5 sm:p-2 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg">
                       {step.icon}
                     </div>
-                    <h3 className="font-bold text-lg text-gray-900">{step.title}</h3>
+                    <h3 className="font-bold text-sm sm:text-base md:text-lg text-gray-900">{step.title}</h3>
                   </div>
-                  <p className="text-gray-600 text-sm">{step.description}</p>
+                  <p className="text-xs sm:text-sm text-gray-600">{step.description}</p>
                 </div>
               </div>
             ))}
@@ -1080,12 +1081,12 @@ const Tickets = () => {
         href="https://wa.me/919023884833"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 group"
+        className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 group"
       >
         <div className="relative">
           <div className="absolute inset-0 bg-blue-500 rounded-full blur-lg group-hover:blur-xl transition-all opacity-70"></div>
-          <div className="relative bg-gradient-to-br from-blue-500 to-teal-500 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110">
-            <MessageCircle size={28} />
+          <div className="relative bg-gradient-to-br from-blue-500 to-teal-500 text-white p-2.5 sm:p-3 md:p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110">
+            <MessageCircle size={20} className="sm:w-6 sm:h-6 md:w-7 md:h-7" />
           </div>
         </div>
       </a>
