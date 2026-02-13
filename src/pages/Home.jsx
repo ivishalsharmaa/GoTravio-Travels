@@ -318,7 +318,7 @@ const Home = () => {
               </div>
 
               {/* FIXED: Reduced text size - more balanced */}
-              <h1 className="text-5xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+              <h1 className="text-5xl sm:text-4xl md:text-5xl lg:text-7xl font-bold leading-tight">
                 Travel Assistance
                 <span className="block text-yellow-300 mt-2 md:mt-3 text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
                   Made Personal
