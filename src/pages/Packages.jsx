@@ -1,3 +1,4 @@
+// client/src/pages/Packages.jsx
 import React, { useEffect, useState } from "react";
 import { API } from "../api.js";
 import { 
@@ -666,91 +667,92 @@ Message: ${formData.message || 'No additional message'}`
 
 const HeroSection = ({ scrollToPackages, scrollToCarousel }) => {
   return (
-    <section className="relative bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 text-white overflow-hidden">
+    <section className="relative bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 text-white overflow-hidden w-full">
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-orange-500/10"></div>
-        <div className="absolute top-10 left-10 w-64 h-64 sm:w-96 sm:h-96 bg-pink-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 right-10 w-64 h-64 sm:w-96 sm:h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-10 left-10 w-64 h-64 sm:w-96 sm:h-96 lg:w-[500px] lg:h-[500px] bg-pink-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-10 right-10 w-64 h-64 sm:w-96 sm:h-96 lg:w-[500px] lg:h-[500px] bg-orange-500/10 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-24">
-        <div className="text-center mb-8 sm:mb-12 md:mb-16">
-          <div className="inline-flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-            <div className="animate-pulse">
-              <Sparkles size={18} className="sm:w-6 sm:h-6 text-yellow-300" />
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent">
-              COMING SOON
-            </h2>
-            <div className="animate-pulse">
-              <Sparkles size={18} className="sm:w-6 sm:h-6 text-yellow-300" />
-            </div>
-          </div>
-          <p className="text-base sm:text-lg md:text-xl text-blue-100 mb-2 sm:mb-4 px-4">
-            Exciting new features and destinations are on the way!
-          </p>
-          <p className="text-sm sm:text-base md:text-lg text-blue-200 max-w-3xl mx-auto px-4">
-            Stay tuned for amazing updates. In the meantime, explore our current packages or request a custom trip.
-          </p>
-        </div>
-
-        <div className="text-center max-w-4xl mx-auto px-4">
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-4 sm:mb-6">
-            <Sparkles size={14} className="sm:w-4 sm:h-4 text-yellow-300" />
-            <span className="text-xs sm:text-sm font-medium">6+ Curated Tour Packages</span>
-          </div>
-          
-          {/* ONLY THE MAIN HEADING SIZE IS INCREASED ON MOBILE */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-7xl font-bold mb-6 sm:mb-8 md:mb-10 leading-tight">
-            Discover Amazing
-            <span className="block text-orange-300 mt-2 sm:mt-3 md:mt-4">Travel Experiences</span>
-          </h1>
-          
-          <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 md:mb-10 max-w-2xl mx-auto px-4">
-            Choose from our 6+ expertly curated tour packages or let us design a fully customized itinerary just for you.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-10 md:mb-12 px-4">
-            <button 
-              onClick={scrollToCarousel}
-              className="group relative bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base md:text-lg flex items-center justify-center gap-2 sm:gap-3 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
-            >
-              <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
-              <Globe className="relative z-10 group-hover:animate-pulse" size={18} /> 
-              <span className="relative z-10">View Packages</span>
-            </button>
-            <button 
-              onClick={scrollToPackages}
-              className="group relative bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base md:text-lg flex items-center justify-center gap-2 sm:gap-3 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
-            >
-              <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
-              <Grid className="relative z-10 group-hover:animate-pulse" size={18} /> 
-              <span className="relative z-10">Browse All</span>
-            </button>
-            <a 
-              href="https://wa.me/916371106588"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base md:text-lg flex items-center justify-center gap-2 sm:gap-3 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
-            >
-              <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
-              <MessageCircle className="relative z-10" size={18} /> 
-              <span className="relative z-10">Custom Trip</span>
-            </a>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 max-w-3xl mx-auto px-4">
-            {[
-              { icon: <Award size={16} className="sm:w-5 sm:h-5" />, text: "Packages", color: "text-yellow-400" },
-              { icon: <Shield size={16} className="sm:w-5 sm:h-5" />, text: "Flexible Plans", color: "text-green-400" },
-              { icon: <TrendingUp size={16} className="sm:w-5 sm:h-5" />, text: "Best Value", color: "text-pink-400" },
-              { icon: <Clock size={16} className="sm:w-5 sm:h-5" />, text: "24/7 Support", color: "text-blue-400" },
-            ].map((badge, idx) => (
-              <div key={idx} className="flex items-center gap-2 sm:gap-3 bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10">
-                <div className={`${badge.color} flex-shrink-0`}>{badge.icon}</div>
-                <span className="text-xs sm:text-sm font-medium truncate">{badge.text}</span>
+      <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 py-12 sm:py-16 lg:py-24">
+        <div className="w-full">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <div className="inline-flex items-center gap-2 sm:gap-3 lg:gap-4 mb-3 sm:mb-4">
+              <div className="animate-pulse">
+                <Sparkles size={18} className="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-yellow-300" />
               </div>
-            ))}
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent">
+                COMING SOON
+              </h2>
+              <div className="animate-pulse">
+                <Sparkles size={18} className="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-yellow-300" />
+              </div>
+            </div>
+            <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-blue-100 mb-2 sm:mb-4 px-4">
+              Exciting new features and destinations are on the way!
+            </p>
+            <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-blue-200 max-w-4xl mx-auto px-4">
+              Stay tuned for amazing updates. In the meantime, explore our current packages or request a custom trip.
+            </p>
+          </div>
+
+          <div className="text-center max-w-7xl mx-auto px-4">
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 lg:py-3 mb-4 sm:mb-6">
+              <Sparkles size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-yellow-300" />
+              <span className="text-xs sm:text-sm lg:text-base font-medium">6+ Curated Tour Packages</span>
+            </div>
+          
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 sm:mb-8 lg:mb-10 leading-tight">
+              Discover Amazing
+              <span className="block text-orange-300 mt-2 sm:mt-3 lg:mt-4">Travel Experiences</span>
+            </h1>
+          
+            <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-gray-300 mb-6 sm:mb-8 lg:mb-10 max-w-3xl mx-auto px-4">
+              Choose from our 6+ expertly curated tour packages or let us design a fully customized itinerary just for you.
+            </p>
+          
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 lg:gap-6 justify-center mb-8 sm:mb-10 lg:mb-12 px-4">
+              <button 
+                onClick={scrollToCarousel}
+                className="group relative bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-bold text-sm sm:text-base lg:text-lg xl:text-xl flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
+                <Globe className="relative z-10 group-hover:animate-pulse" size={18} /> 
+                <span className="relative z-10">View Packages</span>
+              </button>
+              <button 
+                onClick={scrollToPackages}
+                className="group relative bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-bold text-sm sm:text-base lg:text-lg xl:text-xl flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
+                <Grid className="relative z-10 group-hover:animate-pulse" size={18} /> 
+                <span className="relative z-10">Browse All</span>
+              </button>
+              <a 
+                href="https://wa.me/916371106588"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-bold text-sm sm:text-base lg:text-lg xl:text-xl flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
+                <MessageCircle className="relative z-10" size={18} /> 
+                <span className="relative z-10">Custom Trip</span>
+              </a>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-6 max-w-4xl mx-auto px-4">
+              {[
+                { icon: <Award size={16} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />, text: "Packages", color: "text-yellow-400" },
+                { icon: <Shield size={16} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />, text: "Flexible Plans", color: "text-green-400" },
+                { icon: <TrendingUp size={16} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />, text: "Best Value", color: "text-pink-400" },
+                { icon: <Clock size={16} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />, text: "24/7 Support", color: "text-blue-400" },
+              ].map((badge, idx) => (
+                <div key={idx} className="flex items-center gap-2 sm:gap-3 lg:gap-4 bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-5 border border-white/10">
+                  <div className={`${badge.color} flex-shrink-0`}>{badge.icon}</div>
+                  <span className="text-xs sm:text-sm lg:text-base font-medium truncate">{badge.text}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -777,7 +779,7 @@ const Grid = ({ size }) => (
   </svg>
 );
 
-// Package Type Filters Component - WITH NAMES RESTORED
+// Package Type Filters Component
 const PackageTypeFilter = ({ activeFilter, setActiveFilter }) => {
   const filters = [
     { id: "all", label: "All Packages", icon: <Globe size={14} />, count: 10 },
@@ -792,13 +794,13 @@ const PackageTypeFilter = ({ activeFilter, setActiveFilter }) => {
   const visibleFilters = showAllFilters ? filters : filters.slice(0, 4);
 
   return (
-    <div className="flex flex-col items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
-      <div className="flex flex-wrap gap-2 justify-center">
+    <div className="flex flex-col items-center gap-3 sm:gap-4 lg:gap-5 mb-6 sm:mb-8 lg:mb-10">
+      <div className="flex flex-wrap gap-2 lg:gap-3 justify-center">
         {visibleFilters.map((filter) => (
           <button
             key={filter.id}
             onClick={() => setActiveFilter(filter.id)}
-            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full transition-all text-xs sm:text-sm ${
+            className={`flex items-center gap-1.5 sm:gap-2 lg:gap-3 px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 lg:py-3 rounded-full transition-all text-xs sm:text-sm lg:text-base ${
               activeFilter === filter.id
                 ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg"
                 : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
@@ -808,7 +810,7 @@ const PackageTypeFilter = ({ activeFilter, setActiveFilter }) => {
               {filter.icon}
             </span>
             <span className="font-medium">{filter.label}</span>
-            <span className={`text-[10px] sm:text-xs px-1.5 py-0.5 rounded-full ${
+            <span className={`text-[10px] sm:text-xs lg:text-sm px-1.5 py-0.5 lg:px-2 lg:py-1 rounded-full ${
               activeFilter === filter.id 
                 ? "bg-white/20 text-white" 
                 : "bg-gray-100 text-gray-600"
@@ -822,7 +824,7 @@ const PackageTypeFilter = ({ activeFilter, setActiveFilter }) => {
       {filters.length > 4 && (
         <button
           onClick={() => setShowAllFilters(!showAllFilters)}
-          className="text-xs sm:text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1"
+          className="text-xs sm:text-sm lg:text-base text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1"
         >
           {showAllFilters ? 'Show Less' : `+${filters.length - 4} More Filters`}
           <ChevronRightIcon size={14} className={`transform transition-transform ${showAllFilters ? 'rotate-90' : ''}`} />
@@ -862,25 +864,27 @@ const QuickStats = () => {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-        {stats.map((stat, idx) => (
-          <div key={idx} className="group relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white rounded-xl sm:rounded-2xl transform group-hover:scale-105 transition-all duration-300"></div>
-            <div className="relative bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 border border-gray-200/50 group-hover:border-indigo-300/50 transition-all">
-              <div className="flex flex-col xs:flex-row items-center xs:items-start gap-2 sm:gap-4 mb-1 sm:mb-3">
-                <div className="p-1.5 sm:p-2 bg-gradient-to-br from-indigo-50 to-white rounded-lg sm:rounded-xl flex-shrink-0">
-                  {stat.icon}
+    <div className="w-full bg-white py-8 sm:py-12 lg:py-16">
+      <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+          {stats.map((stat, idx) => (
+            <div key={idx} className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white rounded-xl sm:rounded-2xl lg:rounded-3xl transform group-hover:scale-105 transition-all duration-300"></div>
+              <div className="relative bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-6 xl:p-8 border border-gray-200/50 group-hover:border-indigo-300/50 transition-all">
+                <div className="flex flex-col xs:flex-row items-center xs:items-start gap-2 sm:gap-3 lg:gap-4 mb-1 sm:mb-2 lg:mb-3">
+                  <div className="p-1.5 sm:p-2 lg:p-3 bg-gradient-to-br from-indigo-50 to-white rounded-lg sm:rounded-xl lg:rounded-2xl flex-shrink-0">
+                    {stat.icon}
+                  </div>
+                  <div className="text-center xs:text-left">
+                    <div className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900">{stat.value}</div>
+                    <div className="text-xs sm:text-sm lg:text-base font-medium text-gray-700">{stat.label}</div>
+                  </div>
                 </div>
-                <div className="text-center xs:text-left">
-                  <div className="text-lg sm:text-2xl md:text-3xl font-bold text-gray-900">{stat.value}</div>
-                  <div className="text-xs sm:text-sm font-medium text-gray-700">{stat.label}</div>
-                </div>
+                <p className="text-[10px] sm:text-xs lg:text-sm text-gray-500 text-center xs:text-left">{stat.desc}</p>
               </div>
-              <p className="text-[10px] sm:text-xs text-gray-500 text-center xs:text-left hidden xs:block">{stat.desc}</p>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -898,8 +902,8 @@ const PackageCard = ({ pkg, onEnquire }) => {
 
   return (
     <>
-      <div className="group relative bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-gray-200/50 group-hover:border-orange-300 transition-all duration-500 shadow-sm group-hover:shadow-2xl">
-        <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
+      <div className="group relative bg-white rounded-2xl sm:rounded-3xl lg:rounded-4xl overflow-hidden border border-gray-200/50 group-hover:border-orange-300 transition-all duration-500 shadow-sm group-hover:shadow-2xl">
+        <div className="relative h-48 sm:h-56 lg:h-72 overflow-hidden">
           <img
             src={pkg.imageUrl || pkg.image || pkg.images?.[0] || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1200"}
             alt={pkg.title}
@@ -907,53 +911,53 @@ const PackageCard = ({ pkg, onEnquire }) => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
           
-          <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
-            <span className="px-2 sm:px-3 py-1 bg-gradient-to-r from-orange-600 to-pink-600 text-white text-[10px] sm:text-xs font-bold rounded-full">
+          <div className="absolute top-3 sm:top-4 lg:top-5 left-3 sm:left-4 lg:left-5">
+            <span className="px-2 sm:px-3 lg:px-4 py-1 sm:py-1.5 lg:py-2 bg-gradient-to-r from-orange-600 to-pink-600 text-white text-[10px] sm:text-xs lg:text-sm font-bold rounded-full">
               {pkg.tag || pkg.category || "Popular"}
             </span>
           </div>
 
-          <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4">
-            <div className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 bg-black/60 backdrop-blur-sm rounded-full text-white text-[10px] sm:text-xs">
-              <Clock size={12} className="sm:w-3 sm:h-3" />
+          <div className="absolute bottom-3 sm:bottom-4 lg:bottom-5 left-3 sm:left-4 lg:left-5">
+            <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 px-2 sm:px-3 lg:px-4 py-1 sm:py-1.5 lg:py-2 bg-black/60 backdrop-blur-sm rounded-full text-white text-[10px] sm:text-xs lg:text-sm">
+              <Clock size={12} className="sm:w-3 sm:h-3 lg:w-4 lg:h-4" />
               <span>{pkg.days || pkg.duration} days</span>
             </div>
           </div>
         </div>
 
-        <div className="p-4 sm:p-5 md:p-6">
-          <div className="flex items-start justify-between mb-2 sm:mb-3">
+        <div className="p-4 sm:p-5 lg:p-6 xl:p-8">
+          <div className="flex items-start justify-between mb-2 sm:mb-3 lg:mb-4">
             <div className="min-w-0 flex-1 pr-2">
-              <h3 className="font-bold text-base sm:text-lg md:text-xl text-gray-900 mb-1 group-hover:text-indigo-700 transition-colors truncate">
+              <h3 className="font-bold text-base sm:text-lg lg:text-xl xl:text-2xl text-gray-900 mb-1 group-hover:text-indigo-700 transition-colors truncate">
                 {pkg.title}
               </h3>
-              <div className="flex items-center gap-1 sm:gap-2 text-gray-600 text-xs sm:text-sm">
-                <MapPin size={12} className="flex-shrink-0" />
+              <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 text-gray-600 text-xs sm:text-sm lg:text-base">
+                <MapPin size={12} className="sm:w-3 sm:h-3 lg:w-4 lg:h-4 flex-shrink-0" />
                 <span className="truncate">{pkg.location || pkg.destination}</span>
               </div>
             </div>
             <div className="flex items-center gap-1 flex-shrink-0">
-              <Star size={14} className="sm:w-4 sm:h-4 text-yellow-400 fill-yellow-400" />
-              <span className="font-bold text-gray-900 text-xs sm:text-sm">4.5</span>
+              <Star size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-yellow-400 fill-yellow-400" />
+              <span className="font-bold text-gray-900 text-xs sm:text-sm lg:text-base">4.5</span>
             </div>
           </div>
 
-          <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2">
+          <p className="text-gray-600 text-xs sm:text-sm lg:text-base mb-3 sm:mb-4 lg:mb-5 line-clamp-2">
             {pkg.description || "Experience amazing destinations with our expertly curated package."}
           </p>
 
-          <div className="flex flex-col xs:flex-row xs:items-center justify-between pt-3 sm:pt-4 border-t border-gray-100 gap-2 xs:gap-0">
+          <div className="flex flex-col xs:flex-row xs:items-center justify-between pt-3 sm:pt-4 lg:pt-5 border-t border-gray-100 gap-2 xs:gap-0">
             <div>
-              <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
+              <div className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900">
                 ₹{pkg.priceFrom?.toLocaleString() || pkg.price?.toLocaleString() || "On Request"}
               </div>
-              <div className="text-[10px] sm:text-xs text-gray-500">per person</div>
+              <div className="text-[10px] sm:text-xs lg:text-sm text-gray-500">per person</div>
             </div>
             <button
               onClick={handleEnquire}
-              className="w-full xs:w-auto px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg font-medium text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 transition-all hover:scale-105"
+              className="w-full xs:w-auto px-4 sm:px-5 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg font-medium text-xs sm:text-sm lg:text-base flex items-center justify-center gap-1.5 sm:gap-2 lg:gap-3 transition-all hover:scale-105"
             >
-              <MessageCircle size={14} className="sm:w-4 sm:h-4" />
+              <MessageCircle size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
               Enquire Now
             </button>
           </div>
@@ -981,22 +985,22 @@ const CustomPackageCTA = () => {
 
   return (
     <>
-      <section className="py-10 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-blue-900 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
+      <section className="w-full py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-12 xl:px-16 bg-gradient-to-br from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-blue-900 rounded-2xl sm:rounded-3xl lg:rounded-4xl overflow-hidden shadow-2xl">
             <div className="grid lg:grid-cols-2 items-center">
-              <div className="p-6 sm:p-8 md:p-10 lg:p-12 text-white">
-                <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-4 sm:mb-6">
-                  <Sparkles size={14} className="sm:w-4 sm:h-4 text-yellow-300" />
-                  <span className="text-xs sm:text-sm font-medium">Custom Trip Planning</span>
+              <div className="p-6 sm:p-8 lg:p-10 xl:p-12 text-white">
+                <div className="inline-flex items-center gap-1.5 sm:gap-2 lg:gap-3 bg-white/20 backdrop-blur-sm rounded-full px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 lg:py-3 mb-4 sm:mb-6">
+                  <Sparkles size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-yellow-300" />
+                  <span className="text-xs sm:text-sm lg:text-base font-medium">Custom Trip Planning</span>
                 </div>
-                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold mb-3 sm:mb-4">
                   Don't See What You're Looking For?
                 </h2>
-                <p className="text-blue-100 text-sm sm:text-base mb-6 sm:mb-8">
+                <p className="text-blue-100 text-sm sm:text-base lg:text-lg mb-6 sm:mb-8">
                   Let our travel experts design a completely personalized itinerary tailored to your preferences, budget, and schedule.
                 </p>
-                <div className="space-y-2 sm:space-y-3">
+                <div className="space-y-2 sm:space-y-3 lg:space-y-4">
                   {[
                     "100% Customizable itineraries",
                     "Flexible dates & destinations",
@@ -1004,23 +1008,23 @@ const CustomPackageCTA = () => {
                     "Best price guarantee"
                   ].map((feature, idx) => (
                     <div key={idx} className="flex items-center gap-2 sm:gap-3">
-                      <CheckCircle size={16} className="sm:w-[18px] sm:h-[18px] text-green-300 flex-shrink-0" />
-                      <span className="text-xs sm:text-sm">{feature}</span>
+                      <CheckCircle size={16} className="sm:w-[18px] sm:h-[18px] lg:w-5 lg:h-5 text-green-300 flex-shrink-0" />
+                      <span className="text-xs sm:text-sm lg:text-base">{feature}</span>
                     </div>
                   ))}
                 </div>
               </div>
               
-              <div className="bg-white p-6 sm:p-8 md:p-10 lg:p-12">
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Request Custom Package</h3>
+              <div className="bg-white p-6 sm:p-8 lg:p-10 xl:p-12">
+                <h3 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Request Custom Package</h3>
                 <button
                   onClick={() => setShowForm(true)}
-                  className="w-full bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white py-2.5 sm:py-3 rounded-lg font-medium text-sm sm:text-base transition-all flex items-center justify-center gap-2"
+                  className="w-full bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white py-2.5 sm:py-3 lg:py-4 rounded-lg font-medium text-sm sm:text-base lg:text-lg transition-all flex items-center justify-center gap-2"
                 >
-                  <MessageCircle size={18} className="sm:w-5 sm:h-5" />
+                  <MessageCircle size={18} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
                   Get Custom Quote
                 </button>
-                <p className="text-xs sm:text-sm text-gray-600 mt-3 sm:mt-4 text-center">
+                <p className="text-xs sm:text-sm lg:text-base text-gray-600 mt-3 sm:mt-4 text-center">
                   Our travel expert will contact you within 1 hour
                 </p>
               </div>
@@ -1262,21 +1266,21 @@ const Packages = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white w-full overflow-x-hidden">
       <HeroSection scrollToPackages={scrollToPackages} scrollToCarousel={scrollToCarousel} />
       <QuickStats />
       
       {/* Circular Carousel Section */}
-      <section id="circular-carousel" className="py-10 sm:py-12 md:py-16 bg-gradient-to-b from-white to-indigo-50/30">
-        <div className="text-center mb-8 sm:mb-10 md:mb-12 px-4 sm:px-6 lg:px-8">
-          <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-3 sm:mb-4">
-            <Sparkles size={14} className="sm:w-4 sm:h-4 text-indigo-500" />
-            <span className="text-xs sm:text-sm font-medium text-indigo-700">Featured Packages</span>
+      <section id="circular-carousel" className="w-full py-10 sm:py-12 lg:py-16 bg-gradient-to-b from-white to-indigo-50/30 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 lg:gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 lg:py-3 mb-3 sm:mb-4">
+            <Sparkles size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-indigo-500" />
+            <span className="text-xs sm:text-sm lg:text-base font-medium text-indigo-700">Featured Packages</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3 px-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-2 sm:mb-3 px-4">
             Explore Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Top Destinations</span>
           </h2>
-          <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-4">
+          <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto px-4">
             Browse through our most popular packages with interactive circular carousel
           </p>
         </div>
@@ -1296,25 +1300,25 @@ const Packages = () => {
         )}
       </section>
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 sm:mt-6 md:mt-8">
+      <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 mt-4 sm:mt-6 lg:mt-8">
         <PackageTypeFilter activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
       </div>
       
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 sm:mt-6 mb-6 sm:mb-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 sm:mt-6 mb-6 sm:mb-8">
         <div className="relative">
-          <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+          <Search className="absolute left-3 sm:left-4 lg:left-5 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
           <input
             type="text"
             placeholder="Search packages by destination, theme, or duration..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-4 bg-white rounded-lg sm:rounded-xl border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none text-sm sm:text-base shadow-sm"
+            className="w-full pl-10 sm:pl-12 lg:pl-14 pr-4 py-2.5 sm:py-3 lg:py-4 bg-white rounded-lg sm:rounded-xl lg:rounded-2xl border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none text-sm sm:text-base lg:text-lg shadow-sm"
           />
         </div>
       </div>
       
       {error && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-8">
+        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 mb-6 sm:mb-8">
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg sm:rounded-xl p-3 sm:p-4">
             <p className="text-xs sm:text-sm text-yellow-700">
               ⚠️ {error}. Showing demo packages. Check if backend is running on port 5000.
@@ -1324,8 +1328,8 @@ const Packages = () => {
       )}
       
       {/* Packages Grid Section */}
-      <section id="packages-grid" className="py-8 sm:py-10 md:py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section id="packages-grid" className="w-full py-8 sm:py-10 lg:py-12 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div className="w-full">
           {filteredPackages.length === 0 ? (
             <div className="text-center py-10 sm:py-12 md:py-16 bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl border border-gray-200/50 px-4">
               <Globe size={48} className="sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto text-gray-300 mb-3 sm:mb-4" />
@@ -1361,17 +1365,17 @@ const Packages = () => {
             <>
               <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between mb-6 sm:mb-8 gap-3 sm:gap-4">
                 <div>
-                  <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900">
                     All Packages
                   </h2>
-                  <p className="text-xs sm:text-sm text-gray-600">
+                  <p className="text-xs sm:text-sm lg:text-base text-gray-600">
                     {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
                     {packages.length === getDemoPackages().length && " (Demo Data)"}
                   </p>
                 </div>
                 <div className="flex items-center gap-2 sm:gap-3 w-full xs:w-auto">
-                  <span className="text-xs sm:text-sm text-gray-500 whitespace-nowrap">Sort by:</span>
-                  <select className="w-full xs:w-auto px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                  <span className="text-xs sm:text-sm lg:text-base text-gray-500 whitespace-nowrap">Sort by:</span>
+                  <select className="w-full xs:w-auto px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-3 text-xs sm:text-sm lg:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                     <option>Popularity</option>
                     <option>Price: Low to High</option>
                     <option>Price: High to Low</option>
@@ -1380,7 +1384,7 @@ const Packages = () => {
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
+              <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 xl:gap-8">
                 {filteredPackages.map((pkg) => (
                   <PackageCard key={pkg._id} pkg={pkg} onEnquire={handleEnquireClick} />
                 ))}
@@ -1411,12 +1415,12 @@ const Packages = () => {
         href="https://wa.me/916371106588"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-40 group"
+        className="fixed bottom-4 sm:bottom-6 lg:bottom-8 right-4 sm:right-6 lg:right-8 z-40 group"
       >
         <div className="relative">
           <div className="absolute inset-0 bg-green-500 rounded-full blur-lg group-hover:blur-xl transition-all opacity-70"></div>
-          <div className="relative bg-gradient-to-br from-green-500 to-green-600 text-white p-3 sm:p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110">
-            <MessageCircle size={22} className="sm:w-7 sm:h-7" />
+          <div className="relative bg-gradient-to-br from-green-500 to-green-600 text-white p-3 sm:p-4 lg:p-5 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110">
+            <MessageCircle size={22} className="sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
           </div>
         </div>
       </a>

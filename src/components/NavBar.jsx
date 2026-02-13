@@ -3,21 +3,15 @@ import { useState, useEffect } from "react";
 import { 
   Menu, 
   X, 
-  User, 
   LogOut, 
   Shield,
   ChevronDown,
-  Bell,
   Settings,
   Home,
   Car,
   Ticket,
   Package,
-  Phone,
-  Users,
-  Globe,
-  Search,
-  Sparkles
+  Phone
 } from "lucide-react";
 
 const Navbar = () => {
@@ -27,13 +21,11 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  // Check if user is logged in
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
     setIsLoggedIn(!!token);
   }, []);
 
-  // Handle scroll for navbar effects
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -51,11 +43,11 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { to: "/", label: "Home", icon: <Home size={18} /> },
-    { to: "/cabs", label: "Rental Cars", icon: <Car size={18} /> },
-    { to: "/tickets", label: "Tickets", icon: <Ticket size={18} /> },
-    { to: "/packages", label: "Packages", icon: <Package size={18} /> },
-    { to: "/contact", label: "Contact", icon: <Phone size={18} /> },
+    { to: "/", label: "Home", icon: <Home size={20} /> },
+    { to: "/cabs", label: "Rental Cars", icon: <Car size={20} /> },
+    { to: "/tickets", label: "Tickets", icon: <Ticket size={20} /> },
+    { to: "/packages", label: "Packages", icon: <Package size={20} /> },
+    { to: "/contact", label: "Contact", icon: <Phone size={20} /> },
   ];
 
   const adminLinks = [
@@ -73,16 +65,15 @@ const Navbar = () => {
             : 'bg-white py-4'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* ============================ */}
-            {/* LOGO SECTION - WITH PROPER GAP BETWEEN LOGO AND TEXT */}
+            {/* LEFT: LOGO - BILKUL LEFT SIDE */}
             {/* ============================ */}
-            <div className="flex items-center">
+            <div className="flex items-center -ml-2 sm:-ml-3 lg:-ml-4">
               <NavLink to="/" className="flex items-center group">
                 <div className="relative">
                   <div className="absolute inset-0 rounded-xl blur-md opacity-70 group-hover:blur-lg transition-all"></div>
-                  {/* LOGO CONTAINER */}
                   <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
                     <img 
                       src="/logo.png"
@@ -92,7 +83,6 @@ const Navbar = () => {
                   </div>
                 </div>
                 
-                {/* DESKTOP BRAND TEXT - WITH LEFT MARGIN FOR GAP */}
                 <div className="hidden sm:flex flex-col ml-3">
                   <p className="font-bold text-xl text-gray-900 leading-tight">
                     GoTravio
@@ -102,7 +92,6 @@ const Navbar = () => {
                   </p>
                 </div>
                 
-                {/* MOBILE BRAND TEXT - WITH LEFT MARGIN FOR GAP */}
                 <div className="flex flex-col sm:hidden ml-2">
                   <p className="font-bold text-lg text-gray-900 leading-tight">
                     GoTravio
@@ -113,18 +102,17 @@ const Navbar = () => {
                 </div>
               </NavLink>
             </div>
-            {/* ============================ */}
-            {/* END LOGO SECTION */}
-            {/* ============================ */}
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1">
+            {/* ============================ */}
+            {/* CENTER: NAVIGATION LINKS - BADE AUR CENTER MEIN */}
+            {/* ============================ */}
+            <nav className="hidden lg:flex items-center justify-center flex-1 mx-4">
               {navLinks.map((link) => (
                 <NavLink
                   key={link.to}
                   to={link.to}
                   className={({ isActive }) =>
-                    `flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all group ${
+                    `flex items-center gap-2 px-5 py-3 mx-0.5 rounded-xl text-base font-medium transition-all group ${
                       isActive
                         ? 'bg-gradient-to-r from-blue-50 to-emerald-50 text-blue-700 border border-blue-100'
                         : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
@@ -139,20 +127,20 @@ const Navbar = () => {
               ))}
             </nav>
 
-            {/* Right Side - Desktop */}
-            <div className="hidden lg:flex items-center gap-4">
-              {/* WhatsApp Button */}
+            {/* ============================ */}
+            {/* RIGHT: WHATSAPP + ADMIN - BILKUL RIGHT SIDE */}
+            {/* ============================ */}
+            <div className="hidden lg:flex items-center -mr-2 sm:-mr-3 lg:-mr-4">
               <a
                 href="https://wa.me/919023884833"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden md:flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:shadow-lg hover:scale-105 transition-all"
+                className="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:shadow-lg hover:scale-105 transition-all mr-3"
               >
                 <span className="text-lg">💬</span>
                 WhatsApp
               </a>
 
-              {/* Admin Dropdown */}
               {isLoggedIn ? (
                 <div className="relative">
                   <button
@@ -217,7 +205,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - UNCHANGED */}
         {isMenuOpen && (
           <div className="lg:hidden bg-white border-t border-gray-200 shadow-2xl animate-slideDown">
             <div className="px-4 py-6 space-y-1 max-h-[calc(100vh-80px)] overflow-y-auto">
@@ -239,7 +227,6 @@ const Navbar = () => {
                 </NavLink>
               ))}
 
-              {/* Admin Links in Mobile */}
               <div className="pt-4 mt-4 border-t border-gray-200">
                 {isLoggedIn ? (
                   <>
@@ -278,7 +265,6 @@ const Navbar = () => {
                 )}
               </div>
 
-              {/* WhatsApp in Mobile */}
               <a
                 href="https://wa.me/919023884833"
                 target="_blank"
@@ -297,7 +283,6 @@ const Navbar = () => {
       {/* Spacer for fixed navbar */}
       <div className="h-16 sm:h-20 lg:h-24"></div>
 
-      {/* Add animation CSS */}
       <style jsx>{`
         @keyframes slideDown {
           from {

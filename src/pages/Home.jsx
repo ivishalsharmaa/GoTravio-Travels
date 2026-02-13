@@ -40,7 +40,7 @@ const Home = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState({
-    type: null, // 'success' or 'error'
+    type: null,
     message: ""
   });
 
@@ -70,7 +70,6 @@ const Home = () => {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Auto-rotate carousel every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => 
@@ -81,7 +80,6 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Services data
   const services = [
     {
       icon: <Car className="w-8 h-8" />,
@@ -109,7 +107,6 @@ const Home = () => {
     },
   ];
 
-  // Contact options
   const contactOptions = [
     {
       icon: <MessageCircle className="w-8 h-8" />,
@@ -137,7 +134,6 @@ const Home = () => {
     },
   ];
 
-  // Process steps (expanded)
   const processSteps = [
     {
       step: "01",
@@ -161,7 +157,6 @@ const Home = () => {
     },
   ];
 
-  // Why book with us? (new)
   const whyBookReasons = [
     {
       icon: <Users className="w-8 h-8" />,
@@ -195,7 +190,6 @@ const Home = () => {
     },
   ];
 
-  // Benefits (expanding existing)
   const benefitsList = [
     {
       icon: <FileText className="w-6 h-6" />,
@@ -229,7 +223,6 @@ const Home = () => {
     },
   ];
 
-  // FAQs
   const faqs = [
     {
       question: "How do I start my enquiry?",
@@ -257,7 +250,6 @@ const Home = () => {
     },
   ];
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEnquiryData(prev => ({
@@ -266,7 +258,6 @@ const Home = () => {
     }));
   };
 
-  // Handle form submission
   const handleSubmitEnquiry = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -343,7 +334,6 @@ const Home = () => {
     scrollToEnquiry();
   };
 
-  // FAQ state for toggling
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
   return (
@@ -378,96 +368,98 @@ const Home = () => {
       )}
 
       {/* ================= HERO WITH AUTO CAROUSEL ================= */}
-      <section className="relative bg-gradient-to-br from-indigo-900 via-blue-800 to-purple-900 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-indigo-900 via-blue-800 to-purple-900 overflow-hidden w-full">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-blue-500 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-10 right-10 w-72 h-72 bg-purple-500 rounded-full blur-3xl"></div>
+          <div className="absolute top-10 left-10 w-64 h-64 sm:w-96 sm:h-96 lg:w-[500px] lg:h-[500px] bg-blue-500 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-64 h-64 sm:w-96 sm:h-96 lg:w-[500px] lg:h-[500px] bg-purple-500 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="relative max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            {/* Left Content - Text Section */}
-            <div className="text-white space-y-6 md:space-y-8 text-center lg:text-left">
-              <div className="inline-flex items-center justify-center lg:justify-start gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-xs sm:text-sm font-semibold mx-auto lg:mx-0">
-                <Zap className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
-                Expert-Assisted Travel Platform
-              </div>
+        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 py-12 sm:py-16 lg:py-24">
+          <div className="w-full">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+              {/* Left Content - Text Section */}
+              <div className="text-white space-y-6 md:space-y-8 text-center lg:text-left">
+                <div className="inline-flex items-center justify-center lg:justify-start gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-xs sm:text-sm font-semibold mx-auto lg:mx-0">
+                  <Zap className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
+                  Expert-Assisted Travel Platform
+                </div>
 
-              <h1 className="text-5xl sm:text-4xl md:text-5xl lg:text-7xl font-bold leading-tight">
-                Travel Assistance
-                <span className="block text-yellow-300 mt-2 md:mt-3 text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
-                  Made Personal
-                </span>
-              </h1>
+                <h1 className="text-5xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
+                  Travel Assistance
+                  <span className="block text-yellow-300 mt-2 md:mt-3 text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+                    Made Personal
+                  </span>
+                </h1>
 
-              <p className="text-blue-100 text-sm sm:text-base md:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
-                GoTravio provides human-powered assistance for cab rentals, train & flight tickets, 
-                and custom tour packages. Real experts handle your travel enquiries.
-              </p>
+                <p className="text-blue-100 text-sm sm:text-base md:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
+                  GoTravio provides human-powered assistance for cab rentals, train & flight tickets, 
+                  and custom tour packages. Real experts handle your travel enquiries.
+                </p>
 
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4 justify-center lg:justify-start">
-                <button
-                  onClick={scrollToEnquiry}
-                  className="group px-5 sm:px-6 md:px-7 py-2.5 sm:py-3 md:py-4 bg-white text-indigo-900 rounded-xl font-bold flex items-center justify-center gap-2 sm:gap-3 hover:bg-slate-100 transition-all duration-300 shadow-xl hover:shadow-2xl text-xs sm:text-sm md:text-base"
-                >
-                  <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
-                  Start Your Enquiry
-                  <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform" />
-                </button>
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4 justify-center lg:justify-start">
+                  <button
+                    onClick={scrollToEnquiry}
+                    className="group px-5 sm:px-6 md:px-7 py-2.5 sm:py-3 md:py-4 bg-white text-indigo-900 rounded-xl font-bold flex items-center justify-center gap-2 sm:gap-3 hover:bg-slate-100 transition-all duration-300 shadow-xl hover:shadow-2xl text-xs sm:text-sm md:text-base"
+                  >
+                    <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+                    Start Your Enquiry
+                    <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform" />
+                  </button>
 
-                <Link
-                  to="/contact"
-                  className="px-5 sm:px-6 md:px-7 py-2.5 sm:py-3 md:py-4 border-2 border-white/60 text-white rounded-xl font-bold hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 backdrop-blur-sm text-xs sm:text-sm md:text-base"
-                >
-                  <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
-                  Speak with Expert
-                </Link>
-              </div>
+                  <Link
+                    to="/contact"
+                    className="px-5 sm:px-6 md:px-7 py-2.5 sm:py-3 md:py-4 border-2 border-white/60 text-white rounded-xl font-bold hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 backdrop-blur-sm text-xs sm:text-sm md:text-base"
+                  >
+                    <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+                    Speak with Expert
+                  </Link>
+                </div>
 
-              <div className="grid grid-cols-3 gap-2 sm:gap-6 pt-6 sm:pt-8 border-t border-white/20">
-                {[
-                  ["Real Experts", "No automation"],
-                  ["Transparent Process", "Clear updates"],
-                  ["Multiple Channels", "Call/WhatsApp/Email"],
-                ].map(([label, sub]) => (
-                  <div key={label} className="text-center">
-                    <p className="text-xs sm:text-sm md:text-base font-bold text-white leading-tight">{label}</p>
-                    <p className="text-[10px] sm:text-xs md:text-sm text-blue-300 mt-1">{sub}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right Content - Auto Carousel */}
-            <div className="relative mt-6 lg:mt-0">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                <div className="relative w-full h-[250px] sm:h-[350px] md:h-[400px] lg:h-[500px]">
-                  {carouselImages.map((image, index) => (
-                    <div
-                      key={index}
-                      className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                        index === currentImageIndex ? 'opacity-100' : 'opacity-0'
-                      }`}
-                    >
-                      <img
-                        src={image.url}
-                        alt={image.alt}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+                <div className="grid grid-cols-3 gap-2 sm:gap-6 pt-6 sm:pt-8 border-t border-white/20">
+                  {[
+                    ["Real Experts", "No automation"],
+                    ["Transparent Process", "Clear updates"],
+                    ["Multiple Channels", "Call/WhatsApp/Email"],
+                  ].map(([label, sub]) => (
+                    <div key={label} className="text-center">
+                      <p className="text-xs sm:text-sm md:text-base font-bold text-white leading-tight">{label}</p>
+                      <p className="text-[10px] sm:text-xs md:text-sm text-blue-300 mt-1">{sub}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 sm:-translate-x-0 sm:left-0 lg:-left-6 bg-white p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl shadow-2xl max-w-[160px] sm:max-w-xs animate-float">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="p-1.5 sm:p-2 bg-indigo-100 rounded-lg">
-                    <Heart className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-indigo-600" />
+              {/* Right Content - Auto Carousel */}
+              <div className="relative mt-6 lg:mt-0">
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                  <div className="relative w-full h-[250px] sm:h-[350px] md:h-[400px] lg:h-[500px]">
+                    {carouselImages.map((image, index) => (
+                      <div
+                        key={index}
+                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                          index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                        }`}
+                      >
+                        <img
+                          src={image.url}
+                          alt={image.alt}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+                      </div>
+                    ))}
                   </div>
-                  <div>
-                    <p className="font-bold text-xs sm:text-sm md:text-base text-slate-900">Personal Service</p>
-                    <p className="text-[10px] sm:text-xs text-slate-500">Dedicated agent handling</p>
+                </div>
+
+                <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 sm:-translate-x-0 sm:left-0 lg:-left-6 bg-white p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl shadow-2xl max-w-[160px] sm:max-w-xs animate-float">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="p-1.5 sm:p-2 bg-indigo-100 rounded-lg">
+                      <Heart className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-indigo-600" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-xs sm:text-sm md:text-base text-slate-900">Personal Service</p>
+                      <p className="text-[10px] sm:text-xs text-slate-500">Dedicated agent handling</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -477,8 +469,8 @@ const Home = () => {
       </section>
 
       {/* ================= OUR APPROACH ================= */}
-      <section className="px-4 sm:px-6 lg:px-8 -mt-4 relative z-10">
-        <div className="max-w-full mx-auto bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8">
+      <section className="px-4 sm:px-6 lg:px-12 xl:px-16 -mt-4 relative z-10">
+        <div className="w-full bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {[
               {
@@ -517,42 +509,42 @@ const Home = () => {
       </section>
 
       {/* ================= SERVICES ================= */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gray-100">
-        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8 sm:mb-12 md:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
+      <section className="w-full bg-gray-100 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div className="w-full">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4">
               How We Can Assist You
             </h2>
-            <p className="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base md:text-lg">
+            <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto">
               Comprehensive travel assistance across multiple services
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
             {services.map((service, index) => (
               <div
                 key={index}
                 onClick={(e) => handleServiceClick(service.title.toLowerCase().includes('cab') ? 'cab' : 
                   service.title.toLowerCase().includes('ticket') ? 'train' : 'tour', e)}
-                className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-slate-200 hover:border-indigo-300 cursor-pointer"
+                className="group bg-white rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-slate-200 hover:border-indigo-300 cursor-pointer"
               >
-                <div className="p-5 sm:p-6 md:p-8">
-                  <div className={`inline-flex p-3 sm:p-4 rounded-xl bg-gradient-to-r ${service.color} text-white mb-4 sm:mb-6`}>
+                <div className="p-5 sm:p-6 lg:p-8">
+                  <div className={`inline-flex p-3 sm:p-4 lg:p-5 rounded-xl bg-gradient-to-r ${service.color} text-white mb-4 sm:mb-6`}>
                     {service.icon}
                   </div>
-                  <h3 className="font-bold text-lg sm:text-xl mb-2 sm:mb-3">{service.title}</h3>
-                  <p className="text-slate-600 text-sm sm:text-base mb-4 sm:mb-6">{service.desc}</p>
+                  <h3 className="font-bold text-lg sm:text-xl lg:text-2xl mb-2 sm:mb-3">{service.title}</h3>
+                  <p className="text-slate-600 text-sm sm:text-base lg:text-lg mb-4 sm:mb-6">{service.desc}</p>
                   <div className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
                     {service.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-slate-700">
-                        <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 flex-shrink-0" />
+                      <div key={idx} className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm lg:text-base text-slate-700">
+                        <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-green-500 flex-shrink-0" />
                         <span>{feature}</span>
                       </div>
                     ))}
                   </div>
-                  <div className="flex items-center justify-between text-indigo-700 font-semibold text-sm sm:text-base group-hover:underline">
+                  <div className="flex items-center justify-between text-indigo-700 font-semibold text-sm sm:text-base lg:text-lg group-hover:underline">
                     <span>Submit Enquiry</span>
-                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-2 transition-transform" />
+                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 group-hover:translate-x-2 transition-transform" />
                   </div>
                 </div>
               </div>
@@ -562,24 +554,24 @@ const Home = () => {
       </section>
 
       {/* ================= WHY BOOK WITH US? ================= */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-indigo-50 to-blue-50">
-        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
+      <section className="w-full bg-gradient-to-br from-indigo-50 to-blue-50 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div className="w-full">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4">
               Why Book With Us?
             </h2>
-            <p className="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base">
+            <p className="text-sm sm:text-base lg:text-lg text-slate-600 max-w-3xl mx-auto">
               We're not just a booking platform – we're your travel partner
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
             {whyBookReasons.map((reason, idx) => (
-              <div key={idx} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-slate-100">
-                <div className="inline-flex p-3 bg-indigo-100 rounded-xl text-indigo-600 mb-4">
+              <div key={idx} className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 shadow-lg hover:shadow-xl transition-all border border-slate-100">
+                <div className="inline-flex p-3 sm:p-4 bg-indigo-100 rounded-xl text-indigo-600 mb-4">
                   {reason.icon}
                 </div>
-                <h3 className="font-bold text-lg mb-2">{reason.title}</h3>
-                <p className="text-slate-600 text-sm">{reason.desc}</p>
+                <h3 className="font-bold text-lg sm:text-xl lg:text-2xl mb-2">{reason.title}</h3>
+                <p className="text-slate-600 text-sm sm:text-base lg:text-lg">{reason.desc}</p>
               </div>
             ))}
           </div>
@@ -587,28 +579,28 @@ const Home = () => {
       </section>
 
       {/* ================= OUR PROCESS (HOW IT WORKS) ================= */}
-      <section className="py-12 sm:py-16 md:py-20 bg-white">
-        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
+      <section className="w-full bg-white py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div className="w-full">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4">
               How Our Process Works
             </h2>
-            <p className="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base">
+            <p className="text-sm sm:text-base lg:text-lg text-slate-600 max-w-3xl mx-auto">
               Simple, transparent steps to get you travel-ready
             </p>
           </div>
-          <div className="grid lg:grid-cols-4 gap-6">
+          <div className="grid lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
             {processSteps.map((item, index) => (
               <div key={index} className="relative">
                 {index < processSteps.length - 1 && (
-                  <div className="hidden lg:block absolute top-12 left-3/4 w-full h-0.5 bg-gradient-to-r from-indigo-200 to-blue-200"></div>
+                  <div className="hidden lg:block absolute top-16 left-3/4 w-full h-0.5 bg-gradient-to-r from-indigo-200 to-blue-200"></div>
                 )}
-                <div className="bg-gradient-to-br from-indigo-50 to-white rounded-2xl p-6 border border-indigo-100 shadow-sm">
-                  <div className="inline-flex items-center justify-center w-12 h-12 bg-indigo-600 text-white rounded-xl font-bold text-lg mb-4">
+                <div className="bg-gradient-to-br from-indigo-50 to-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-indigo-100 shadow-sm">
+                  <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-indigo-600 text-white rounded-xl font-bold text-lg sm:text-xl lg:text-2xl mb-4">
                     {item.step}
                   </div>
-                  <h3 className="font-bold text-lg mb-2">{item.title}</h3>
-                  <p className="text-slate-600 text-sm">{item.desc}</p>
+                  <h3 className="font-bold text-lg sm:text-xl lg:text-2xl mb-2">{item.title}</h3>
+                  <p className="text-slate-600 text-sm sm:text-base lg:text-lg">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -617,18 +609,18 @@ const Home = () => {
       </section>
 
       {/* ================= ENQUIRY PROCESS & FORM ================= */}
-      <section id="enquiry-form" className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-indigo-50 to-blue-50 mt-12">
-        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="enquiry-form" className="w-full bg-gradient-to-br from-indigo-50 to-blue-50 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             <div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-6 sm:mb-8">
                 Ready to Start? Fill the Form
               </h2>
               <div className="space-y-4 sm:space-y-6">
                 {processSteps.map((item, index) => (
                   <div
                     key={index}
-                    className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-slate-200 hover:border-indigo-300 transition-colors"
+                    className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 hover:border-indigo-300 transition-colors"
                   >
                     <div className="flex items-start gap-3 sm:gap-4">
                       <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-indigo-600 text-white flex items-center justify-center rounded-lg font-bold text-sm sm:text-base">
@@ -645,7 +637,7 @@ const Home = () => {
             </div>
 
             {/* ================= ENQUIRY FORM ================= */}
-            <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-6 md:p-8 border border-slate-200">
+            <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-5 sm:p-6 md:p-8 border border-slate-200">
               <h3 className="font-bold text-xl sm:text-2xl mb-2">Quick Travel Enquiry</h3>
               <p className="text-slate-600 text-sm sm:text-base mb-6 sm:mb-8">Get assistance from our travel experts</p>
               
@@ -800,29 +792,29 @@ const Home = () => {
       </section>
 
       {/* ================= BENEFITS (expanded) ================= */}
-      <section className="py-12 sm:py-16 md:py-20 bg-white">
-        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
+      <section className="w-full bg-white py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div className="w-full">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4">
               Key Benefits of Using GoTravio
             </h2>
-            <p className="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base">
+            <p className="text-sm sm:text-base lg:text-lg text-slate-600 max-w-3xl mx-auto">
               Why travelers choose us for their journey planning
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
             {benefitsList.map((benefit, index) => (
               <div
                 key={index}
-                className="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-indigo-300 transition-colors"
+                className="bg-slate-50 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-slate-200 hover:border-indigo-300 transition-colors"
               >
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-white rounded-lg shadow-sm mb-4">
                   <div className="text-indigo-600">
                     {benefit.icon}
                   </div>
                 </div>
-                <h3 className="font-bold text-lg mb-2">{benefit.title}</h3>
-                <p className="text-slate-600 text-sm">{benefit.desc}</p>
+                <h3 className="font-bold text-lg sm:text-xl lg:text-2xl mb-2">{benefit.title}</h3>
+                <p className="text-slate-600 text-sm sm:text-base lg:text-lg">{benefit.desc}</p>
               </div>
             ))}
           </div>
@@ -830,42 +822,42 @@ const Home = () => {
       </section>
 
       {/* ================= CONTACT OPTIONS ================= */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-white to-slate-50">
-        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
+      <section className="w-full bg-gradient-to-b from-white to-slate-50 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div className="w-full">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4">
               Connect with Our Experts
             </h2>
-            <p className="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base">
+            <p className="text-sm sm:text-base lg:text-lg text-slate-600 max-w-3xl mx-auto">
               Choose your preferred way to get travel assistance
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
             {contactOptions.map((option, index) => (
               <button
                 key={index}
                 onClick={option.action}
-                className={`group rounded-2xl p-5 sm:p-6 md:p-8 border-2 ${option.color} hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-left`}
+                className={`group rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 border-2 ${option.color} hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-left`}
               >
                 <div className="inline-flex p-3 sm:p-4 bg-white rounded-xl shadow-sm mb-4 sm:mb-6">
                   <div className="text-indigo-600">
                     {option.icon}
                   </div>
                 </div>
-                <h3 className="font-bold text-lg sm:text-xl mb-2 sm:mb-3">{option.title}</h3>
-                <p className="text-slate-600 text-sm sm:text-base mb-4 sm:mb-6">{option.desc}</p>
+                <h3 className="font-bold text-lg sm:text-xl lg:text-2xl mb-2 sm:mb-3">{option.title}</h3>
+                <p className="text-slate-600 text-sm sm:text-base lg:text-lg mb-4 sm:mb-6">{option.desc}</p>
                 <div className="space-y-1 sm:space-y-2 mb-6 sm:mb-8">
                   {option.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-slate-700">
-                      <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 flex-shrink-0" />
+                    <div key={idx} className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm lg:text-base text-slate-700">
+                      <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-green-500 flex-shrink-0" />
                       <span>{feature}</span>
                     </div>
                   ))}
                 </div>
-                <div className="flex items-center gap-1 sm:gap-2 text-indigo-700 font-semibold text-sm sm:text-base">
+                <div className="flex items-center gap-1 sm:gap-2 text-indigo-700 font-semibold text-sm sm:text-base lg:text-lg">
                   Connect Now
-                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-2 transition-transform" />
+                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </button>
             ))}
@@ -874,13 +866,13 @@ const Home = () => {
       </section>
 
       {/* ================= FREQUENTLY ASKED QUESTIONS ================= */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gray-100">
-        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
+      <section className="w-full bg-gray-100 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div className="w-full">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base">
+            <p className="text-sm sm:text-base lg:text-lg text-slate-600 max-w-3xl mx-auto">
               Got questions? We've got answers.
             </p>
           </div>
@@ -889,10 +881,10 @@ const Home = () => {
               <div key={idx} className="mb-4">
                 <button
                   onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
-                  className="w-full text-left bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow border border-slate-200 focus:outline-none"
+                  className="w-full text-left bg-white rounded-xl sm:rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-200 focus:outline-none"
                 >
                   <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-base sm:text-lg pr-4">{faq.question}</h3>
+                    <h3 className="font-semibold text-base sm:text-lg lg:text-xl pr-4">{faq.question}</h3>
                     <ChevronRight
                       className={`w-5 h-5 text-indigo-600 transform transition-transform ${
                         openFaqIndex === idx ? 'rotate-90' : ''
@@ -900,7 +892,7 @@ const Home = () => {
                     />
                   </div>
                   {openFaqIndex === idx && (
-                    <p className="mt-3 text-slate-600 text-sm sm:text-base">{faq.answer}</p>
+                    <p className="mt-3 text-slate-600 text-sm sm:text-base lg:text-lg">{faq.answer}</p>
                   )}
                 </button>
               </div>
@@ -910,18 +902,18 @@ const Home = () => {
       </section>
 
       {/* ================= FINAL CTA ================= */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-indigo-900 via-blue-800 to-purple-900 relative overflow-hidden">
+      <section className="w-full bg-gradient-to-r from-indigo-900 via-blue-800 to-purple-900 relative overflow-hidden py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute -top-20 -right-20 w-96 h-96 bg-white rounded-full"></div>
         </div>
         
-        <div className="relative max-w-full mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 sm:p-8 md:p-12 border border-white/20">
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 sm:mb-6">
+        <div className="relative max-w-7xl mx-auto text-center">
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 border border-white/20">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-white mb-4 sm:mb-6">
               Ready for Personalized Travel Assistance?
             </h2>
             
-            <p className="text-blue-100 text-sm sm:text-base md:text-lg mb-6 sm:mb-8 md:mb-10 max-w-2xl mx-auto">
+            <p className="text-blue-100 text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 md:mb-10 max-w-2xl mx-auto">
               Experience travel planning with real experts, transparent processes, 
               and dedicated support throughout your journey.
             </p>
