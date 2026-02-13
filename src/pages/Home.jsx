@@ -1,3 +1,4 @@
+// client/src/pages/Home.jsx
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -21,7 +22,11 @@ import {
   Mail,
   Send,
   AlertCircle,
-  X
+  X,
+  Star,
+  ThumbsUp,
+  Award,
+  HelpCircle
 } from "lucide-react";
 import { API } from "../api.js";
 
@@ -104,7 +109,7 @@ const Home = () => {
     },
   ];
 
-  // Contact options - UPDATED with your phone number and email
+  // Contact options
   const contactOptions = [
     {
       icon: <MessageCircle className="w-8 h-8" />,
@@ -132,46 +137,123 @@ const Home = () => {
     },
   ];
 
-  // Process steps
+  // Process steps (expanded)
   const processSteps = [
     {
       step: "01",
       title: "Share Your Requirements",
-      desc: "Tell us about your travel plans, dates, and preferences"
+      desc: "Tell us about your travel plans, dates, and preferences. The more details, the better we can assist you."
     },
     {
       step: "02",
       title: "Agent Review & Verification",
-      desc: "Our experts check availability and suitable options"
+      desc: "Our experts check availability, compare options, and verify all details to ensure accuracy."
     },
     {
       step: "03",
       title: "Receive Options & Details",
-      desc: "Get comprehensive information to make decisions"
+      desc: "Get comprehensive information, including pricing, itineraries, and recommendations to make an informed decision."
     },
     {
       step: "04",
       title: "Proceed with Confidence",
-      desc: "Move forward only when you're fully satisfied"
+      desc: "Once you're satisfied, we help you book with no hidden charges. We remain available for support throughout your journey."
     },
   ];
 
-  // Benefits
-  const benefits = [
+  // Why book with us? (new)
+  const whyBookReasons = [
+    {
+      icon: <Users className="w-8 h-8" />,
+      title: "Personalized Assistance",
+      desc: "Every enquiry is handled by a real travel expert who understands your needs and provides tailored solutions."
+    },
+    {
+      icon: <Shield className="w-8 h-8" />,
+      title: "Trust & Transparency",
+      desc: "We believe in clear communication with no hidden fees. You'll know exactly what you're getting before you commit."
+    },
+    {
+      icon: <Clock className="w-8 h-8" />,
+      title: "Time-Saving",
+      desc: "Let us do the research and legwork. We present you with the best options so you can focus on enjoying your trip."
+    },
+    {
+      icon: <ThumbsUp className="w-8 h-8" />,
+      title: "Verified Options",
+      desc: "We only work with trusted partners and verified service providers to ensure quality and reliability."
+    },
+    {
+      icon: <Award className="w-8 h-8" />,
+      title: "Experienced Team",
+      desc: "Our team has years of experience in the travel industry, helping countless travelers with their plans."
+    },
+    {
+      icon: <Headphones className="w-8 h-8" />,
+      title: "End-to-End Support",
+      desc: "From the first enquiry to after your journey, we're here to assist you every step of the way."
+    },
+  ];
+
+  // Benefits (expanding existing)
+  const benefitsList = [
     {
       icon: <FileText className="w-6 h-6" />,
       title: "Detailed Documentation",
-      desc: "Clear records of all communications and options"
+      desc: "We provide clear records of all communications, options, and confirmations for your reference."
     },
     {
       icon: <Shield className="w-6 h-6" />,
       title: "Risk Minimization",
-      desc: "Verified options to avoid travel issues"
+      desc: "Our verification process helps avoid common travel pitfalls and ensures you deal with reliable providers."
     },
     {
       icon: <Clock className="w-6 h-6" />,
       title: "Time Saving",
-      desc: "Let experts handle research and verification"
+      desc: "We handle the research and coordination, saving you hours of browsing and calling."
+    },
+    {
+      icon: <CheckCircle className="w-6 h-6" />,
+      title: "Quality Assurance",
+      desc: "We personally vet services to ensure they meet our standards of comfort and reliability."
+    },
+    {
+      icon: <Star className="w-6 h-6" />,
+      title: "Customer Satisfaction",
+      desc: "Our focus is on making your travel experience smooth and enjoyable, with prompt issue resolution."
+    },
+    {
+      icon: <Heart className="w-6 h-6" />,
+      title: "Personal Touch",
+      desc: "We treat every traveler as an individual, not just a booking number."
+    },
+  ];
+
+  // FAQs
+  const faqs = [
+    {
+      question: "How do I start my enquiry?",
+      answer: "Simply fill out the quick enquiry form on this page, or reach out via WhatsApp, phone, or email. Provide your travel details, and one of our experts will get back to you within 1-2 hours."
+    },
+    {
+      question: "Is there any charge for the enquiry?",
+      answer: "No, our enquiry service is completely free. We only facilitate bookings; you pay the actual service provider directly. There are no hidden fees or markups."
+    },
+    {
+      question: "What services do you assist with?",
+      answer: "We help with cab rentals (local, outstation, airport transfers), train and flight tickets (including Tatkal), and custom tour packages for domestic and international destinations."
+    },
+    {
+      question: "How do you ensure the best price?",
+      answer: "Our experts compare multiple options from trusted partners and use their industry knowledge to find competitive rates. We also help you understand any applicable discounts or offers."
+    },
+    {
+      question: "What if I need to make changes to my booking?",
+      answer: "Contact us immediately. We'll guide you through the modification or cancellation process as per the service provider's policy and help minimize any inconvenience."
+    },
+    {
+      question: "Do you handle last-minute bookings?",
+      answer: "Yes, we specialize in quick assistance for urgent travel needs, including Tatkal train tickets and last-minute flight or cab bookings."
     },
   ];
 
@@ -191,18 +273,15 @@ const Home = () => {
     setSubmitStatus({ type: null, message: "" });
 
     try {
-      // Basic validation - including email as required
       if (!enquiryData.name || !enquiryData.service || !enquiryData.phone || !enquiryData.email) {
         throw new Error('Please fill in all required fields');
       }
 
-      // Phone number validation
       const phoneRegex = /^[+]?[0-9\s-]{10,}$/;
       if (!phoneRegex.test(enquiryData.phone)) {
         throw new Error('Please enter a valid phone number');
       }
 
-      // Email validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(enquiryData.email)) {
         throw new Error('Please enter a valid email address');
@@ -210,7 +289,6 @@ const Home = () => {
 
       console.log('Submitting enquiry:', enquiryData);
 
-      // Send to backend API
       const response = await API.post("/enquiry", enquiryData);
       
       if (response.data.success) {
@@ -219,7 +297,6 @@ const Home = () => {
           message: response.data.message || 'Enquiry submitted successfully! Our team will contact you within 1-2 hours.'
         });
 
-        // Reset form
         setEnquiryData({
           name: "",
           service: "",
@@ -228,7 +305,6 @@ const Home = () => {
           email: ""
         });
 
-        // Auto-hide success message after 5 seconds
         setTimeout(() => {
           setSubmitStatus({ type: null, message: "" });
         }, 5000);
@@ -247,12 +323,10 @@ const Home = () => {
     }
   };
 
-  // Close notification
   const closeNotification = () => {
     setSubmitStatus({ type: null, message: "" });
   };
 
-  // Scroll to enquiry form
   const scrollToEnquiry = () => {
     const enquirySection = document.getElementById('enquiry-form');
     if (enquirySection) {
@@ -260,7 +334,6 @@ const Home = () => {
     }
   };
 
-  // Handle service click with enquiry prefilling
   const handleServiceClick = (serviceType, e) => {
     e.preventDefault();
     setEnquiryData(prev => ({
@@ -269,6 +342,9 @@ const Home = () => {
     }));
     scrollToEnquiry();
   };
+
+  // FAQ state for toggling
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white overflow-x-hidden">
@@ -317,7 +393,6 @@ const Home = () => {
                 Expert-Assisted Travel Platform
               </div>
 
-              {/* FIXED: Reduced text size - more balanced */}
               <h1 className="text-5xl sm:text-4xl md:text-5xl lg:text-7xl font-bold leading-tight">
                 Travel Assistance
                 <span className="block text-yellow-300 mt-2 md:mt-3 text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
@@ -366,7 +441,6 @@ const Home = () => {
             {/* Right Content - Auto Carousel */}
             <div className="relative mt-6 lg:mt-0">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                {/* Carousel Images - Auto changing only */}
                 <div className="relative w-full h-[250px] sm:h-[350px] md:h-[400px] lg:h-[500px]">
                   {carouselImages.map((image, index) => (
                     <div
@@ -386,7 +460,6 @@ const Home = () => {
                 </div>
               </div>
 
-              {/* Floating Feature Cards - Adjusted for mobile */}
               <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 sm:-translate-x-0 sm:left-0 lg:-left-6 bg-white p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl shadow-2xl max-w-[160px] sm:max-w-xs animate-float">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div className="p-1.5 sm:p-2 bg-indigo-100 rounded-lg">
@@ -443,7 +516,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= SERVICES ENHANCED ================= */}
+      {/* ================= SERVICES ================= */}
       <section className="py-12 sm:py-16 md:py-20 bg-gray-100">
         <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
@@ -488,15 +561,69 @@ const Home = () => {
         </div>
       </section>
 
+      {/* ================= WHY BOOK WITH US? ================= */}
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-indigo-50 to-blue-50">
+        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
+              Why Book With Us?
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base">
+              We're not just a booking platform – we're your travel partner
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {whyBookReasons.map((reason, idx) => (
+              <div key={idx} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-slate-100">
+                <div className="inline-flex p-3 bg-indigo-100 rounded-xl text-indigo-600 mb-4">
+                  {reason.icon}
+                </div>
+                <h3 className="font-bold text-lg mb-2">{reason.title}</h3>
+                <p className="text-slate-600 text-sm">{reason.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= OUR PROCESS (HOW IT WORKS) ================= */}
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
+        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
+              How Our Process Works
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base">
+              Simple, transparent steps to get you travel-ready
+            </p>
+          </div>
+          <div className="grid lg:grid-cols-4 gap-6">
+            {processSteps.map((item, index) => (
+              <div key={index} className="relative">
+                {index < processSteps.length - 1 && (
+                  <div className="hidden lg:block absolute top-12 left-3/4 w-full h-0.5 bg-gradient-to-r from-indigo-200 to-blue-200"></div>
+                )}
+                <div className="bg-gradient-to-br from-indigo-50 to-white rounded-2xl p-6 border border-indigo-100 shadow-sm">
+                  <div className="inline-flex items-center justify-center w-12 h-12 bg-indigo-600 text-white rounded-xl font-bold text-lg mb-4">
+                    {item.step}
+                  </div>
+                  <h3 className="font-bold text-lg mb-2">{item.title}</h3>
+                  <p className="text-slate-600 text-sm">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ================= ENQUIRY PROCESS & FORM ================= */}
-      <section id="enquiry-form" className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-indigo-50 to-blue-50">
+      <section id="enquiry-form" className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-indigo-50 to-blue-50 mt-12">
         <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             <div>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8">
-                Our Enquiry Process
+                Ready to Start? Fill the Form
               </h2>
-
               <div className="space-y-4 sm:space-y-6">
                 {processSteps.map((item, index) => (
                   <div
@@ -517,13 +644,12 @@ const Home = () => {
               </div>
             </div>
 
-            {/* ================= FUNCTIONAL ENQUIRY FORM ================= */}
+            {/* ================= ENQUIRY FORM ================= */}
             <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-6 md:p-8 border border-slate-200">
               <h3 className="font-bold text-xl sm:text-2xl mb-2">Quick Travel Enquiry</h3>
               <p className="text-slate-600 text-sm sm:text-base mb-6 sm:mb-8">Get assistance from our travel experts</p>
               
               <form onSubmit={handleSubmitEnquiry} className="space-y-4 sm:space-y-6">
-                {/* Form-level success/error messages */}
                 {submitStatus.type && (
                   <div className={`p-3 sm:p-4 ${submitStatus.type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'} border rounded-xl`}>
                     <div className="flex items-center gap-2 sm:gap-3">
@@ -539,7 +665,6 @@ const Home = () => {
                   </div>
                 )}
 
-                {/* 1. Full Name Field */}
                 <div>
                   <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">
                     Full Name *
@@ -558,7 +683,6 @@ const Home = () => {
                   </div>
                 </div>
 
-                {/* 2. Service Required Dropdown */}
                 <div>
                   <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">
                     Service Required *
@@ -584,7 +708,6 @@ const Home = () => {
                   </div>
                 </div>
 
-                {/* 3. Phone/WhatsApp Number */}
                 <div>
                   <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">
                     Phone / WhatsApp Number *
@@ -604,7 +727,6 @@ const Home = () => {
                   <p className="text-[10px] sm:text-xs text-slate-500 mt-1 sm:mt-2">Include country code. We'll contact you on WhatsApp</p>
                 </div>
 
-                {/* Email Field - Now Mandatory */}
                 <div>
                   <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">
                     Email Address *
@@ -624,7 +746,6 @@ const Home = () => {
                   <p className="text-[10px] sm:text-xs text-slate-500 mt-1 sm:mt-2">We'll send confirmation and updates to your email</p>
                 </div>
 
-                {/* 4. Additional Information */}
                 <div>
                   <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">
                     Additional Information
@@ -643,7 +764,6 @@ const Home = () => {
                   <p className="text-[10px] sm:text-xs text-slate-500 mt-1 sm:mt-2">More details help us provide better assistance</p>
                 </div>
 
-                {/* Trust Badge */}
                 <div className="text-center p-3 sm:p-4 bg-slate-50 rounded-xl border border-slate-200">
                   <p className="text-xs sm:text-sm text-slate-700">
                     <Shield className="inline w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-green-600" />
@@ -651,7 +771,6 @@ const Home = () => {
                   </p>
                 </div>
 
-                {/* 5. Submit Button */}
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -670,7 +789,6 @@ const Home = () => {
                   )}
                 </button>
 
-                {/* 6. Response Time Reassurance */}
                 <p className="text-[10px] sm:text-xs text-slate-500 text-center">
                   <Clock className="inline w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-indigo-600" />
                   Our team typically responds within 1–2 hours during business hours
@@ -681,31 +799,30 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= BENEFITS ================= */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gray-100">
+      {/* ================= BENEFITS (expanded) ================= */}
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
-              Why Choose Our Service
+              Key Benefits of Using GoTravio
             </h2>
             <p className="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base">
-              What makes our travel assistance different
+              Why travelers choose us for their journey planning
             </p>
           </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {benefits.map((benefit, index) => (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {benefitsList.map((benefit, index) => (
               <div
                 key={index}
-                className="bg-slate-50 rounded-xl p-4 sm:p-6 border border-slate-200 hover:border-indigo-300 transition-colors"
+                className="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-indigo-300 transition-colors"
               >
-                <div className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white rounded-lg shadow-sm mb-3 sm:mb-4">
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-white rounded-lg shadow-sm mb-4">
                   <div className="text-indigo-600">
                     {benefit.icon}
                   </div>
                 </div>
-                <h3 className="font-bold text-base sm:text-lg mb-1 sm:mb-2">{benefit.title}</h3>
-                <p className="text-slate-600 text-xs sm:text-sm">{benefit.desc}</p>
+                <h3 className="font-bold text-lg mb-2">{benefit.title}</h3>
+                <p className="text-slate-600 text-sm">{benefit.desc}</p>
               </div>
             ))}
           </div>
@@ -751,6 +868,42 @@ const Home = () => {
                   <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-2 transition-transform" />
                 </div>
               </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= FREQUENTLY ASKED QUESTIONS ================= */}
+      <section className="py-12 sm:py-16 md:py-20 bg-gray-100">
+        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base">
+              Got questions? We've got answers.
+            </p>
+          </div>
+          <div className="max-w-4xl mx-auto">
+            {faqs.map((faq, idx) => (
+              <div key={idx} className="mb-4">
+                <button
+                  onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
+                  className="w-full text-left bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow border border-slate-200 focus:outline-none"
+                >
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold text-base sm:text-lg pr-4">{faq.question}</h3>
+                    <ChevronRight
+                      className={`w-5 h-5 text-indigo-600 transform transition-transform ${
+                        openFaqIndex === idx ? 'rotate-90' : ''
+                      }`}
+                    />
+                  </div>
+                  {openFaqIndex === idx && (
+                    <p className="mt-3 text-slate-600 text-sm sm:text-base">{faq.answer}</p>
+                  )}
+                </button>
+              </div>
             ))}
           </div>
         </div>
