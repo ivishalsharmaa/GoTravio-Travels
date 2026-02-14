@@ -84,7 +84,7 @@ const Home = () => {
 
   const services = [
     {
-      icon: <Car className="w-8 h-8" />,
+      icon: <Car className="w-7 h-7" />,
       title: "Cab & Vehicle Rentals",
       desc: "Assistance with local, outstation, and airport transfers across vehicle types.",
       features: ["Verified drivers", "Multiple vehicle options", "GPS tracking available"],
@@ -92,7 +92,7 @@ const Home = () => {
       color: "from-blue-600 to-cyan-500"
     },
     {
-      icon: <Ticket className="w-8 h-8" />,
+      icon: <Ticket className="w-7 h-7" />,
       title: "Ticket Assistance",
       desc: "Help with train, bus, and flight tickets including special quota requirements.",
       features: ["Normal & Tatkal", "All major airlines", "Seat selection help"],
@@ -100,7 +100,7 @@ const Home = () => {
       color: "from-purple-600 to-pink-500"
     },
     {
-      icon: <Package className="w-8 h-8" />,
+      icon: <Package className="w-7 h-7" />,
       title: "Tour Planning",
       desc: "Custom domestic and international tour packages with itinerary planning.",
       features: ["Tailored itineraries", "Accommodation help", "Activity planning"],
@@ -143,7 +143,7 @@ const Home = () => {
 
   const contactOptions = [
     {
-      icon: <MessageCircle className="w-8 h-8" />,
+      icon: <MessageCircle className="w-7 h-7" />,
       title: "WhatsApp Chat",
       desc: "Quick responses for enquiries and document sharing",
       action: () => window.open('https://wa.me/919023884833?text=Hi%20GOTravio,%20I%20need%20travel%20assistance', '_blank'),
@@ -151,7 +151,7 @@ const Home = () => {
       color: "border-green-200 bg-green-50 hover:bg-green-100"
     },
     {
-      icon: <Phone className="w-8 h-8" />,
+      icon: <Phone className="w-7 h-7" />,
       title: "Phone Consultation",
       desc: "Detailed discussion for complex travel requirements",
       action: () => window.location.href = 'tel:+919023884833',
@@ -159,7 +159,7 @@ const Home = () => {
       color: "border-blue-200 bg-blue-50 hover:bg-blue-100"
     },
     {
-      icon: <Headphones className="w-8 h-8" />,
+      icon: <Headphones className="w-7 h-7" />,
       title: "Email Support",
       desc: "Comprehensive planning with detailed itineraries",
       action: () => window.location.href = 'mailto:gotravio.travel@gmail.com?subject=Travel%20Assistance%20Enquiry&body=Hi%20GOTravio%20Team,%0A%0AI%20need%20assistance%20with%20my%20travel%20plans.%0A%0ARegards,%0A[Your%20Name]',
@@ -193,32 +193,32 @@ const Home = () => {
 
   const whyBookReasons = [
     {
-      icon: <Users className="w-8 h-8" />,
+      icon: <Users className="w-7 h-7" />,
       title: "Personalized Assistance",
       desc: "Every enquiry is handled by a real travel expert who understands your needs and provides tailored solutions."
     },
     {
-      icon: <Shield className="w-8 h-8" />,
+      icon: <Shield className="w-7 h-7" />,
       title: "Trust & Transparency",
       desc: "We believe in clear communication with no hidden fees. You'll know exactly what you're getting before you commit."
     },
     {
-      icon: <Clock className="w-8 h-8" />,
+      icon: <Clock className="w-7 h-7" />,
       title: "Time-Saving",
       desc: "Let us do the research and legwork. We present you with the best options so you can focus on enjoying your trip."
     },
     {
-      icon: <ThumbsUp className="w-8 h-8" />,
+      icon: <ThumbsUp className="w-7 h-7" />,
       title: "Verified Options",
       desc: "We only work with trusted partners and verified service providers to ensure quality and reliability."
     },
     {
-      icon: <Award className="w-8 h-8" />,
+      icon: <Award className="w-7 h-7" />,
       title: "Experienced Team",
       desc: "Our team has years of experience in the travel industry, helping countless travelers with their plans."
     },
     {
-      icon: <Headphones className="w-8 h-8" />,
+      icon: <Headphones className="w-7 h-7" />,
       title: "End-to-End Support",
       desc: "From the first enquiry to after your journey, we're here to assist you every step of the way."
     },
@@ -226,32 +226,32 @@ const Home = () => {
 
   const benefitsList = [
     {
-      icon: <FileText className="w-6 h-6" />,
+      icon: <FileText className="w-5 h-5" />,
       title: "Detailed Documentation",
       desc: "We provide clear records of all communications, options, and confirmations for your reference."
     },
     {
-      icon: <Shield className="w-6 h-6" />,
+      icon: <Shield className="w-5 h-5" />,
       title: "Risk Minimization",
       desc: "Our verification process helps avoid common travel pitfalls and ensures you deal with reliable providers."
     },
     {
-      icon: <Clock className="w-6 h-6" />,
+      icon: <Clock className="w-5 h-5" />,
       title: "Time Saving",
       desc: "We handle the research and coordination, saving you hours of browsing and calling."
     },
     {
-      icon: <CheckCircle className="w-6 h-6" />,
+      icon: <CheckCircle className="w-5 h-5" />,
       title: "Quality Assurance",
       desc: "We personally vet services to ensure they meet our standards of comfort and reliability."
     },
     {
-      icon: <Star className="w-6 h-6" />,
+      icon: <Star className="w-5 h-5" />,
       title: "Customer Satisfaction",
       desc: "Our focus is on making your travel experience smooth and enjoyable, with prompt issue resolution."
     },
     {
-      icon: <Heart className="w-6 h-6" />,
+      icon: <Heart className="w-5 h-5" />,
       title: "Personal Touch",
       desc: "We treat every traveler as an individual, not just a booking number."
     },
@@ -418,14 +418,14 @@ const Home = () => {
                   Expert-Assisted Travel Platform
                 </div>
 
-                <h1 className="text-5xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
+                <h1 className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
                   Travel Assistance
-                  <span className="block text-yellow-300 mt-2 md:mt-3 text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+                  <span className="block text-yellow-300 mt-2 md:mt-3 text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
                     Made Personal
                   </span>
                 </h1>
 
-                <p className="text-blue-100 text-sm sm:text-base md:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
+                <p className="text-blue-100 text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
                   GoTravio provides human-powered assistance for cab rentals, train & flight tickets, 
                   and custom tour packages. Real experts handle your travel enquiries.
                 </p>
@@ -934,17 +934,16 @@ const Home = () => {
                 </div>
                 
                 {/* Scanner/QR Code */}
-               {/* Scanner/QR Code */}
-<div className="relative w-40 h-40 sm:w-48 sm:h-48 lg:w-56 lg:h-56 mx-auto my-6 sm:my-8">
-  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-2xl rotate-6 opacity-20"></div>
-  <div className="absolute inset-0 bg-white rounded-2xl shadow-xl flex items-center justify-center border-2 border-yellow-200 overflow-hidden">
-    <img 
-      src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://www.google.com/search?q=GoTravio+Travels" 
-      alt="Google Reviews QR Code"
-      className="w-full h-full object-cover"
-    />
-  </div>
-</div>
+                <div className="relative w-40 h-40 sm:w-48 sm:h-48 lg:w-56 lg:h-56 mx-auto my-6 sm:my-8">
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-2xl rotate-6 opacity-20"></div>
+                  <div className="absolute inset-0 bg-white rounded-2xl shadow-xl flex items-center justify-center border-2 border-yellow-200 overflow-hidden">
+                    <img 
+                      src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://www.google.com/search?q=GoTravio+Travels" 
+                      alt="Google Reviews QR Code"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
                 
                 <p className="text-sm sm:text-base text-gray-600 mb-4">
                   Scan to read our reviews on Google
