@@ -21,13 +21,7 @@ import {
   CheckCircle,
   Loader2,
   ChevronRight,
-  Star,
-  Award,
-  Shield,
-  Globe,
-  Coffee,
-  Sunset,
-  Compass
+  Shield
 } from "lucide-react";
 
 const AIAssistant = () => {
@@ -37,7 +31,7 @@ const AIAssistant = () => {
       id: 1,
       type: "bot",
       text: "👋 **Hi there!** I'm GoTravio's AI travel assistant.\n\nI can help you book:\n• 🚗 **Cabs** - Local & outstation\n• 🚂 **Train tickets** - Including Tatkal\n• ✈️ **Flights** - Domestic & international\n• 🏝️ **Tour packages** - Custom itineraries\n\nWhat would you like to book today?",
-      timestamp: new Date().toLocaleTimeString()
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
   const [inputValue, setInputValue] = useState("");
@@ -49,36 +43,42 @@ const AIAssistant = () => {
   
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const chatWindowRef = useRef(null);
 
-  // Quick reply options with website color scheme
+  // Quick reply options
   const quickReplies = [
     { 
       id: "cab", 
-      text: "🚗 Book Cab", 
+      text: "🚗 Cab", 
+      fullText: "Book Cab",
       gradient: "from-blue-600 to-indigo-600",
       action: "startCabBooking" 
     },
     { 
       id: "train", 
-      text: "🚂 Train Tickets", 
+      text: "🚂 Train", 
+      fullText: "Train Tickets",
       gradient: "from-indigo-600 to-purple-600",
       action: "startTrainBooking" 
     },
     { 
       id: "flight", 
-      text: "✈️ Flight Booking", 
+      text: "✈️ Flight", 
+      fullText: "Flight Booking",
       gradient: "from-purple-600 to-pink-600",
       action: "startFlightBooking" 
     },
     { 
       id: "package", 
-      text: "🏝️ Tour Package", 
+      text: "🏝️ Tour", 
+      fullText: "Tour Package",
       gradient: "from-blue-600 to-teal-600",
       action: "startPackageBooking" 
     },
     { 
       id: "contact", 
-      text: "📞 Talk to Expert", 
+      text: "📞 Expert", 
+      fullText: "Talk to Expert",
       gradient: "from-gray-700 to-gray-900",
       action: "contactExpert" 
     },
@@ -90,12 +90,29 @@ const AIAssistant = () => {
 
   useEffect(() => {
     if (isOpen && inputRef.current) {
-      inputRef.current.focus();
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 300);
     }
   }, [isOpen]);
 
+  // Prevent body scroll when chat is open on mobile
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }, 100);
   };
 
   const toggleChat = () => {
@@ -115,7 +132,7 @@ const AIAssistant = () => {
       id: messages.length + 1,
       type: type,
       text: text,
-      timestamp: new Date().toLocaleTimeString()
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
     setMessages(prev => [...prev, newMessage]);
     return newMessage.id;
@@ -221,8 +238,6 @@ const AIAssistant = () => {
           break;
       }
       
-      console.log('📤 Sending to:', endpoint);
-      
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -293,7 +308,7 @@ const AIAssistant = () => {
           case "cab_date":
             setBookingData({ ...bookingData, date: input });
             setCurrentStep("cab_time");
-            response = "⏰ **Pickup time?**";
+            response = "⏰ **Pickup time?** (e.g., 10:00 AM)";
             break;
             
           case "cab_time":
@@ -562,60 +577,72 @@ const AIAssistant = () => {
 
   return (
     <>
-      {/* Chat Button - Website color scheme */}
+      {/* Chat Button - Fixed position bottom right */}
       <button
         onClick={toggleChat}
-        className={`fixed bottom-6 right-6 z-50 group transition-all duration-500 ${
+        className={`fixed bottom-4 right-4 z-50 group transition-all duration-500 ${
           isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
         }`}
       >
         <div className="relative">
-          {/* Animated rings with website colors */}
+          {/* Animated rings */}
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full animate-ping opacity-20"></div>
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-md group-hover:blur-xl transition-all opacity-60"></div>
           
-          {/* Main button - matches your website gradient */}
+          {/* Main button */}
           <div className="relative bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110">
-            <Bot size={28} className="animate-pulse" />
+            <Bot size={24} />
           </div>
           
           {/* Online indicator */}
           <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white animate-pulse"></span>
-          
-          {/* Tooltip */}
-          <span className="absolute right-16 top-3 bg-gray-900 text-white text-sm px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-            Travel Assistant
-          </span>
         </div>
       </button>
 
-      {/* Chat Window - Website color scheme */}
+      {/* Chat Window - FULLY RESPONSIVE */}
       <div
-        className={`fixed bottom-6 right-6 z-50 w-[380px] sm:w-[420px] bg-white rounded-2xl shadow-2xl transition-all duration-500 transform ${
-          isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
-        } overflow-hidden border border-gray-200/50`}
-      >
-        {/* Header - Matches your website gradient */}
-        <div className="relative bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white p-4 overflow-hidden">
-          {/* Animated background orbs */}
-          <div className="absolute -top-10 -right-10 w-24 h-24 bg-white/10 rounded-full blur-xl animate-pulse"></div>
-          <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-white/10 rounded-full blur-xl animate-pulse delay-700"></div>
+        ref={chatWindowRef}
+        className={`
+          fixed z-50 transition-all duration-300 transform
+          ${isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}
           
-          <div className="relative flex items-center justify-between">
+          /* Mobile: Full screen with safe area insets */
+          inset-0
+          
+          /* Tablet: Fixed width and position */
+          sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[380px] sm:h-[600px] sm:rounded-2xl
+          
+          /* Desktop: Larger size */
+          md:w-[420px] md:h-[650px]
+          
+          /* Base styles */
+          bg-white flex flex-col overflow-hidden shadow-2xl
+        `}
+        style={{
+          // Add safe area insets for modern phones
+          paddingTop: 'env(safe-area-inset-top, 0px)',
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+          paddingLeft: 'env(safe-area-inset-left, 0px)',
+          paddingRight: 'env(safe-area-inset-right, 0px)',
+        }}
+      >
+        {/* Header */}
+        <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white px-4 py-3 sm:rounded-t-2xl flex-shrink-0">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              {/* Avatar with glow */}
+              {/* Avatar */}
               <div className="relative">
                 <div className="absolute inset-0 bg-white/30 rounded-full blur-md"></div>
-                <div className="relative w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/50">
-                  <Bot size={24} className="text-white" />
+                <div className="relative w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/50">
+                  <Bot size={20} className="text-white" />
                 </div>
                 <span className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></span>
               </div>
               
               <div>
-                <h3 className="font-bold text-lg flex items-center gap-1">
+                <h3 className="font-bold text-base flex items-center gap-1">
                   GoTravio AI
-                  <Sparkles size={16} className="text-yellow-300" />
+                  <Sparkles size={14} className="text-yellow-300" />
                 </h3>
                 <p className="text-xs text-white/80 flex items-center gap-1">
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
@@ -633,27 +660,27 @@ const AIAssistant = () => {
           </div>
         </div>
 
-        {/* Messages area - matches your website background */}
-        <div className="h-[400px] overflow-y-auto p-4 bg-gradient-to-b from-gray-50 to-white">
+        {/* Messages area - Scrollable */}
+        <div className="flex-1 overflow-y-auto p-4 bg-gradient-to-b from-gray-50 to-white">
           {messages.map((message) => (
             <div
               key={message.id}
               className={`mb-4 flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               {message.type === 'bot' && (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white mr-2 flex-shrink-0">
-                  <Bot size={16} />
+                <div className="w-7 h-7 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white mr-2 flex-shrink-0">
+                  <Bot size={14} />
                 </div>
               )}
               
               <div
-                className={`max-w-[80%] rounded-2xl p-3 ${
+                className={`max-w-[85%] rounded-2xl p-3 ${
                   message.type === 'user'
                     ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-br-none'
                     : 'bg-white text-gray-800 rounded-bl-none shadow-md border border-gray-200/50'
                 }`}
               >
-                <p className="text-sm whitespace-pre-line">{message.text}</p>
+                <p className="text-sm whitespace-pre-line break-words">{message.text}</p>
                 <p className={`text-[10px] mt-1 ${
                   message.type === 'user' ? 'text-blue-200' : 'text-gray-400'
                 }`}>
@@ -662,8 +689,8 @@ const AIAssistant = () => {
               </div>
               
               {message.type === 'user' && (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gray-700 to-gray-900 flex items-center justify-center text-white ml-2 flex-shrink-0">
-                  <User size={16} />
+                <div className="w-7 h-7 rounded-full bg-gradient-to-r from-gray-700 to-gray-900 flex items-center justify-center text-white ml-2 flex-shrink-0">
+                  <User size={14} />
                 </div>
               )}
             </div>
@@ -671,12 +698,12 @@ const AIAssistant = () => {
           
           {isTyping && (
             <div className="flex justify-start mb-4">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white mr-2">
-                <Bot size={16} />
+              <div className="w-7 h-7 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white mr-2 flex-shrink-0">
+                <Bot size={14} />
               </div>
               <div className="bg-white rounded-2xl rounded-bl-none p-4 shadow-md border border-gray-200/50">
                 <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                  <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
                   <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
                   <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                 </div>
@@ -688,12 +715,12 @@ const AIAssistant = () => {
             <div className="flex justify-center mb-4">
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-3 flex items-center gap-2 border border-blue-100">
                 <Loader2 size={16} className="animate-spin text-blue-600" />
-                <p className="text-xs text-blue-600 font-medium">Processing your booking...</p>
+                <p className="text-sm text-blue-600 font-medium">Processing...</p>
               </div>
             </div>
           )}
           
-          {/* Quick Replies with website gradients */}
+          {/* Quick Replies */}
           {showQuickReplies && !currentStep && messages.length < 3 && (
             <div className="mt-4">
               <p className="text-xs text-gray-500 mb-2 font-medium">Quick actions:</p>
@@ -703,9 +730,17 @@ const AIAssistant = () => {
                     key={reply.id}
                     onClick={() => handleQuickReply(reply)}
                     disabled={isProcessing}
-                    className={`bg-gradient-to-r ${reply.gradient} text-white p-3 rounded-xl hover:shadow-lg transition-all hover:scale-105 text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50`}
+                    className={`
+                      bg-gradient-to-r ${reply.gradient} 
+                      text-white p-3 rounded-xl hover:shadow-lg 
+                      transition-all hover:scale-105 text-sm font-medium 
+                      flex items-center justify-center gap-2 
+                      disabled:opacity-50
+                    `}
                   >
-                    {reply.text}
+                    {/* Show icon + short text on mobile, full text on tablet/desktop */}
+                    <span className="sm:hidden">{reply.text}</span>
+                    <span className="hidden sm:inline">{reply.fullText}</span>
                   </button>
                 ))}
               </div>
@@ -715,9 +750,9 @@ const AIAssistant = () => {
           {/* Progress indicator */}
           {currentStep && (
             <div className="mt-4 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
-              <p className="text-xs text-blue-600 font-medium flex items-center gap-1">
-                <Zap size={12} className="animate-pulse" />
-                Booking in progress • Step {getStepNumber(currentStep)} of {getTotalSteps(bookingData.type)}
+              <p className="text-sm text-blue-600 font-medium flex items-center gap-1">
+                <Zap size={14} className="animate-pulse" />
+                <span>Step {getStepNumber(currentStep)} of {getTotalSteps(bookingData.type)}</span>
               </p>
             </div>
           )}
@@ -726,7 +761,7 @@ const AIAssistant = () => {
         </div>
 
         {/* Input Area */}
-        <div className="p-4 border-t border-gray-200 bg-white">
+        <div className="p-4 border-t border-gray-200 bg-white flex-shrink-0">
           <div className="flex items-center gap-2">
             <input
               ref={inputRef}
@@ -737,11 +772,12 @@ const AIAssistant = () => {
               placeholder={isProcessing ? "Processing..." : "Type your message..."}
               disabled={isProcessing}
               className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-sm disabled:bg-gray-100 transition-all"
+              style={{ fontSize: '16px' }} // Prevents zoom on mobile
             />
             <button
               onClick={() => handleUserInput(inputValue)}
               disabled={!inputValue.trim() || isProcessing}
-              className={`p-3 rounded-xl transition-all ${
+              className={`p-3 rounded-xl transition-all flex-shrink-0 ${
                 inputValue.trim() && !isProcessing
                   ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg hover:scale-105'
                   : 'bg-gray-100 text-gray-400 cursor-not-allowed'
@@ -751,19 +787,19 @@ const AIAssistant = () => {
             </button>
           </div>
           
-          {/* Trust badges - matches website style */}
-          <div className="flex items-center justify-center gap-3 mt-3 text-[10px] text-gray-400">
+          {/* Trust badges */}
+          <div className="flex items-center justify-center gap-4 mt-3 text-[10px] text-gray-400">
             <span className="flex items-center gap-1">
               <Shield size={10} className="text-blue-600" />
-              Secure
+              <span className="hidden xs:inline">Secure</span>
             </span>
             <span className="flex items-center gap-1">
               <Clock size={10} className="text-indigo-600" />
-              24/7 Support
+              <span className="hidden xs:inline">24/7 Support</span>
             </span>
             <span className="flex items-center gap-1">
               <CheckCircle size={10} className="text-purple-600" />
-              Free Service
+              <span className="hidden xs:inline">Free</span>
             </span>
           </div>
         </div>
@@ -772,7 +808,7 @@ const AIAssistant = () => {
   );
 };
 
-// Helper functions for progress tracking
+// Helper functions
 const getStepNumber = (step) => {
   const steps = {
     'cab_pickup': 1, 'cab_drop': 2, 'cab_date': 3, 'cab_time': 4, 'cab_passengers': 5, 'cab_name': 6, 'cab_phone': 7,
