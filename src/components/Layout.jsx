@@ -1,4 +1,6 @@
+// client/src/components/Layout.jsx
 import Navbar from "./NavBar.jsx";
+import AIAssistant from "./AIAssistant.jsx"; // 👈 Import the AI Assistant
 
 const Layout = ({ children }) => {
   return (
@@ -15,6 +17,9 @@ const Layout = ({ children }) => {
       <main className="relative z-10 animate-fade-in">
         {children}
       </main>
+
+      {/* AI Assistant - Floating Chat Widget */}
+      <AIAssistant /> {/* 👈 This will appear on all pages */}
 
       {/* Modern Footer */}
       <footer className="relative z-10 border-t border-gray-200 bg-white/80 backdrop-blur-sm mt-20">

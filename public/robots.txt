@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://gotraviotravels.netlify.app/sitemap.xml
