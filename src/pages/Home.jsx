@@ -26,7 +26,9 @@ import {
   Star,
   ThumbsUp,
   Award,
-  HelpCircle
+  HelpCircle,
+  MapPin,
+  QrCode
 } from "lucide-react";
 import { API } from "../api.js";
 
@@ -105,6 +107,38 @@ const Home = () => {
       link: "/packages",
       color: "from-orange-600 to-yellow-500"
     },
+  ];
+
+  // Google Reviews Data
+  const googleReviews = [
+    {
+      name: "Rahul Sharma",
+      rating: 5,
+      date: "2 weeks ago",
+      text: "GoTravio helped me book a last-minute cab to the airport when I was in a rush. Their response was super quick and the driver was professional. Highly recommended!",
+      initial: "RS"
+    },
+    {
+      name: "Priya Patel",
+      rating: 5,
+      date: "1 month ago",
+      text: "Amazing service for train ticket booking! They got me confirmed Tatkal tickets when I couldn't book myself. Very helpful team.",
+      initial: "PP"
+    },
+    {
+      name: "Amit Kumar",
+      rating: 5,
+      date: "3 weeks ago",
+      text: "Booked a Manali tour package through them. Everything was perfectly arranged - cabs, hotels, sightseeing. Great experience!",
+      initial: "AK"
+    },
+    {
+      name: "Neha Singh",
+      rating: 5,
+      date: "2 months ago",
+      text: "Very responsive and professional. They helped me with flight tickets and even suggested better options than I found online. Will use again!",
+      initial: "NS"
+    }
   ];
 
   const contactOptions = [
@@ -861,6 +895,129 @@ const Home = () => {
                 </div>
               </button>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= GOOGLE REVIEWS SECTION WITH SCANNER ================= */}
+      <section className="w-full bg-gradient-to-br from-yellow-50 to-orange-50 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div className="w-full">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <div className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-yellow-100 to-orange-100 px-4 sm:px-6 py-2 sm:py-3 rounded-full mb-4 sm:mb-5">
+              <Star className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600 fill-yellow-600" />
+              <span className="text-xs sm:text-sm font-medium text-orange-700">Trusted by Travelers</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4">
+              Join <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600">100+ Happy Travelers</span>
+            </h2>
+            <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto">
+              See what our customers are saying about us on Google
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Left Side - Scanner and Google Info */}
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 shadow-xl border border-yellow-100">
+              <div className="text-center mb-6 sm:mb-8">
+                <div className="inline-flex items-center justify-center gap-2 mb-4">
+                  <img 
+                    src="https://www.google.com/favicon.ico" 
+                    alt="Google" 
+                    className="w-5 h-5 sm:w-6 sm:h-6"
+                    onError={(e) => e.target.style.display = 'none'}
+                  />
+                  <span className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-green-600">Google</span>
+                </div>
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">Check us out on</h3>
+                <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600 mb-4">
+                  GoTravio Travels
+                </div>
+                
+                {/* Scanner/QR Code */}
+               {/* Scanner/QR Code */}
+<div className="relative w-40 h-40 sm:w-48 sm:h-48 lg:w-56 lg:h-56 mx-auto my-6 sm:my-8">
+  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-2xl rotate-6 opacity-20"></div>
+  <div className="absolute inset-0 bg-white rounded-2xl shadow-xl flex items-center justify-center border-2 border-yellow-200 overflow-hidden">
+    <img 
+      src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://www.google.com/search?q=GoTravio+Travels" 
+      alt="Google Reviews QR Code"
+      className="w-full h-full object-cover"
+    />
+  </div>
+</div>
+                
+                <p className="text-sm sm:text-base text-gray-600 mb-4">
+                  Scan to read our reviews on Google
+                </p>
+                
+                <a 
+                  href="https://www.google.com/search?q=GoTravio+Travels" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold hover:shadow-lg transition-all hover:scale-105 text-sm sm:text-base"
+                >
+                  <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-white" />
+                  View All Reviews
+                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                </a>
+              </div>
+
+              {/* Rating Summary */}
+              <div className="border-t border-yellow-100 pt-6 sm:pt-8">
+                <div className="flex items-center justify-center gap-3 sm:gap-4">
+                  <div className="text-3xl sm:text-4xl font-bold text-gray-900">4.9</div>
+                  <div>
+                    <div className="flex items-center gap-1 mb-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 fill-yellow-400" />
+                      ))}
+                    </div>
+                    <p className="text-xs sm:text-sm text-gray-600">Based on 100+ reviews</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side - Reviews Grid */}
+            <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+              {googleReviews.map((review, index) => (
+                <div
+                  key={index}
+                  className="group bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-yellow-100 hover:border-yellow-300 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                >
+                  <div className="flex items-start justify-between mb-2 sm:mb-3">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-full flex items-center justify-center">
+                        <span className="text-[10px] sm:text-xs font-bold text-indigo-700">{review.initial}</span>
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-xs sm:text-sm text-gray-900">{review.name}</h3>
+                        <p className="text-[8px] sm:text-[10px] text-gray-500">{review.date}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-0.5">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-2.5 h-2.5 sm:w-3 sm:h-3 ${
+                            i < review.rating
+                              ? 'text-yellow-400 fill-yellow-400'
+                              : 'text-gray-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-[10px] sm:text-xs text-gray-600 line-clamp-2 italic">
+                    "{review.text}"
+                  </p>
+                  <div className="mt-2 sm:mt-3 flex items-center gap-1 text-yellow-600 text-[8px] sm:text-[10px]">
+                    <MapPin className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                    <span>Google Review</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

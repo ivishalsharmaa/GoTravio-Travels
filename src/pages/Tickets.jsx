@@ -28,7 +28,9 @@ import {
   Navigation,
   Plane,
   User,
-  Globe
+  Globe,
+  HelpCircle,
+  ChevronDown
 } from "lucide-react";
 
 const Tickets = () => {
@@ -57,6 +59,73 @@ const Tickets = () => {
   const [status, setStatus] = useState({ type: "", message: "" });
   const [errors, setErrors] = useState({});
   const [ticketType, setTicketType] = useState("train");
+  const [openFaq, setOpenFaq] = useState(null);
+  
+  // Carousel state
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  // HD Travel Images Array - Updated with better train and flight images
+  const travelImages = [
+    {
+      url: "/scenic.png",
+      title: "Scenic Train Journey",
+      description: "Experience the beauty of rail travel through mountains"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80",
+      title: "Luxury Air Travel",
+      description: "Comfortable and premium flight experience"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2084&q=80",
+      title: "Modern Train Interior",
+      description: "Contemporary rail travel with all amenities"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1556388158-158ea5ccacbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      title: "Business Class Comfort",
+      description: "Premium seating for a relaxing journey"
+    },
+    {
+      url: "/sunsetflight.png",
+      title: "Sunset Flight",
+      description: "Beautiful views during your air travel"
+    },
+    {
+      url: "/sunsettrain.png",
+      title: "Train at Sunset",
+      description: "Magical moments on rail journeys"
+    }
+  ];
+
+  // FAQ Data
+  const faqs = [
+    {
+      question: "How do I book train or flight tickets through GoTravio?",
+      answer: "Simply fill out the enquiry form with your journey details including from/to locations, travel date, number of passengers, and your contact information. Our travel expert will contact you within 15 minutes with the best available options and prices. We'll then assist you with the complete booking process."
+    },
+    {
+      question: "What is your success rate for ticket confirmation?",
+      answer: "We have a 99.2% success rate for ticket confirmations. Our travel experts have 10+ years of experience and know the best strategies for getting confirmed tickets, especially for Tatkal bookings and waitlisted tickets. We work with multiple partners to ensure maximum confirmation."
+    },
+
+    {
+      question: "How quickly will I get a response after submitting the form?",
+      answer: "We pride ourselves on quick response times. Our travel experts typically contact you within 15 minutes of receiving your enquiry. For urgent bookings, we recommend using the WhatsApp option for an even faster response, usually within 5-10 minutes."
+    },
+    {
+      question: "Can you help with Tatkal train ticket bookings?",
+      answer: "Yes, absolutely! We specialize in Tatkal and Premium Tatkal train ticket bookings. Our experts are well-versed with the Tatkal timings and procedures, and we have a high success rate for confirmed Tatkal tickets. Just mention your preference in the service type dropdown."
+    },
+    {
+      question: "What train classes can I book through your service?",
+      answer: "We can book all classes including Sleeper (SL), 3A (AC 3 Tier), 2A (AC 2 Tier), 1A (AC First Class), Chair Car (CC), Executive Chair Car (EC), and Second Seating (2S). Simply select your preferred class in the form and our expert will find the best options for you."
+    },
+    {
+      question: "Is your service available 24/7?",
+      answer: "Yes, our service is available 24/7, 365 days a year. Whether you need to book tickets in the middle of the night or have an emergency travel situation, our team is always ready to assist you. You can submit the form anytime, and we'll respond promptly."
+    }
+  ];
 
   const TRAIN_SERVICE_TYPES = ["Normal", "Tatkal", "Premium Tatkal", "Emergency"];
   
@@ -72,6 +141,21 @@ const Tickets = () => {
 
   const FLIGHT_TRIP_TYPES = ["One Way", "Round Trip", "Multi City"];
   const FLIGHT_CLASS_OPTIONS = ["Economy", "Premium Economy", "Business", "First Class"];
+
+  // Auto-slide carousel effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === travelImages.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const toggleFaq = (index) => {
+    setOpenFaq(openFaq === index ? null : index);
+  };
 
   useEffect(() => {
     const initialCount = parseInt(form.passengers) || 1;
@@ -1132,6 +1216,118 @@ const Tickets = () => {
                 <h3 className="font-bold text-base sm:text-lg lg:text-xl xl:text-2xl text-gray-900">Confirm Booking</h3>
               </div>
               <p className="text-sm sm:text-base lg:text-lg text-gray-600">Book tickets with 24/7 support</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= IMAGE CAROUSEL SECTION ================= */}
+      <section className="w-full bg-gradient-to-b from-gray-50 to-white py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+            <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-3 sm:mb-4">
+              <Sparkles size={16} className="text-blue-500" />
+              <span className="text-sm sm:text-base lg:text-lg font-medium text-blue-700">Travel Inspiration</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-2 sm:mb-3">
+              Journey <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Moments</span>
+            </h2>
+            <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto">
+              Experience the beauty of train and flight travel through our stunning visuals
+            </p>
+          </div>
+
+          {/* Carousel Container */}
+          <div className="relative rounded-2xl sm:rounded-3xl lg:rounded-4xl overflow-hidden shadow-2xl">
+            {/* Main Image */}
+            <div className="relative h-[300px] sm:h-[400px] md:h-[450px] lg:h-[500px] xl:h-[500px] w-2xl">
+              <img
+                src={travelImages[currentImageIndex].url}
+                alt={travelImages[currentImageIndex].title}
+                className="w-full h-full object-cover transition-all duration-700 ease-in-out"
+              />
+              
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+              
+              {/* Image Caption */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 lg:p-8 xl:p-10 text-white">
+                <h3 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold mb-1 sm:mb-2">
+                  {travelImages[currentImageIndex].title}
+                </h3>
+                <p className="text-xs sm:text-sm lg:text-base xl:text-lg text-gray-200">
+                  {travelImages[currentImageIndex].description}
+                </p>
+              </div>
+            </div>
+
+            {/* Image indicators (dots) */}
+            
+          </div>
+        </div>
+      </section>
+
+      {/* ================= FAQ SECTION ================= */}
+      <section className="w-full bg-gradient-to-b from-white to-gray-50 py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-2 sm:mb-3">
+              Frequently Asked <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Questions</span>
+            </h2>
+            <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto">
+              Find answers to common questions about our ticket booking service
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-xl sm:rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 overflow-hidden"
+              >
+                <button
+                  onClick={() => toggleFaq(index)}
+                  className="w-full px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between text-left focus:outline-none"
+                >
+                  <span className="text-sm sm:text-base lg:text-lg font-semibold text-gray-900 pr-4">
+                    {faq.question}
+                  </span>
+                  <ChevronDown
+                    size={20}
+                    className={`text-blue-600 transition-transform duration-300 flex-shrink-0 ${
+                      openFaq === index ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+                
+                <div
+                  className={`overflow-hidden transition-all duration-300 ${
+                    openFaq === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                  }`}
+                >
+                  <div className="px-4 sm:px-6 pb-4 sm:pb-5 text-xs sm:text-sm lg:text-base text-gray-600 border-t border-gray-100 pt-3 sm:pt-4">
+                    {faq.answer}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Still have questions */}
+          <div className="mt-8 sm:mt-10 text-center">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 sm:px-6 py-3 sm:py-4">
+              <MessageCircle size={18} className="text-blue-600" />
+              <span className="text-sm sm:text-base text-gray-700">
+                Still have questions?{" "}
+                <a
+                  href="https://wa.me/919023884833"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 font-semibold hover:text-blue-700 underline"
+                >
+                  WhatsApp us
+                </a>
+              </span>
             </div>
           </div>
         </div>

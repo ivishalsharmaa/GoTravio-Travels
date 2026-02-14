@@ -9,8 +9,7 @@ import Contact from "./pages/Contact.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import AdminPackages from "./pages/AdminPackages.jsx";
-
-
+import AboutUs from "./pages/Aboutus.jsx";
 
 const App = () => {
   return (
@@ -21,6 +20,7 @@ const App = () => {
         <Route path="/tickets" element={<Tickets />} />
         <Route path="/packages" element={<Packages />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/about" element={<AboutUs />} /> {/* Add this line */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/packages" element={<AdminPackages />} />

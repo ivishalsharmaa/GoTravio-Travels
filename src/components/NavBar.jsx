@@ -11,7 +11,8 @@ import {
   Car,
   Ticket,
   Package,
-  Phone
+  Phone,
+  Info
 } from "lucide-react";
 
 const Navbar = () => {
@@ -48,6 +49,7 @@ const Navbar = () => {
     { to: "/tickets", label: "Tickets", icon: <Ticket size={20} /> },
     { to: "/packages", label: "Packages", icon: <Package size={20} /> },
     { to: "/contact", label: "Contact", icon: <Phone size={20} /> },
+    { to: "/about", label: "About Us", icon: <Info size={20} /> },
   ];
 
   const adminLinks = [

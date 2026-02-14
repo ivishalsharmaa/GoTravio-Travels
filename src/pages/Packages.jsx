@@ -44,7 +44,10 @@ import {
   Snowflake,
   Castle,
   Coffee,
-  Palette
+  Palette,
+  HelpCircle,
+  ChevronDown,
+  Camera
 } from "lucide-react";
 
 // ================= CIRCULAR CAROUSEL COMPONENT =================
@@ -1082,6 +1085,228 @@ const CustomPackageCTA = () => {
   );
 };
 
+// ================= IMAGE CAROUSEL SECTION =================
+
+const ImageCarousel = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  // HD Travel Images Array - Top visited places with tags
+  const travelImages = [
+    {
+      url: "/taj.png",
+      location: "Agra, Uttar Pradesh",
+      description: "A global icon of love, history, and architectural brilliance."
+    },
+    {
+      url: "/citypalace.png",
+      
+      location: "Jaipur, Rajasthan",
+      description: "Where Rajput grandeur and royal heritage come alive."
+    },
+    {
+      url: "/kerla.png",
+      
+      location: "Alleppey, Kerala",
+      description: "A serene web of lakes and lagoons, ideal for houseboat journeys."
+    },
+    {
+      url: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?q=80&w=1974&auto=format&fit=crop",
+      
+      location: "Goa",
+      description: "Golden beaches, electric nights, and timeless Portuguese influence."
+    },
+    {
+      url: "/leh.png",
+    
+      location: "Ladakh",
+      description: "Where rugged Himalayan beauty meets spiritual calm."
+    },
+    {
+      url: "/banaras.png",
+      
+      location: "Varanasi, Uttar Pradesh",
+      description: "Where the Ganges flows through centuries of faith and ritual."
+    },
+    {
+      url: "/Mysore.jpg",
+      
+      location: "Mysore, Karnataka",
+      description: "A breathtaking display of royal grandeur lit up for festive evenings.."
+    }
+  ];
+
+  // Auto-slide carousel effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === travelImages.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <section className="w-full bg-gradient-to-b from-white to-gray-50 py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-12 xl:px-16">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+          <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-3 sm:mb-4">
+            <Camera size={16} className="text-indigo-500" />
+            <span className="text-sm sm:text-base lg:text-lg font-medium text-indigo-700">Top Destinations</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-2 sm:mb-3">
+            Most Visited <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Places</span>
+          </h2>
+          <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto">
+            Explore the most popular destinations that travelers love the most
+          </p>
+        </div>
+
+        {/* Carousel Container - No navigation arrows */}
+        <div className="relative rounded-2xl sm:rounded-3xl lg:rounded-4xl overflow-hidden shadow-2xl">
+          {/* Main Image */}
+          <div className="relative h-[250px] sm:h-[350px] md:h-[450px] lg:h-[550px] xl:h-[550px] w-full">
+            <img
+              src={travelImages[currentImageIndex].url}
+              alt={travelImages[currentImageIndex].title}
+              className="w-full h-full object-cover transition-all duration-700 ease-in-out"
+            />
+            
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+            
+            {/* Image Caption with Location Tag */}
+            <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 lg:p-8 xl:p-10 text-white">
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1 sm:py-1.5 mb-2 sm:mb-3">
+                <MapPin size={12} className="sm:w-3 sm:h-3 lg:w-4 lg:h-4" />
+                <span className="text-[10px] sm:text-xs lg:text-sm font-medium">{travelImages[currentImageIndex].location}</span>
+              </div>
+              <h3 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold mb-1 sm:mb-2">
+                {travelImages[currentImageIndex].title}
+              </h3>
+              <p className="text-xs sm:text-sm lg:text-base xl:text-lg text-gray-200 max-w-2xl">
+                {travelImages[currentImageIndex].description}
+              </p>
+            </div>
+          </div>
+
+          {/* Image indicators (dots) - For manual navigation */}
+         
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ================= FAQ SECTION =================
+
+const FAQSection = () => {
+  const [openFaq, setOpenFaq] = useState(null);
+
+  const faqs = [
+    {
+      question: "How do I book a tour package with GoTravio?",
+      answer: "Booking a tour package is simple! You can browse through our packages, click on 'Enquire Now' for any package you're interested in, fill out the enquiry form, and our travel expert will contact you within 1-2 hours. Alternatively, you can WhatsApp us directly for instant assistance."
+    },
+    {
+      question: "Can I customize a package to suit my preferences?",
+      answer: "Absolutely! We specialize in creating fully customized itineraries. Whether you want to modify an existing package or create a completely new one, our travel experts will work with you to design the perfect trip tailored to your preferences, budget, and schedule."
+    },
+    {
+      question: "What is included in the package price?",
+      answer: "Our package prices typically include accommodation, meals as specified in the itinerary, transportation during the tour, sightseeing as per the plan, and the services of a tour guide. However, each package may have different inclusions. Please check the package details or contact us for specific information."
+    },
+    {
+      question: "What is your cancellation and refund policy?",
+      answer: "Our cancellation policy varies depending on the package and how far in advance you cancel. Generally, cancellations made 30+ days before departure receive a full refund minus processing fees. For cancellations within 30 days, partial refunds may apply. Please check the specific package terms or contact us for details."
+    },
+    {
+      question: "Can I book a package for solo travel?",
+      answer: "Yes, we welcome solo travelers! Many of our packages are suitable for solo travelers, and we can also help you connect with other solo travelers if you prefer group tours. We offer special solo traveler options with no single supplement on select packages."
+    },
+    {
+      question: "How do I make payment for my booking?",
+      answer: "We accept multiple payment methods including bank transfers, UPI (Google Pay, PhonePe, Paytm). After your enquiry, we'll send you payment instructions with secure payment options."
+    }
+  ];
+
+  const toggleFaq = (index) => {
+    setOpenFaq(openFaq === index ? null : index);
+  };
+
+  return (
+    <section className="w-full bg-gradient-to-b from-gray-50 to-white py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-12 xl:px-16">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+          <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-3 sm:mb-4">
+            <HelpCircle size={16} className="text-indigo-500" />
+            <span className="text-sm sm:text-base lg:text-lg font-medium text-indigo-700">Got Questions?</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-2 sm:mb-3">
+            Frequently Asked <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Questions</span>
+          </h2>
+          <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto">
+            Find answers to common questions about our tour packages and booking process
+          </p>
+        </div>
+
+        <div className="space-y-3 sm:space-y-4">
+          {faqs.map((faq, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-xl sm:rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 overflow-hidden"
+            >
+              <button
+                onClick={() => toggleFaq(index)}
+                className="w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between text-left focus:outline-none"
+              >
+                <span className="text-sm sm:text-base lg:text-lg font-semibold text-gray-900 pr-4">
+                  {faq.question}
+                </span>
+                <ChevronDown
+                  size={18}
+                  className={`text-indigo-600 transition-transform duration-300 flex-shrink-0 ${
+                    openFaq === index ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+              
+              <div
+                className={`overflow-hidden transition-all duration-300 ${
+                  openFaq === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                }`}
+              >
+                <div className="px-4 sm:px-6 pb-3 sm:pb-4 text-xs sm:text-sm lg:text-base text-gray-600 border-t border-gray-100 pt-2 sm:pt-3">
+                  {faq.answer}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Still have questions */}
+        <div className="mt-8 sm:mt-10 text-center">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 sm:px-6 py-3 sm:py-4">
+            <MessageCircle size={18} className="text-indigo-600" />
+            <span className="text-xs sm:text-sm lg:text-base text-gray-700">
+              Still have questions?{" "}
+              <a
+                href="https://wa.me/916371106588"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-indigo-600 font-semibold hover:text-indigo-700 underline"
+              >
+                WhatsApp us
+              </a>{" "}
+              for instant answers
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 // ================= 6 DEMO PACKAGES =================
 
 const getDemoPackages = () => [
@@ -1395,6 +1620,12 @@ const Packages = () => {
       </section>
 
       <CustomPackageCTA />
+      
+      {/* Image Carousel Section - Added after Custom Package CTA */}
+      <ImageCarousel />
+      
+      {/* FAQ Section - Added after Image Carousel */}
+      <FAQSection />
       
       {showEnquiryForm && selectedPackage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">

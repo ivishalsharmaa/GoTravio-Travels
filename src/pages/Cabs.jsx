@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { API } from "../api.js";
 import { 
   ArrowUpDown, 
@@ -32,7 +32,20 @@ import {
   Globe,
   Key,
   Calendar,
-  Target
+  Target,
+  ChevronLeft,
+  ChevronRight as ChevronRightIcon,
+  Heart,
+  HelpCircle,
+  BookOpen,
+  Compass,
+  Sun,
+  Cloud,
+  Coffee,
+  Camera,
+  Mountain,
+  Umbrella,
+  Info
 } from "lucide-react";
 
 // ================= COMPONENTS =================
@@ -100,6 +113,341 @@ const HeroSection = ({ scrollToForm }) => {
               ))}
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Image Carousel Component - Updated to full width
+const ImageCarousel = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const destinations = [
+    {
+      image: "/manali.png",
+      name: "Manali",
+      tag: "Summer Paradise"
+    },
+    {
+      image: "/shimla.png",
+      name: "Shimla",
+      tag: "Queen of Hills"
+    },
+    {
+      image: "/kashmir.png",
+      name: "Kashmir",
+      tag: "Paradise on Earth"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      name: "Coorg",
+      tag: "Scotland of India"
+    },
+    {
+      image: "/darjelling.png",
+      name: "Darjeeling",
+      tag: "Queen of Hills"
+    },
+    {
+      image: "/goa.png",
+      name: "Goa",
+      tag: "Beach Paradise"
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % destinations.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [destinations.length]);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % destinations.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + destinations.length) % destinations.length);
+  };
+
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+  };
+
+  return (
+    <section className="w-full bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 xl:px-12">
+      <div className="w-full max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8 sm:mb-12">
+          <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-pink-50 to-rose-50 rounded-full px-4 sm:px-6 py-2 sm:py-3 mb-3 sm:mb-4">
+            <Heart size={16} className="sm:w-5 sm:h-5 text-rose-500" fill="currentColor" />
+            <span className="text-xs sm:text-sm md:text-base font-medium text-rose-700">Popular Destinations</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-2 sm:mb-3 px-2">
+            Beautiful Places to{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-pink-600">
+              Visit This Summer
+            </span>
+          </h2>
+          <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-4">
+            Explore these stunning destinations with our premium cab services
+          </p>
+        </div>
+
+        {/* Carousel Container - Full width */}
+        <div className="relative group w-full mx-auto">
+          {/* Main Carousel */}
+          <div className="relative h-[300px] sm:h-[400px] md:h-[450px] lg:h-[500px] w-full rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
+            {/* Images */}
+            {destinations.map((dest, index) => (
+              <div
+                key={index}
+                className={`absolute inset-0 transition-all duration-700 ease-in-out transform ${
+                  index === currentSlide
+                    ? 'opacity-100 translate-x-0'
+                    : index < currentSlide
+                    ? 'opacity-0 -translate-x-full'
+                    : 'opacity-0 translate-x-full'
+                }`}
+              >
+                {/* Background Image */}
+                <img
+                  src={dest.image}
+                  alt={dest.name}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+                
+                {/* Gradient Overlay - Only at bottom for text */}
+                <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                
+                {/* Place Name and Tag - At the bottom of image */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 text-white">
+                  <div className="flex items-end justify-between">
+                    <div>
+                      <span className="inline-block bg-rose-500/90 backdrop-blur-sm px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-semibold mb-2">
+                        {dest.tag}
+                      </span>
+                      <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold">{dest.name}</h3>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            
+          </div>
+
+       
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Updated FAQ Section Component - Single Column with Larger Quick Tips
+const FAQSection = () => {
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const faqs = [
+    {
+      category: "Booking & Pricing",
+      icon: <BookOpen className="text-blue-600" size={24} />,
+      questions: [
+        {
+          q: "How do I book a cab?",
+          a: "You can book a cab by filling out our enquiry form above, calling us directly, or sending a WhatsApp message. Our team will confirm your booking within 15 minutes."
+        },
+        
+        {
+          q: "How are the prices calculated?",
+          a: "Prices are based on distance, vehicle type, and duration. We provide transparent pricing with no hidden charges. Get a custom quote by filling the form above."
+        },
+        {
+          q: "Is there any cancellation fee?",
+          a: "Free cancellation up to 2 hours before the trip. Cancellations within 2 hours may incur a nominal fee."
+        }
+      ]
+    },
+    {
+      category: "Destinations & Travel",
+      icon: <Compass className="text-green-600" size={24} />,
+      questions: [
+        {
+          q: "Which destinations do you cover?",
+          a: "We cover all major tourist destinations including Manali, Shimla, Kashmir, Coorg, Darjeeling, Goa, and many more. Contact us for specific destinations."
+        },
+        {
+          q: "What is the best time to visit Manali?",
+          a: "Summer (March-June) is perfect for pleasant weather and adventure activities. Winter (December-February) is ideal for snow lovers."
+        }
+      ]
+    },
+    {
+      category: "Vehicles & Services",
+      icon: <Car className="text-purple-600" size={24} />,
+      questions: [
+        {
+          q: "What types of vehicles do you offer?",
+          a: "We offer Hatchbacks, Sedans, SUVs, Luxury cars, and Travellers for groups. All vehicles are well-maintained and sanitized."
+        },
+        {
+          q: "Are your drivers verified?",
+          a: "Yes, all our drivers undergo thorough background checks, police verification, and professional training before joining us."
+        },
+      ]
+    },
+    {
+      category: "Summer Specials",
+      icon: <Sun className="text-orange-600" size={24} />,
+      questions: [
+        {
+          q: "Which destinations are best for summer?",
+          a: "Hill stations like Manali, Shimla, Kashmir, Coorg, and Darjeeling are perfect for summer escapes with pleasant weather around 15-25°C."
+        },
+        {
+          q: "Do you offer summer special packages?",
+          a: "Yes, we have special summer packages including accommodation + cab deals. Contact us for customized summer vacation plans."
+        },
+        {
+          q: "What should I pack for a hill station trip?",
+          a: "Pack light woolens, comfortable walking shoes, sunscreen, sunglasses, and a camera. Evenings can be cool, so carry a light jacket."
+        }
+        
+      ]
+    }
+  ];
+
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  return (
+    <section className="w-full bg-gradient-to-b from-white to-gray-50 py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 xl:px-12">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8 sm:mb-12">
+          <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 sm:px-6 py-2 sm:py-3 mb-3 sm:mb-4">
+            <HelpCircle size={16} className="sm:w-5 sm:h-5 text-blue-500" />
+            <span className="text-xs sm:text-sm md:text-base font-medium text-blue-700">Got Questions?</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-2 sm:mb-3 px-2">
+            Frequently Asked{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+              Questions
+            </span>
+          </h2>
+          <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-4">
+            Find answers to common questions about booking, destinations, and our services
+          </p>
+        </div>
+
+        {/* FAQ Categories - Single Column */}
+        <div className="space-y-6 sm:space-y-8">
+          {faqs.map((category, catIndex) => (
+            <div key={catIndex} className="bg-white rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-md transition-all border border-gray-200/50 overflow-hidden">
+              {/* Category Header - Single Line */}
+              <div className="bg-gradient-to-r from-gray-50 to-white px-5 sm:px-6 py-4 border-b border-gray-200/50">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-gradient-to-br from-white to-gray-50 rounded-lg shadow-sm">
+                    {category.icon}
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900">{category.category}</h3>
+                </div>
+              </div>
+
+              {/* Questions Accordion */}
+              <div className="p-5 sm:p-6 space-y-3">
+                {category.questions.map((faq, qIndex) => {
+                  const uniqueIndex = `${catIndex}-${qIndex}`;
+                  const isOpen = openIndex === uniqueIndex;
+                  
+                  return (
+                    <div
+                      key={qIndex}
+                      className="bg-gray-50 rounded-xl border border-gray-200/50 hover:border-blue-200 transition-all overflow-hidden"
+                    >
+                      <button
+                        onClick={() => toggleFAQ(uniqueIndex)}
+                        className="w-full px-4 py-3 flex items-center justify-between text-left gap-3"
+                      >
+                        <span className="text-sm sm:text-base font-medium text-gray-900 flex-1">
+                          {faq.q}
+                        </span>
+                        <div className={`flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 flex items-center justify-center transition-transform duration-300 ${
+                          isOpen ? 'rotate-180' : ''
+                        }`}>
+                          <ChevronDown size={12} className="sm:w-3.5 sm:h-3.5 text-blue-600" />
+                        </div>
+                      </button>
+                      
+                      <div
+                        className={`transition-all duration-300 ease-in-out ${
+                          isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                        } overflow-hidden`}
+                      >
+                        <div className="px-4 pb-3 text-xs sm:text-sm text-gray-600 border-t border-gray-200 pt-3">
+                          {faq.a}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Still Have Questions Banner */}
+        <div className="mt-10 sm:mt-12 md:mt-16 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 text-white text-center">
+          <div className="max-w-3xl mx-auto">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4">Still Have Questions?</h3>
+            <p className="text-sm sm:text-base md:text-lg text-blue-100 mb-4 sm:mb-6">
+              Can't find the answer you're looking for? Please chat with our friendly team.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+              <a
+                href="https://wa.me/916371106588"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-white text-blue-600 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base hover:bg-blue-50 transition-all hover:scale-105"
+              >
+                <MessageCircle size={18} className="sm:w-5 sm:h-5" />
+                WhatsApp Us
+              </a>
+              <button
+                onClick={() => document.getElementById('enquiry-form')?.scrollIntoView({ behavior: 'smooth' })}
+                className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-white text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base hover:bg-white/10 transition-all hover:scale-105"
+              >
+                <Car size={18} className="sm:w-5 sm:h-5" />
+                Book a Cab
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Tips Section - Larger Divs for PC */}
+        <div className="mt-10 sm:mt-12 md:mt-16 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+          {[
+            { icon: <Clock size={24} className="sm:w-7 sm:h-7 md:w-8 md:h-8" />, text: "24/7 Support" },
+            { icon: <ShieldCheck size={24} className="sm:w-7 sm:h-7 md:w-8 md:h-8" />, text: "Safe Travel" },
+            { icon: <MapPin size={24} className="sm:w-7 sm:h-7 md:w-8 md:h-8" />, text: "All Destinations" },
+            { icon: <CreditCard size={24} className="sm:w-7 sm:h-7 md:w-8 md:h-8" />, text: "Flexible Payment" }
+          ].map((tip, idx) => (
+            <div 
+              key={idx} 
+              className="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 text-center border border-gray-200/60 hover:border-blue-300 transition-all shadow-md hover:shadow-lg group cursor-pointer"
+            >
+              <div className="text-blue-600 mb-3 sm:mb-4 md:mb-5 flex justify-center transform group-hover:scale-110 transition-transform duration-300">
+                {tip.icon}
+              </div>
+              <span className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-800">
+                {tip.text}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -935,14 +1283,6 @@ const EnquiryForm = ({ initialData, onSubmit }) => {
   );
 };
 
-const Info = ({ size, className }) => (
-  <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor">
-    <circle cx="12" cy="12" r="10" strokeWidth="2" />
-    <line x1="12" y1="16" x2="12" y2="12" strokeWidth="2" />
-    <line x1="12" y1="8" x2="12.01" y2="8" strokeWidth="2" />
-  </svg>
-);
-
 const FloatingWhatsApp = () => {
   return (
     <a
@@ -993,6 +1333,18 @@ const Cabs = () => {
       <CabTypeGrid onSelectType={handleSelectType} />
       <BenefitsSection />
       <VehicleSelector onSelectVehicle={handleSelectVehicle} />
+      
+      {/* Enquiry Form */}
+      <EnquiryForm 
+        initialData={formData}
+        onSubmit={handleFormSubmit}
+      />
+      
+      {/* Image Carousel */}
+      <ImageCarousel />
+      
+      {/* FAQ Section - Single Column with Larger Quick Tips */}
+      <FAQSection />
 
       {formMessage && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 animate-slideDown w-[90%] sm:w-auto">
@@ -1006,10 +1358,6 @@ const Cabs = () => {
         </div>
       )}
 
-      <EnquiryForm 
-        initialData={formData}
-        onSubmit={handleFormSubmit}
-      />
       <FloatingWhatsApp />
     </div>
   );
