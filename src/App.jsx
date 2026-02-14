@@ -9,7 +9,7 @@ import Contact from "./pages/Contact.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import AdminPackages from "./pages/AdminPackages.jsx";
-import AboutUs from "./pages/Aboutus.jsx";
+import Aboutus from "./pages/Aboutus.jsx";
 
 const App = () => {
   return (
