@@ -782,15 +782,50 @@ const Grid = ({ size }) => (
   </svg>
 );
 
-// Package Type Filters Component
-const PackageTypeFilter = ({ activeFilter, setActiveFilter }) => {
+// Package Type Filters Component - FIXED VERSION
+const PackageTypeFilter = ({ activeFilter, setActiveFilter, packages }) => {
+  // Calculate counts based on actual packages
+  const totalPackages = packages.length;
+  
+  // Count domestic packages (Indian destinations)
+  const domesticPackages = packages.filter(pkg => {
+    const location = (pkg.location || pkg.destination || '').toLowerCase();
+    return location.includes('india') || 
+           location.includes('kashmir') || 
+           location.includes('goa') || 
+           location.includes('kerala') || 
+           location.includes('rajasthan') || 
+           location.includes('ladakh') || 
+           location.includes('himachal') ||
+           location.includes('agra') ||
+           location.includes('jaipur') ||
+           location.includes('varanasi') ||
+           location.includes('mysore');
+  }).length;
+
+  // Count international packages (non-Indian destinations)
+  const internationalPackages = totalPackages - domesticPackages;
+
+  // Count packages by tag
+  const honeymoonPackages = packages.filter(pkg => 
+    (pkg.tag || pkg.category || '').toLowerCase() === 'honeymoon'
+  ).length;
+
+  const adventurePackages = packages.filter(pkg => 
+    (pkg.tag || pkg.category || '').toLowerCase() === 'adventure'
+  ).length;
+
+  const familyPackages = packages.filter(pkg => 
+    (pkg.tag || pkg.category || '').toLowerCase() === 'family'
+  ).length;
+
   const filters = [
-    { id: "all", label: "All Packages", icon: <Globe size={14} />, count: 10 },
-    { id: "domestic", label: "Domestic", icon: <MapPin size={14} />, count: 6 },
-    { id: "international", label: "International", icon: <Globe size={14} />, count: 4 },
-    { id: "honeymoon", label: "Honeymoon", icon: <Heart size={14} />, count: 3 },
-    { id: "adventure", label: "Adventure", icon: <Mountain size={14} />, count: 4 },
-    { id: "family", label: "Family", icon: <Users size={14} />, count: 5 },
+    { id: "all", label: "All Packages", icon: <Globe size={14} />, count: totalPackages },
+    { id: "domestic", label: "Domestic", icon: <MapPin size={14} />, count: domesticPackages },
+    { id: "international", label: "International", icon: <Globe size={14} />, count: internationalPackages },
+    { id: "honeymoon", label: "Honeymoon", icon: <Heart size={14} />, count: honeymoonPackages },
+    { id: "adventure", label: "Adventure", icon: <Mountain size={14} />, count: adventurePackages },
+    { id: "family", label: "Family", icon: <Users size={14} />, count: familyPackages },
   ];
 
   const [showAllFilters, setShowAllFilters] = useState(false);
@@ -838,16 +873,19 @@ const PackageTypeFilter = ({ activeFilter, setActiveFilter }) => {
 };
 
 // QuickStats Component
-const QuickStats = () => {
+const QuickStats = ({ packages }) => {
+  const totalPackages = packages.length;
+  const uniqueDestinations = [...new Set(packages.map(pkg => pkg.location || pkg.destination))].length;
+
   const stats = [
     { 
-      value: "6+", 
+      value: totalPackages + "+", 
       label: "Curated Packages",
       icon: <Globe className="text-indigo-500" size={18} />,
       desc: "Domestic & international"
     },
     { 
-      value: "15+", 
+      value: uniqueDestinations + "+", 
       label: "Destinations",
       icon: <MapPin className="text-green-500" size={18} />,
       desc: "Across India & abroad"
@@ -1189,9 +1227,6 @@ const ImageCarousel = () => {
               </p>
             </div>
           </div>
-
-          {/* Image indicators (dots) - For manual navigation */}
-         
         </div>
       </div>
     </section>
@@ -1333,7 +1368,7 @@ const getDemoPackages = () => [
     highlights: ["Beach Hopping", "Water Sports", "Portuguese Churches", "Nightlife"]
   },
   {
-    _id: "4",
+    _id: "3",
     title: "Kerala Backwaters",
     location: "Alleppey, Munnar, Kochi",
     description: "Houseboat cruise through backwaters, tea plantations, and Ayurvedic wellness treatments.",
@@ -1344,7 +1379,7 @@ const getDemoPackages = () => [
     highlights: ["Houseboat Stay", "Tea Plantations", "Ayurvedic Spa", "Kathakali Show"]
   },
   {
-    _id: "5",
+    _id: "4",
     title: "Rajasthan Royal Heritage",
     location: "Jaipur, Udaipur, Jodhpur",
     description: "Palaces, forts, desert safaris, and cultural experiences in royal Rajasthan.",
@@ -1355,7 +1390,7 @@ const getDemoPackages = () => [
     highlights: ["Palace Stay", "Desert Safari", "Folk Performances", "Shopping"]
   },
   {
-    _id: "7",
+    _id: "5",
     title: "Ladakh Adventure",
     location: "Leh, Nubra Valley, Pangong",
     description: "High altitude lakes, monasteries, mountain passes, and adventure activities in Ladakh.",
@@ -1366,7 +1401,7 @@ const getDemoPackages = () => [
     highlights: ["Pangong Lake", "Monastery Tour", "Mountain Biking", "Camping"]
   },
   {
-    _id: "10",
+    _id: "6",
     title: "Himachal Hill Stations",
     location: "Shimla, Manali, Dharamshala",
     description: "Hill stations, mountain views, adventure sports, and Tibetan culture experiences.",
@@ -1458,10 +1493,44 @@ const Packages = () => {
     let filtered = packages;
     
     if (activeFilter !== "all") {
-      filtered = filtered.filter(pkg => 
-        pkg.tag?.toLowerCase() === activeFilter || 
-        pkg.category?.toLowerCase() === activeFilter
-      );
+      if (activeFilter === "domestic") {
+        // Filter for domestic packages (Indian destinations)
+        filtered = filtered.filter(pkg => {
+          const location = (pkg.location || pkg.destination || '').toLowerCase();
+          return location.includes('india') || 
+                 location.includes('kashmir') || 
+                 location.includes('goa') || 
+                 location.includes('kerala') || 
+                 location.includes('rajasthan') || 
+                 location.includes('ladakh') || 
+                 location.includes('himachal') ||
+                 location.includes('agra') ||
+                 location.includes('jaipur') ||
+                 location.includes('varanasi') ||
+                 location.includes('mysore');
+        });
+      } else if (activeFilter === "international") {
+        // Filter for international packages (non-Indian destinations)
+        filtered = filtered.filter(pkg => {
+          const location = (pkg.location || pkg.destination || '').toLowerCase();
+          return !(location.includes('india') || 
+                   location.includes('kashmir') || 
+                   location.includes('goa') || 
+                   location.includes('kerala') || 
+                   location.includes('rajasthan') || 
+                   location.includes('ladakh') || 
+                   location.includes('himachal') ||
+                   location.includes('agra') ||
+                   location.includes('jaipur') ||
+                   location.includes('varanasi') ||
+                   location.includes('mysore'));
+        });
+      } else {
+        // Filter by tag/category for other filters
+        filtered = filtered.filter(pkg => 
+          (pkg.tag || pkg.category || '').toLowerCase() === activeFilter.toLowerCase()
+        );
+      }
     }
     
     if (searchTerm.trim()) {
@@ -1493,7 +1562,7 @@ const Packages = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white w-full overflow-x-hidden">
       <HeroSection scrollToPackages={scrollToPackages} scrollToCarousel={scrollToCarousel} />
-      <QuickStats />
+      <QuickStats packages={packages} />
       
       {/* Circular Carousel Section */}
       <section id="circular-carousel" className="w-full py-10 sm:py-12 lg:py-16 bg-gradient-to-b from-white to-indigo-50/30 px-4 sm:px-6 lg:px-12 xl:px-16">
@@ -1526,7 +1595,7 @@ const Packages = () => {
       </section>
       
       <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 mt-4 sm:mt-6 lg:mt-8">
-        <PackageTypeFilter activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
+        <PackageTypeFilter activeFilter={activeFilter} setActiveFilter={setActiveFilter} packages={packages} />
       </div>
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 sm:mt-6 mb-6 sm:mb-8">

@@ -21,8 +21,13 @@ import {
   CheckCircle,
   Loader2,
   ChevronRight,
-  Shield
+  Shield,
+  Wifi,
+  WifiOff
 } from "lucide-react";
+
+// API Configuration
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://gotravio-backend.onrender.com';
 
 const AIAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +45,8 @@ const AIAssistant = () => {
   const [bookingData, setBookingData] = useState({});
   const [currentStep, setCurrentStep] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isBackendAvailable, setIsBackendAvailable] = useState(true);
+  const [isCheckingBackend, setIsCheckingBackend] = useState(false);
   
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -84,6 +91,11 @@ const AIAssistant = () => {
     },
   ];
 
+  // Check backend health on mount and when opening chat
+  useEffect(() => {
+    checkBackendHealth();
+  }, []);
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -109,17 +121,46 @@ const AIAssistant = () => {
     };
   }, [isOpen]);
 
+  const checkBackendHealth = async () => {
+    setIsCheckingBackend(true);
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      
+      const response = await fetch(`${API_BASE_URL}/api/health`, {
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('✅ Backend health check passed:', data);
+        setIsBackendAvailable(true);
+      } else {
+        throw new Error('Backend health check failed');
+      }
+    } catch (error) {
+      console.warn('⚠️ Backend health check failed:', error.message);
+      setIsBackendAvailable(false);
+    } finally {
+      setIsCheckingBackend(false);
+    }
+  };
+
   const scrollToBottom = () => {
     setTimeout(() => {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }, 100);
   };
 
-  const toggleChat = () => {
+  const toggleChat = async () => {
     setIsOpen(!isOpen);
     if (!isOpen) {
       setBookingData({});
       setCurrentStep(null);
+      // Check backend health when opening chat
+      await checkBackendHealth();
     }
   };
 
@@ -172,13 +213,20 @@ const AIAssistant = () => {
     addMessage("bot", "⏳ **Processing your booking...** Please wait.");
     
     try {
-      const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      // First check if backend is available
+      if (!isBackendAvailable) {
+        await checkBackendHealth();
+        if (!isBackendAvailable) {
+          throw new Error('backend_unavailable');
+        }
+      }
+      
       let endpoint = '';
       let payload = {};
       
       switch(bookingData.type) {
         case 'cab':
-          endpoint = `${baseURL}/api/cabs`;
+          endpoint = `${API_BASE_URL}/api/cabs`;
           payload = {
             pickupLocation: bookingData.pickup,
             dropLocation: bookingData.drop,
@@ -193,7 +241,7 @@ const AIAssistant = () => {
           break;
           
         case 'train':
-          endpoint = `${baseURL}/api/tickets`;
+          endpoint = `${API_BASE_URL}/api/tickets`;
           payload = {
             from: bookingData.from,
             to: bookingData.to,
@@ -209,7 +257,7 @@ const AIAssistant = () => {
           break;
           
         case 'flight':
-          endpoint = `${baseURL}/api/tickets`;
+          endpoint = `${API_BASE_URL}/api/tickets`;
           payload = {
             from: bookingData.from,
             to: bookingData.to,
@@ -226,7 +274,7 @@ const AIAssistant = () => {
           break;
           
         case 'package':
-          endpoint = `${baseURL}/api/enquiry`;
+          endpoint = `${API_BASE_URL}/api/enquiry`;
           payload = {
             name: bookingData.name,
             service: `Tour Package - ${bookingData.destination}`,
@@ -238,13 +286,27 @@ const AIAssistant = () => {
           break;
       }
       
+      console.log('📤 Sending to:', endpoint);
+      console.log('📤 Payload:', payload);
+      
+      // Add timeout for the fetch request
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
       const response = await fetch(endpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload),
+        signal: controller.signal
       });
       
+      clearTimeout(timeoutId);
+      
       const data = await response.json();
+      console.log('📥 Response:', data);
       
       if (response.ok) {
         const bookingRef = data.data?.id || data.id || data.bookingId || 'REF' + Date.now().toString().slice(-6);
@@ -269,12 +331,36 @@ const AIAssistant = () => {
       }
     } catch (error) {
       console.error('❌ Error:', error);
-      addMessage("bot", 
-        `❌ **Something went wrong**\n\n` +
-        `Please contact us directly:\n` +
-        `📞 +91 90238 84833\n` +
-        `💬 WhatsApp: +91 90238 84833`
-      );
+      
+      // Handle different types of errors
+      if (error.message === 'backend_unavailable' || error.name === 'AbortError' || error.message.includes('Failed to fetch')) {
+        // Backend is down or timing out (Render cold start)
+        addMessage("bot", 
+          `⏳ **Server is waking up...**\n\n` +
+          `Our backend is hosted on Render's free tier and goes to sleep after inactivity.\n\n` +
+          `🕒 This first request may take **30-60 seconds** to wake up.\n\n` +
+          `Please wait a moment and try again. Your booking will work once the server is active!\n\n` +
+          `For immediate assistance, contact us directly:\n` +
+          `📞 +91 90238 84833\n` +
+          `💬 WhatsApp: +91 90238 84833`
+        );
+        
+        // Set backend as unavailable
+        setIsBackendAvailable(false);
+        
+        // Automatically retry health check after 10 seconds
+        setTimeout(() => {
+          checkBackendHealth();
+        }, 10000);
+        
+      } else {
+        addMessage("bot", 
+          `❌ **Something went wrong**\n\n` +
+          `Please contact us directly:\n` +
+          `📞 +91 90238 84833\n` +
+          `💬 WhatsApp: +91 90238 84833`
+        );
+      }
     } finally {
       setIsProcessing(false);
     }
@@ -488,16 +574,21 @@ const AIAssistant = () => {
             }
             const cleanPhone = input.replace(/\D/g, '');
             
-            await fetch(`${baseURL}/api/enquiry`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                name: 'Contact Request',
-                service: 'Call Me Back',
-                phone: cleanPhone,
-                details: 'Customer requested callback via AI Assistant'
-              })
-            });
+            // Try to send to backend, but don't fail if it doesn't work
+            try {
+              await fetch(`${API_BASE_URL}/api/enquiry`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  name: 'Contact Request',
+                  service: 'Call Me Back',
+                  phone: cleanPhone,
+                  details: 'Customer requested callback via AI Assistant'
+                })
+              });
+            } catch (e) {
+              console.log('Backend not available for contact request, but continuing');
+            }
             
             setCurrentStep(null);
             setShowQuickReplies(true);
@@ -594,8 +685,10 @@ const AIAssistant = () => {
             <Bot size={24} />
           </div>
           
-          {/* Online indicator */}
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white animate-pulse"></span>
+          {/* Online/Offline indicator */}
+          <span className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-white animate-pulse ${
+            isBackendAvailable ? 'bg-green-400' : 'bg-yellow-400'
+          }`}></span>
         </div>
       </button>
 
@@ -636,7 +729,9 @@ const AIAssistant = () => {
                 <div className="relative w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/50">
                   <Bot size={20} className="text-white" />
                 </div>
-                <span className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></span>
+                <span className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${
+                  isBackendAvailable ? 'bg-green-400' : 'bg-yellow-400'
+                }`}></span>
               </div>
               
               <div>
@@ -645,8 +740,17 @@ const AIAssistant = () => {
                   <Sparkles size={14} className="text-yellow-300" />
                 </h3>
                 <p className="text-xs text-white/80 flex items-center gap-1">
-                  <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                  Online • 24/7 Support
+                  {isBackendAvailable ? (
+                    <>
+                      <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                      <span>Online • 24/7 Support</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span>
+                      <span>Connecting...</span>
+                    </>
+                  )}
                 </p>
               </div>
             </div>
@@ -658,6 +762,21 @@ const AIAssistant = () => {
               <X size={20} />
             </button>
           </div>
+          
+          {/* Backend status warning */}
+          {!isBackendAvailable && !isCheckingBackend && (
+            <div className="mt-2 bg-yellow-500/20 backdrop-blur-sm rounded-lg p-2 text-xs text-yellow-100 flex items-center gap-2">
+              <WifiOff size={14} />
+              <span>Server is waking up... First request may take 30-60 seconds.</span>
+            </div>
+          )}
+          
+          {isCheckingBackend && (
+            <div className="mt-2 bg-blue-500/20 backdrop-blur-sm rounded-lg p-2 text-xs text-blue-100 flex items-center gap-2">
+              <Loader2 size={14} className="animate-spin" />
+              <span>Checking server status...</span>
+            </div>
+          )}
         </div>
 
         {/* Messages area - Scrollable */}
