@@ -1,5 +1,5 @@
-// client/src/pages/Packages.jsx
 import React, { useEffect, useState } from "react";
+import SEO from "../components/SEO";
 import { API } from "../api.js";
 import { 
   MapPin,
@@ -136,6 +136,7 @@ const CircularCarousel = ({ packages }) => {
         <button
           onClick={handlePrev}
           className="p-2 sm:p-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 shadow-lg hover:shadow-xl transition-all"
+          aria-label="Previous package"
         >
           <ChevronLeft size={20} className="sm:w-6 sm:h-6" />
         </button>
@@ -143,6 +144,7 @@ const CircularCarousel = ({ packages }) => {
         <button
           onClick={() => setIsPaused(!isPaused)}
           className="p-2 sm:p-3 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white hover:from-orange-600 hover:to-pink-600 shadow-lg hover:shadow-xl transition-all"
+          aria-label={isPaused ? "Play carousel" : "Pause carousel"}
         >
           {isPaused ? <Play size={20} className="sm:w-6 sm:h-6" /> : <Pause size={20} className="sm:w-6 sm:h-6" />}
         </button>
@@ -150,6 +152,7 @@ const CircularCarousel = ({ packages }) => {
         <button
           onClick={handleNext}
           className="p-2 sm:p-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 shadow-lg hover:shadow-xl transition-all"
+          aria-label="Next package"
         >
           <ChevronRightIcon size={20} className="sm:w-6 sm:h-6" />
         </button>
@@ -197,7 +200,7 @@ const CircularCarousel = ({ packages }) => {
                       <div className="h-32 overflow-hidden">
                         <img
                           src={pkg.imageUrl || pkg.image || pkg.images?.[0] || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=400"}
-                          alt={pkg.title}
+                          alt={`${pkg.title} tour package in ${pkg.location || pkg.destination}`}
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
@@ -250,7 +253,7 @@ const CircularCarousel = ({ packages }) => {
                   <div className="h-32 sm:h-40 overflow-hidden">
                     <img
                       src={activePackage.imageUrl || activePackage.image || activePackage.images?.[0] || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=400"}
-                      alt={activePackage.title}
+                      alt={`${activePackage.title} tour package`}
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
@@ -358,7 +361,7 @@ const CircularCarousel = ({ packages }) => {
               className="inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-8 py-2.5 sm:py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-bold text-sm sm:text-base shadow-lg hover:shadow-xl transition-all hover:scale-105"
             >
               <MessageCircle size={18} className="sm:w-5 sm:h-5" />
-              Book This Package
+              Enquire About This Package
               <ChevronRightIcon size={18} className="sm:w-5 sm:h-5" />
             </a>
           </div>
@@ -376,6 +379,7 @@ const CircularCarousel = ({ packages }) => {
                 ? 'w-4 sm:w-6 h-1.5 sm:h-2 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full' 
                 : 'w-1.5 sm:w-2 h-1.5 sm:h-2 bg-gray-300 hover:bg-gray-400 rounded-full'
             }`}
+            aria-label={`Go to package ${index + 1}`}
           />
         ))}
       </div>
@@ -420,14 +424,15 @@ const PackageEnquiryForm = ({ selectedPackage, onClose }) => {
 
       const enquiryData = {
         name: formData.name,
-        service: `Package: ${formData.packageName}`,
+        service: `Tour Package: ${formData.packageName}`,
         phone: formData.phone,
         email: formData.email || '',
         details: `Package: ${formData.packageName}
 Travelers: ${formData.travellers}
-Budget: ${formData.budget || 'Not specified'}
+Budget: ₹${formData.budget || 'Not specified'}
 Travel Date: ${formData.travelDate || 'Not specified'}
-Message: ${formData.message || 'No additional message'}`
+Message: ${formData.message || 'No additional message'}`,
+        source: "packages_page"
       };
 
       console.log('Submitting package enquiry:', enquiryData);
@@ -437,7 +442,7 @@ Message: ${formData.message || 'No additional message'}`
       if (response.data.success) {
         setSubmitStatus({
           type: 'success',
-          message: 'Package enquiry submitted successfully! Our team will contact you within 1-2 hours.'
+          message: 'Package enquiry submitted successfully! Our travel expert will contact you within 1-2 hours.'
         });
 
         setTimeout(() => {
@@ -526,7 +531,7 @@ Message: ${formData.message || 'No additional message'}`
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full pl-9 sm:pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                placeholder="Your name"
+                placeholder="Your full name"
                 required
               />
             </div>
@@ -544,7 +549,7 @@ Message: ${formData.message || 'No additional message'}`
                 value={formData.phone}
                 onChange={handleChange}
                 className="w-full pl-9 sm:pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                placeholder="+91 98765 43210"
+                placeholder="10-digit mobile number"
                 required
               />
             </div>
@@ -577,7 +582,7 @@ Message: ${formData.message || 'No additional message'}`
                 name="travellers"
                 value={formData.travellers}
                 onChange={handleChange}
-                className="w-full pl-9 sm:pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none"
+                className="w-full pl-9 sm:pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none bg-white"
               >
                 {[1,2,3,4,5,6,7,8,9,10].map(num => (
                   <option key={num} value={num}>{num} {num === 1 ? 'person' : 'people'}</option>
@@ -650,7 +655,7 @@ Message: ${formData.message || 'No additional message'}`
           ) : (
             <>
               <Send size={16} className="sm:w-[18px] sm:h-[18px]" />
-              Submit Enquiry
+              Submit Package Enquiry
             </>
           )}
         </button>
@@ -679,39 +684,19 @@ const HeroSection = ({ scrollToPackages, scrollToCarousel }) => {
 
       <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 py-12 sm:py-16 lg:py-24">
         <div className="w-full">
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <div className="inline-flex items-center gap-2 sm:gap-3 lg:gap-4 mb-3 sm:mb-4">
-              <div className="animate-pulse">
-                <Sparkles size={18} className="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-yellow-300" />
-              </div>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-orange-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent">
-                COMING SOON
-              </h2>
-              <div className="animate-pulse">
-                <Sparkles size={18} className="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-yellow-300" />
-              </div>
-            </div>
-            <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-blue-100 mb-2 sm:mb-4 px-4">
-              Exciting new features and destinations are on the way!
-            </p>
-            <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-blue-200 max-w-4xl mx-auto px-4">
-              Stay tuned for amazing updates. In the meantime, explore our current packages or request a custom trip.
-            </p>
-          </div>
-
           <div className="text-center max-w-7xl mx-auto px-4">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 lg:py-3 mb-4 sm:mb-6">
               <Sparkles size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-yellow-300" />
-              <span className="text-xs sm:text-sm lg:text-base font-medium">6+ Curated Tour Packages</span>
+              <span className="text-xs sm:text-sm lg:text-base font-medium">India Tour Packages & Holiday Deals</span>
             </div>
           
             <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 sm:mb-8 lg:mb-10 leading-tight">
               Discover Amazing
-              <span className="block text-orange-300 mt-2 sm:mt-3 lg:mt-4">Travel Experiences</span>
+              <span className="block text-orange-300 mt-2 sm:mt-3 lg:mt-4">India Tour Packages</span>
             </h1>
           
             <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-gray-300 mb-6 sm:mb-8 lg:mb-10 max-w-3xl mx-auto px-4">
-              Choose from our 6+ expertly curated tour packages or let us design a fully customized itinerary just for you.
+              Choose from our curated tour packages to Kashmir, Goa, Kerala, Rajasthan, Ladakh, and Himachal. Customizable itineraries, best prices, and expert travel assistance.
             </p>
           
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 lg:gap-6 justify-center mb-8 sm:mb-10 lg:mb-12 px-4">
@@ -721,7 +706,7 @@ const HeroSection = ({ scrollToPackages, scrollToCarousel }) => {
               >
                 <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
                 <Globe className="relative z-10 group-hover:animate-pulse" size={18} /> 
-                <span className="relative z-10">View Packages</span>
+                <span className="relative z-10">View Tour Packages</span>
               </button>
               <button 
                 onClick={scrollToPackages}
@@ -729,25 +714,25 @@ const HeroSection = ({ scrollToPackages, scrollToCarousel }) => {
               >
                 <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
                 <Grid className="relative z-10 group-hover:animate-pulse" size={18} /> 
-                <span className="relative z-10">Browse All</span>
+                <span className="relative z-10">Browse All Packages</span>
               </button>
               <a 
-                href="https://wa.me/916371106588"
+                href="https://wa.me/916371106588?text=Hi%20GoTravio,%20I'm%20interested%20in%20custom%20tour%20packages"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-bold text-sm sm:text-base lg:text-lg xl:text-xl flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
               >
                 <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
                 <MessageCircle className="relative z-10" size={18} /> 
-                <span className="relative z-10">Custom Trip</span>
+                <span className="relative z-10">Custom Trip Enquiry</span>
               </a>
             </div>
 
             <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-6 max-w-4xl mx-auto px-4">
               {[
-                { icon: <Award size={16} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />, text: "Packages", color: "text-yellow-400" },
-                { icon: <Shield size={16} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />, text: "Flexible Plans", color: "text-green-400" },
-                { icon: <TrendingUp size={16} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />, text: "Best Value", color: "text-pink-400" },
+                { icon: <Award size={16} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />, text: "6+ Curated Packages", color: "text-yellow-400" },
+                { icon: <Shield size={16} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />, text: "Best Price Guarantee", color: "text-green-400" },
+                { icon: <Star size={16} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />, text: "4.8+ Rating", color: "text-pink-400" },
                 { icon: <Clock size={16} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />, text: "24/7 Support", color: "text-blue-400" },
               ].map((badge, idx) => (
                 <div key={idx} className="flex items-center gap-2 sm:gap-3 lg:gap-4 bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-5 border border-white/10">
@@ -782,12 +767,10 @@ const Grid = ({ size }) => (
   </svg>
 );
 
-// Package Type Filters Component - FIXED VERSION
+// Package Type Filters Component
 const PackageTypeFilter = ({ activeFilter, setActiveFilter, packages }) => {
-  // Calculate counts based on actual packages
   const totalPackages = packages.length;
   
-  // Count domestic packages (Indian destinations)
   const domesticPackages = packages.filter(pkg => {
     const location = (pkg.location || pkg.destination || '').toLowerCase();
     return location.includes('india') || 
@@ -803,10 +786,8 @@ const PackageTypeFilter = ({ activeFilter, setActiveFilter, packages }) => {
            location.includes('mysore');
   }).length;
 
-  // Count international packages (non-Indian destinations)
   const internationalPackages = totalPackages - domesticPackages;
 
-  // Count packages by tag
   const honeymoonPackages = packages.filter(pkg => 
     (pkg.tag || pkg.category || '').toLowerCase() === 'honeymoon'
   ).length;
@@ -821,7 +802,7 @@ const PackageTypeFilter = ({ activeFilter, setActiveFilter, packages }) => {
 
   const filters = [
     { id: "all", label: "All Packages", icon: <Globe size={14} />, count: totalPackages },
-    { id: "domestic", label: "Domestic", icon: <MapPin size={14} />, count: domesticPackages },
+    { id: "domestic", label: "Domestic Tours", icon: <MapPin size={14} />, count: domesticPackages },
     { id: "international", label: "International", icon: <Globe size={14} />, count: internationalPackages },
     { id: "honeymoon", label: "Honeymoon", icon: <Heart size={14} />, count: honeymoonPackages },
     { id: "adventure", label: "Adventure", icon: <Mountain size={14} />, count: adventurePackages },
@@ -947,14 +928,15 @@ const PackageCard = ({ pkg, onEnquire }) => {
         <div className="relative h-48 sm:h-56 lg:h-72 overflow-hidden">
           <img
             src={pkg.imageUrl || pkg.image || pkg.images?.[0] || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1200"}
-            alt={pkg.title}
+            alt={`${pkg.title} - Tour package in ${pkg.location || pkg.destination}`}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
           
           <div className="absolute top-3 sm:top-4 lg:top-5 left-3 sm:left-4 lg:left-5">
             <span className="px-2 sm:px-3 lg:px-4 py-1 sm:py-1.5 lg:py-2 bg-gradient-to-r from-orange-600 to-pink-600 text-white text-[10px] sm:text-xs lg:text-sm font-bold rounded-full">
-              {pkg.tag || pkg.category || "Popular"}
+              {pkg.tag || pkg.category || "Popular Package"}
             </span>
           </div>
 
@@ -984,7 +966,7 @@ const PackageCard = ({ pkg, onEnquire }) => {
           </div>
 
           <p className="text-gray-600 text-xs sm:text-sm lg:text-base mb-3 sm:mb-4 lg:mb-5 line-clamp-2">
-            {pkg.description || "Experience amazing destinations with our expertly curated package."}
+            {pkg.description || `Experience amazing ${pkg.location || 'destinations'} with our expertly curated package.`}
           </p>
 
           <div className="flex flex-col xs:flex-row xs:items-center justify-between pt-3 sm:pt-4 lg:pt-5 border-t border-gray-100 gap-2 xs:gap-0">
@@ -1133,43 +1115,44 @@ const ImageCarousel = () => {
     {
       url: "/taj.png",
       location: "Agra, Uttar Pradesh",
-      description: "A global icon of love, history, and architectural brilliance."
+      description: "A global icon of love, history, and architectural brilliance.",
+      alt: "Taj Mahal in Agra - popular tourist destination"
     },
     {
       url: "/citypalace.png",
-      
       location: "Jaipur, Rajasthan",
-      description: "Where Rajput grandeur and royal heritage come alive."
+      description: "Where Rajput grandeur and royal heritage come alive.",
+      alt: "City Palace Jaipur - Rajasthan heritage tour"
     },
     {
       url: "/kerla.png",
-      
       location: "Alleppey, Kerala",
-      description: "A serene web of lakes and lagoons, ideal for houseboat journeys."
+      description: "A serene web of lakes and lagoons, ideal for houseboat journeys.",
+      alt: "Kerala backwaters houseboat tour"
     },
     {
       url: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?q=80&w=1974&auto=format&fit=crop",
-      
       location: "Goa",
-      description: "Golden beaches, electric nights, and timeless Portuguese influence."
+      description: "Golden beaches, electric nights, and timeless Portuguese influence.",
+      alt: "Goa beaches - popular beach holiday destination"
     },
     {
       url: "/leh.png",
-    
       location: "Ladakh",
-      description: "Where rugged Himalayan beauty meets spiritual calm."
+      description: "Where rugged Himalayan beauty meets spiritual calm.",
+      alt: "Ladakh mountains - adventure tour package"
     },
     {
       url: "/banaras.png",
-      
       location: "Varanasi, Uttar Pradesh",
-      description: "Where the Ganges flows through centuries of faith and ritual."
+      description: "Where the Ganges flows through centuries of faith and ritual.",
+      alt: "Varanasi Ganga Aarti - spiritual tour"
     },
     {
       url: "/Mysore.jpg",
-      
       location: "Mysore, Karnataka",
-      description: "A breathtaking display of royal grandeur lit up for festive evenings.."
+      description: "A breathtaking display of royal grandeur lit up for festive evenings.",
+      alt: "Mysore Palace - heritage tour package"
     }
   ];
 
@@ -1179,7 +1162,7 @@ const ImageCarousel = () => {
       setCurrentImageIndex((prevIndex) => 
         prevIndex === travelImages.length - 1 ? 0 : prevIndex + 1
       );
-    }, 3000); // Change image every 3 seconds
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -1190,37 +1173,33 @@ const ImageCarousel = () => {
         <div className="text-center mb-8 sm:mb-10 lg:mb-12">
           <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-3 sm:mb-4">
             <Camera size={16} className="text-indigo-500" />
-            <span className="text-sm sm:text-base lg:text-lg font-medium text-indigo-700">Top Destinations</span>
+            <span className="text-sm sm:text-base lg:text-lg font-medium text-indigo-700">Top Tour Destinations</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-2 sm:mb-3">
-            Most Visited <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Places</span>
+            Most Visited <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Places in India</span>
           </h2>
           <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto">
             Explore the most popular destinations that travelers love the most
           </p>
         </div>
 
-        {/* Carousel Container - No navigation arrows */}
         <div className="relative rounded-2xl sm:rounded-3xl lg:rounded-4xl overflow-hidden shadow-2xl">
-          {/* Main Image */}
           <div className="relative h-[250px] sm:h-[350px] md:h-[450px] lg:h-[550px] xl:h-[550px] w-full">
             <img
               src={travelImages[currentImageIndex].url}
-              alt={travelImages[currentImageIndex].title}
+              alt={travelImages[currentImageIndex].alt}
               className="w-full h-full object-cover transition-all duration-700 ease-in-out"
             />
             
-            {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
             
-            {/* Image Caption with Location Tag */}
             <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 lg:p-8 xl:p-10 text-white">
               <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1 sm:py-1.5 mb-2 sm:mb-3">
                 <MapPin size={12} className="sm:w-3 sm:h-3 lg:w-4 lg:h-4" />
                 <span className="text-[10px] sm:text-xs lg:text-sm font-medium">{travelImages[currentImageIndex].location}</span>
               </div>
               <h3 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold mb-1 sm:mb-2">
-                {travelImages[currentImageIndex].title}
+                {travelImages[currentImageIndex].location.split(',')[0]}
               </h3>
               <p className="text-xs sm:text-sm lg:text-base xl:text-lg text-gray-200 max-w-2xl">
                 {travelImages[currentImageIndex].description}
@@ -1319,7 +1298,6 @@ const FAQSection = () => {
           ))}
         </div>
 
-        {/* Still have questions */}
         <div className="mt-8 sm:mt-10 text-center">
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 sm:px-6 py-3 sm:py-4">
             <MessageCircle size={18} className="text-indigo-600" />
@@ -1352,29 +1330,29 @@ const getDemoPackages = () => [
     description: "Experience the beauty of Kashmir with houseboat stays, shikara rides, and snow adventures in the Himalayas.",
     days: 7,
     priceFrom: 25000,
-    tag: "Honeymoon",
+    tag: "Honeymoon Package",
     imageUrl: "https://media.istockphoto.com/id/498628231/photo/lake-of-blue-water.webp?a=1&b=1&s=612x612&w=0&k=20&c=JWajlJmK-qq7ITeu1m0KJeqA-hUu731rQpgJ3g2rAyY=",
     highlights: ["Houseboat Stay", "Shikara Ride", "Skiing in Gulmarg", "Pahalgam Valley"]
   },
   {
     _id: "2",
-    title: "Goa Beach & Culture",
+    title: "Goa Beach Holiday",
     location: "North Goa, South Goa",
     description: "Sun, sand, and Portuguese heritage with beach shacks, water sports, and vibrant nightlife.",
     days: 5,
     priceFrom: 18000,
-    tag: "Beach",
+    tag: "Beach Package",
     imageUrl: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?q=80&w=1200",
     highlights: ["Beach Hopping", "Water Sports", "Portuguese Churches", "Nightlife"]
   },
   {
     _id: "3",
-    title: "Kerala Backwaters",
+    title: "Kerala Backwaters Tour",
     location: "Alleppey, Munnar, Kochi",
     description: "Houseboat cruise through backwaters, tea plantations, and Ayurvedic wellness treatments.",
     days: 6,
     priceFrom: 22000,
-    tag: "Wellness",
+    tag: "Wellness Package",
     imageUrl: "https://images.unsplash.com/photo-1528164344705-47542687000d?q=80&w=1200",
     highlights: ["Houseboat Stay", "Tea Plantations", "Ayurvedic Spa", "Kathakali Show"]
   },
@@ -1385,18 +1363,18 @@ const getDemoPackages = () => [
     description: "Palaces, forts, desert safaris, and cultural experiences in royal Rajasthan.",
     days: 8,
     priceFrom: 28000,
-    tag: "Heritage",
+    tag: "Heritage Package",
     imageUrl: "https://images.unsplash.com/photo-1615836245337-f5b9b2303f10?w=600&auto=format&fit=crop&q=60",
     highlights: ["Palace Stay", "Desert Safari", "Folk Performances", "Shopping"]
   },
   {
     _id: "5",
-    title: "Ladakh Adventure",
+    title: "Ladakh Adventure Tour",
     location: "Leh, Nubra Valley, Pangong",
     description: "High altitude lakes, monasteries, mountain passes, and adventure activities in Ladakh.",
     days: 9,
     priceFrom: 32000,
-    tag: "Adventure",
+    tag: "Adventure Package",
     imageUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1200",
     highlights: ["Pangong Lake", "Monastery Tour", "Mountain Biking", "Camping"]
   },
@@ -1407,7 +1385,7 @@ const getDemoPackages = () => [
     description: "Hill stations, mountain views, adventure sports, and Tibetan culture experiences.",
     days: 7,
     priceFrom: 24000,
-    tag: "Family",
+    tag: "Family Package",
     imageUrl: "https://images.unsplash.com/photo-1581791534721-e599df4417f7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGltYWNoYWx8ZW58MHx8MHx8fDA%3D0",
     highlights: ["Toy Train", "Skiing", "Tibetan Culture", "River Rafting"]
   }
@@ -1424,6 +1402,73 @@ const Packages = () => {
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [showEnquiryForm, setShowEnquiryForm] = useState(false);
   const [error, setError] = useState(null);
+
+  // FAQ data for schema
+  const faqs = [
+    {
+      question: "How do I book a tour package with GoTravio?",
+      answer: "Booking a tour package is simple! You can browse through our packages, click on 'Enquire Now' for any package you're interested in, fill out the enquiry form, and our travel expert will contact you within 1-2 hours. Alternatively, you can WhatsApp us directly for instant assistance."
+    },
+    {
+      question: "Can I customize a package to suit my preferences?",
+      answer: "Absolutely! We specialize in creating fully customized itineraries. Whether you want to modify an existing package or create a completely new one, our travel experts will work with you to design the perfect trip tailored to your preferences, budget, and schedule."
+    },
+    {
+      question: "What is included in the package price?",
+      answer: "Our package prices typically include accommodation, meals as specified in the itinerary, transportation during the tour, sightseeing as per the plan, and the services of a tour guide. However, each package may have different inclusions. Please check the package details or contact us for specific information."
+    },
+    {
+      question: "What is your cancellation and refund policy?",
+      answer: "Our cancellation policy varies depending on the package and how far in advance you cancel. Generally, cancellations made 30+ days before departure receive a full refund minus processing fees. For cancellations within 30 days, partial refunds may apply. Please check the specific package terms or contact us for details."
+    }
+  ];
+
+  // Schema.org structured data for tour packages
+  const packagesSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": packages.map((pkg, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "TouristTrip",
+        "name": pkg.title,
+        "description": pkg.description,
+        "touristType": pkg.tag,
+        "itinerary": {
+          "@type": "ItemList",
+          "itemListElement": (pkg.highlights || []).map((highlight, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "item": {
+              "@type": "TouristDestination",
+              "name": highlight
+            }
+          }))
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": (pkg.priceFrom || pkg.price || 25000).toString().replace(/,/g, ''),
+          "priceCurrency": "INR",
+          "availability": "https://schema.org/InStock"
+        }
+      }
+    }))
+  };
+
+  // FAQ Schema
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -1494,7 +1539,6 @@ const Packages = () => {
     
     if (activeFilter !== "all") {
       if (activeFilter === "domestic") {
-        // Filter for domestic packages (Indian destinations)
         filtered = filtered.filter(pkg => {
           const location = (pkg.location || pkg.destination || '').toLowerCase();
           return location.includes('india') || 
@@ -1510,7 +1554,6 @@ const Packages = () => {
                  location.includes('mysore');
         });
       } else if (activeFilter === "international") {
-        // Filter for international packages (non-Indian destinations)
         filtered = filtered.filter(pkg => {
           const location = (pkg.location || pkg.destination || '').toLowerCase();
           return !(location.includes('india') || 
@@ -1526,7 +1569,6 @@ const Packages = () => {
                    location.includes('mysore'));
         });
       } else {
-        // Filter by tag/category for other filters
         filtered = filtered.filter(pkg => 
           (pkg.tag || pkg.category || '').toLowerCase() === activeFilter.toLowerCase()
         );
@@ -1560,171 +1602,182 @@ const Packages = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white w-full overflow-x-hidden">
-      <HeroSection scrollToPackages={scrollToPackages} scrollToCarousel={scrollToCarousel} />
-      <QuickStats packages={packages} />
-      
-      {/* Circular Carousel Section */}
-      <section id="circular-carousel" className="w-full py-10 sm:py-12 lg:py-16 bg-gradient-to-b from-white to-indigo-50/30 px-4 sm:px-6 lg:px-12 xl:px-16">
-        <div className="text-center mb-8 sm:mb-10 lg:mb-12">
-          <div className="inline-flex items-center gap-1.5 sm:gap-2 lg:gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 lg:py-3 mb-3 sm:mb-4">
-            <Sparkles size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-indigo-500" />
-            <span className="text-xs sm:text-sm lg:text-base font-medium text-indigo-700">Featured Packages</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-2 sm:mb-3 px-4">
-            Explore Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Top Destinations</span>
-          </h2>
-          <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto px-4">
-            Browse through our most popular packages with interactive circular carousel
-          </p>
-        </div>
+    <>
+      <SEO 
+        title="India Tour Packages | Custom Travel Packages & Holiday Deals - GoTravio"
+        description="Explore our curated India tour packages including Kashmir, Goa, Kerala, Rajasthan, Ladakh, and Himachal. Customizable itineraries, best prices, and expert travel assistance. Book your dream vacation today!"
+        keywords="India tour packages, holiday packages India, Kashmir tour package, Goa holiday package, Kerala backwaters tour, Rajasthan heritage tour, Ladakh adventure tour, Himachal tour, family vacation packages, honeymoon packages, GoTravio tours"
+        canonicalUrl="/packages"
+        ogImage="https://gotravio.com/packages-og-image.jpg"
+        schemaData={[packagesSchema, faqSchema]}
+      />
+
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white w-full overflow-x-hidden">
+        <HeroSection scrollToPackages={scrollToPackages} scrollToCarousel={scrollToCarousel} />
+        <QuickStats packages={packages} />
         
-        {isLoading ? (
-          <div className="text-center py-12 sm:py-16 md:py-20 px-4">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 border-t-2 border-b-2 border-indigo-600"></div>
-            <p className="mt-3 sm:mt-4 text-sm sm:text-base text-gray-600">Loading amazing packages...</p>
-          </div>
-        ) : packages.length > 0 ? (
-          <CircularCarousel packages={packages.slice(0, 6)} />
-        ) : (
-          <div className="text-center py-8 sm:py-10 md:py-12 px-4">
-            <Globe size={48} className="sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto text-gray-300 mb-3 sm:mb-4" />
-            <p className="text-sm sm:text-base text-gray-600">No packages available yet</p>
-          </div>
-        )}
-      </section>
-      
-      <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 mt-4 sm:mt-6 lg:mt-8">
-        <PackageTypeFilter activeFilter={activeFilter} setActiveFilter={setActiveFilter} packages={packages} />
-      </div>
-      
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 sm:mt-6 mb-6 sm:mb-8">
-        <div className="relative">
-          <Search className="absolute left-3 sm:left-4 lg:left-5 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
-          <input
-            type="text"
-            placeholder="Search packages by destination, theme, or duration..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 sm:pl-12 lg:pl-14 pr-4 py-2.5 sm:py-3 lg:py-4 bg-white rounded-lg sm:rounded-xl lg:rounded-2xl border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none text-sm sm:text-base lg:text-lg shadow-sm"
-          />
-        </div>
-      </div>
-      
-      {error && (
-        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 mb-6 sm:mb-8">
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg sm:rounded-xl p-3 sm:p-4">
-            <p className="text-xs sm:text-sm text-yellow-700">
-              ⚠️ {error}. Showing demo packages. Check if backend is running on port 5000.
+        {/* Circular Carousel Section */}
+        <section id="circular-carousel" className="w-full py-10 sm:py-12 lg:py-16 bg-gradient-to-b from-white to-indigo-50/30 px-4 sm:px-6 lg:px-12 xl:px-16">
+          <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 lg:gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 lg:py-3 mb-3 sm:mb-4">
+              <Sparkles size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-indigo-500" />
+              <span className="text-xs sm:text-sm lg:text-base font-medium text-indigo-700">Featured Tour Packages</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-2 sm:mb-3 px-4">
+              Explore Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Top India Destinations</span>
+            </h2>
+            <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto px-4">
+              Browse through our most popular tour packages with interactive circular carousel
             </p>
           </div>
-        </div>
-      )}
-      
-      {/* Packages Grid Section */}
-      <section id="packages-grid" className="w-full py-8 sm:py-10 lg:py-12 px-4 sm:px-6 lg:px-12 xl:px-16">
-        <div className="w-full">
-          {filteredPackages.length === 0 ? (
-            <div className="text-center py-10 sm:py-12 md:py-16 bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl border border-gray-200/50 px-4">
-              <Globe size={48} className="sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto text-gray-300 mb-3 sm:mb-4" />
-              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2">No packages found</h3>
-              <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 max-w-md mx-auto">
-                {searchTerm 
-                  ? `No packages match "${searchTerm}". Try a different search or browse all packages.`
-                  : "Packages will be added soon. Contact us for custom trip planning."
-                }
-              </p>
-              <div className="flex flex-col xs:flex-row gap-3 justify-center px-4">
-                <button
-                  onClick={() => {
-                    setActiveFilter("all");
-                    setSearchTerm("");
-                  }}
-                  className="w-full xs:w-auto px-5 sm:px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-medium text-sm sm:text-base"
-                >
-                  View All Packages
-                </button>
-                <a
-                  href="https://wa.me/916371106588"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full xs:w-auto px-5 sm:px-6 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg font-medium text-sm sm:text-base flex items-center justify-center gap-2"
-                >
-                  <MessageCircle size={16} className="sm:w-[18px] sm:h-[18px]" />
-                  WhatsApp for Custom Trip
-                </a>
-              </div>
+          
+          {isLoading ? (
+            <div className="text-center py-12 sm:py-16 md:py-20 px-4">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 border-t-2 border-b-2 border-indigo-600"></div>
+              <p className="mt-3 sm:mt-4 text-sm sm:text-base text-gray-600">Loading amazing packages...</p>
             </div>
+          ) : packages.length > 0 ? (
+            <CircularCarousel packages={packages.slice(0, 6)} />
           ) : (
-            <>
-              <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between mb-6 sm:mb-8 gap-3 sm:gap-4">
-                <div>
-                  <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900">
-                    All Packages
-                  </h2>
-                  <p className="text-xs sm:text-sm lg:text-base text-gray-600">
-                    {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
-                    {packages.length === getDemoPackages().length && " (Demo Data)"}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 sm:gap-3 w-full xs:w-auto">
-                  <span className="text-xs sm:text-sm lg:text-base text-gray-500 whitespace-nowrap">Sort by:</span>
-                  <select className="w-full xs:w-auto px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-3 text-xs sm:text-sm lg:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                    <option>Popularity</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                    <option>Duration</option>
-                  </select>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 xl:gap-8">
-                {filteredPackages.map((pkg) => (
-                  <PackageCard key={pkg._id} pkg={pkg} onEnquire={handleEnquireClick} />
-                ))}
-              </div>
-            </>
+            <div className="text-center py-8 sm:py-10 md:py-12 px-4">
+              <Globe size={48} className="sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto text-gray-300 mb-3 sm:mb-4" />
+              <p className="text-sm sm:text-base text-gray-600">No packages available yet</p>
+            </div>
           )}
+        </section>
+        
+        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 mt-4 sm:mt-6 lg:mt-8">
+          <PackageTypeFilter activeFilter={activeFilter} setActiveFilter={setActiveFilter} packages={packages} />
         </div>
-      </section>
-
-      <CustomPackageCTA />
-      
-      {/* Image Carousel Section - Added after Custom Package CTA */}
-      <ImageCarousel />
-      
-      {/* FAQ Section - Added after Image Carousel */}
-      <FAQSection />
-      
-      {showEnquiryForm && selectedPackage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
-          <div className="w-full max-w-md my-4 sm:my-8">
-            <PackageEnquiryForm 
-              selectedPackage={selectedPackage}
-              onClose={() => {
-                setShowEnquiryForm(false);
-                setSelectedPackage(null);
-              }}
+        
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 sm:mt-6 mb-6 sm:mb-8">
+          <div className="relative">
+            <Search className="absolute left-3 sm:left-4 lg:left-5 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+            <input
+              type="text"
+              placeholder="Search packages by destination, theme, or duration..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 sm:pl-12 lg:pl-14 pr-4 py-2.5 sm:py-3 lg:py-4 bg-white rounded-lg sm:rounded-xl lg:rounded-2xl border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none text-sm sm:text-base lg:text-lg shadow-sm"
             />
           </div>
         </div>
-      )}
-      
-      {/* Floating WhatsApp */}
-      <a
-        href="https://wa.me/916371106588"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-4 sm:bottom-6 lg:bottom-8 right-4 sm:right-6 lg:right-8 z-40 group"
-      >
-        <div className="relative">
-          <div className="absolute inset-0 bg-green-500 rounded-full blur-lg group-hover:blur-xl transition-all opacity-70"></div>
-          <div className="relative bg-gradient-to-br from-green-500 to-green-600 text-white p-3 sm:p-4 lg:p-5 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110">
-            <MessageCircle size={22} className="sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
+        
+        {error && (
+          <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 mb-6 sm:mb-8">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg sm:rounded-xl p-3 sm:p-4">
+              <p className="text-xs sm:text-sm text-yellow-700">
+                ⚠️ {error}. Showing demo packages. Check if backend is running on port 5000.
+              </p>
+            </div>
           </div>
-        </div>
-      </a>
-    </div>
+        )}
+        
+        {/* Packages Grid Section */}
+        <section id="packages-grid" className="w-full py-8 sm:py-10 lg:py-12 px-4 sm:px-6 lg:px-12 xl:px-16">
+          <div className="w-full">
+            {filteredPackages.length === 0 ? (
+              <div className="text-center py-10 sm:py-12 md:py-16 bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl border border-gray-200/50 px-4">
+                <Globe size={48} className="sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto text-gray-300 mb-3 sm:mb-4" />
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2">No packages found</h3>
+                <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 max-w-md mx-auto">
+                  {searchTerm 
+                    ? `No packages match "${searchTerm}". Try a different search or browse all packages.`
+                    : "Packages will be added soon. Contact us for custom trip planning."
+                  }
+                </p>
+                <div className="flex flex-col xs:flex-row gap-3 justify-center px-4">
+                  <button
+                    onClick={() => {
+                      setActiveFilter("all");
+                      setSearchTerm("");
+                    }}
+                    className="w-full xs:w-auto px-5 sm:px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-medium text-sm sm:text-base"
+                  >
+                    View All Packages
+                  </button>
+                  <a
+                    href="https://wa.me/916371106588"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full xs:w-auto px-5 sm:px-6 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg font-medium text-sm sm:text-base flex items-center justify-center gap-2"
+                  >
+                    <MessageCircle size={16} className="sm:w-[18px] sm:h-[18px]" />
+                    WhatsApp for Custom Trip
+                  </a>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between mb-6 sm:mb-8 gap-3 sm:gap-4">
+                  <div>
+                    <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900">
+                      All Tour Packages
+                    </h2>
+                    <p className="text-xs sm:text-sm lg:text-base text-gray-600">
+                      {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
+                      {packages.length === getDemoPackages().length && " (Demo Data)"}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 sm:gap-3 w-full xs:w-auto">
+                    <span className="text-xs sm:text-sm lg:text-base text-gray-500 whitespace-nowrap">Sort by:</span>
+                    <select className="w-full xs:w-auto px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-3 text-xs sm:text-sm lg:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                      <option>Popularity</option>
+                      <option>Price: Low to High</option>
+                      <option>Price: High to Low</option>
+                      <option>Duration</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 xl:gap-8">
+                  {filteredPackages.map((pkg) => (
+                    <PackageCard key={pkg._id} pkg={pkg} onEnquire={handleEnquireClick} />
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        </section>
+
+        <CustomPackageCTA />
+        
+        {/* Image Carousel Section */}
+        <ImageCarousel />
+        
+        {/* FAQ Section */}
+        <FAQSection />
+        
+        {showEnquiryForm && selectedPackage && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
+            <div className="w-full max-w-md my-4 sm:my-8">
+              <PackageEnquiryForm 
+                selectedPackage={selectedPackage}
+                onClose={() => {
+                  setShowEnquiryForm(false);
+                  setSelectedPackage(null);
+                }}
+              />
+            </div>
+          </div>
+        )}
+        
+        {/* Floating WhatsApp */}
+        <a
+          href="https://wa.me/916371106588"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fixed bottom-4 sm:bottom-6 lg:bottom-8 right-4 sm:right-6 lg:right-8 z-40 group"
+        >
+          <div className="relative">
+            <div className="absolute inset-0 bg-green-500 rounded-full blur-lg group-hover:blur-xl transition-all opacity-70"></div>
+            <div className="relative bg-gradient-to-br from-green-500 to-green-600 text-white p-3 sm:p-4 lg:p-5 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110">
+              <MessageCircle size={22} className="sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
+            </div>
+          </div>
+        </a>
+      </div>
+    </>
   );
 };
 

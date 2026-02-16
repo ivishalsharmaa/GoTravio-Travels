@@ -1,5 +1,5 @@
-// client/src/pages/Contact.jsx
 import React, { useState } from "react";
+import SEO from "../components/SEO";
 import { 
   Phone, 
   Mail, 
@@ -15,7 +15,8 @@ import {
   X,
   Sparkles,
   Headphones,
-  ChevronRight
+  ChevronRight,
+  ChevronDown
 } from "lucide-react";
 import { API } from "../api.js";
 
@@ -23,19 +24,19 @@ import { API } from "../api.js";
 const BUSINESS_CONFIG = {
   phone: "+919023884833",
   whatsapp: "+916371106588",
-  email: "support@triproute.com",
-  whatsappMessage: "Hi, I need travel assistance from TripRoute",
+  email: "gotravio.travel@gmail.com",
+  whatsappMessage: "Hi GoTravio, I need travel assistance",
   social: {
-    facebook: "#",
-    instagram: "#",
-    twitter: "#",
-    linkedin: "#"
+    facebook: "https://facebook.com/gotravio",
+    instagram: "https://instagram.com/gotravio",
+    twitter: "https://twitter.com/gotravio",
+    linkedin: "https://linkedin.com/company/gotravio"
   }
 };
 
 const SERVICE_TYPES = [
   "Cab & Vehicle Rental",
-  "Train Ticket Assistance",
+  "Train Ticket Assistance (Including Tatkal)",
   "Flight Booking",
   "Tour Packages",
   "Hotel Booking",
@@ -83,7 +84,7 @@ const SuccessModal = ({ isOpen, onClose, onContinueWhatsApp }) => {
           <div className="w-16 h-16 sm:w-20 sm:h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
             <CheckCircle className="text-green-600" size={32} />
           </div>
-          <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Message Sent Successfully!</h3>
+          <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Enquiry Sent Successfully!</h3>
           <p className="text-sm sm:text-base lg:text-lg text-gray-600 mb-6 sm:mb-8">
             Our travel expert will review your enquiry and contact you within 1 hour.
           </p>
@@ -162,20 +163,91 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState({ type: null, message: "" });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [openFaq, setOpenFaq] = useState(null);
+
+  // FAQ data for schema - SAME STYLE AS HOME PAGE
+  const faqs = [
+    {
+      question: "How can I contact GoTravio for travel assistance?",
+      answer: "You can contact us through multiple channels: Fill out the enquiry form on this page, WhatsApp us at +91 90238 84833 for instant responses, call us at +91 90238 84833 for immediate assistance, or email us at gotravio.travel@gmail.com for detailed queries."
+    },
+    {
+      question: "What are your business hours?",
+      answer: "We are available 24/7, 365 days a year. Our travel experts are always ready to assist you with any travel requirements, including emergency bookings and last-minute changes."
+    },
+    {
+      question: "How quickly can I expect a response?",
+      answer: "We pride ourselves on quick response times. WhatsApp messages are typically answered within 5-10 minutes. Phone calls are answered immediately during business hours. Email enquiries are responded to within 1-2 hours. Form submissions are handled within 15-30 minutes."
+    },
+    {
+      question: "Do you provide support in regional languages?",
+      answer: "Yes, our travel experts are multilingual and can assist you in Hindi, English, and several regional languages including Tamil, Telugu, Kannada, Malayalam, Bengali, and Gujarati."
+    },
+    {
+      question: "Can I visit your office for in-person consultation?",
+      answer: "Currently, we operate as a digital-first travel assistance service to provide you with the best convenience. However, we're happy to schedule video calls for detailed travel planning. For urgent matters, our phone and WhatsApp support is available 24/7."
+    }
+  ];
+
+  // Schema.org structured data for contact page
+  const contactSchema = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact GoTravio Travels",
+    "description": "Get in touch with GoTravio for travel assistance, cab bookings, train tickets, flight bookings, and tour packages.",
+    "url": "https://gotravio.com/contact",
+    "mainEntity": {
+      "@type": "TravelAgency",
+      "name": "GoTravio Travels",
+      "telephone": "+91 90238 84833",
+      "email": "gotravio.travel@gmail.com",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91 90238 84833",
+        "contactType": "customer service",
+        "availableLanguage": ["English", "Hindi", "Tamil", "Telugu", "Kannada", "Malayalam", "Bengali", "Gujarati"],
+        "hoursAvailable": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          "opens": "00:00",
+          "closes": "23:59"
+        }
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "India",
+        "addressCountry": "IN"
+      }
+    }
+  };
+
+  // FAQ Schema
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
 
   const quickContacts = [
     {
       icon: <MessageCircle className="text-white" size={22} />,
       title: "WhatsApp Chat",
-      description: "Instant response, document sharing",
-      actionText: "Chat Now",
-      actionUrl: `https://wa.me/${BUSINESS_CONFIG.whatsapp}`,
+      description: "Instant response, document sharing, quick queries",
+      actionText: "Chat on WhatsApp",
+      actionUrl: `https://wa.me/${BUSINESS_CONFIG.whatsapp}?text=${encodeURIComponent(BUSINESS_CONFIG.whatsappMessage)}`,
       gradient: "from-green-500 to-emerald-600"
     },
     {
       icon: <Phone className="text-white" size={22} />,
       title: "Call Expert",
-      description: "Detailed discussion, 24/7 support",
+      description: "Immediate assistance, detailed discussion, 24/7 support",
       actionText: "Call Now",
       actionUrl: `tel:${BUSINESS_CONFIG.phone}`,
       gradient: "from-blue-500 to-cyan-600"
@@ -183,9 +255,9 @@ const Contact = () => {
     {
       icon: <Mail className="text-white" size={22} />,
       title: "Email Us",
-      description: "Detailed queries, document attachments",
+      description: "Detailed queries, document attachments, formal communication",
       actionText: "Send Email",
-      actionUrl: `mailto:${BUSINESS_CONFIG.email}`,
+      actionUrl: `mailto:${BUSINESS_CONFIG.email}?subject=Travel%20Assistance%20Enquiry`,
       gradient: "from-purple-500 to-pink-600"
     }
   ];
@@ -214,7 +286,7 @@ const Contact = () => {
     }
 
     if (!validatePhone(form.phone)) {
-      newErrors.phone = "Please enter a valid phone number";
+      newErrors.phone = "Please enter a valid phone number with country code";
     }
 
     if (!form.serviceType) {
@@ -243,9 +315,10 @@ const Contact = () => {
       const enquiryData = {
         name: form.name,
         service: form.serviceType,
-        phone: form.phone,
+        phone: form.phone.replace(/\D/g, ''),
         email: form.email,
-        details: form.message
+        details: form.message,
+        source: 'contact_page'
       };
 
       console.log('Submitting contact enquiry:', enquiryData);
@@ -288,339 +361,445 @@ const Contact = () => {
     setSubmitStatus({ type: null, message: "" });
   };
 
+  const toggleFaq = (index) => {
+    setOpenFaq(openFaq === index ? null : index);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white w-full overflow-x-hidden">
-      {/* Notification Banner */}
-      {submitStatus.type && (
-        <div className={`fixed top-4 right-4 z-50 max-w-md w-[calc(100%-2rem)] sm:w-full ${submitStatus.type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'} border rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-5 transition-all duration-300`}>
-          <div className="flex items-start justify-between">
-            <div className="flex items-start gap-3 sm:gap-4">
-              {submitStatus.type === 'success' ? (
-                <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 flex-shrink-0 mt-0.5" />
-              ) : (
-                <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 text-red-600 flex-shrink-0 mt-0.5" />
-              )}
-              <div>
-                <p className={`font-semibold text-sm sm:text-base ${submitStatus.type === 'success' ? 'text-green-800' : 'text-red-800'}`}>
-                  {submitStatus.type === 'success' ? 'Success!' : 'Error!'}
-                </p>
-                <p className={`text-xs sm:text-sm mt-1 ${submitStatus.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
-                  {submitStatus.message}
+    <>
+      <SEO 
+        title="Contact GoTravio Travels | Travel Assistance, Cab, Train, Flight & Tour Enquiries"
+        description="Get in touch with GoTravio for expert travel assistance. Contact us via phone, WhatsApp, or email for cab bookings, train tickets (including Tatkal), flight bookings, and tour packages. 24/7 support available."
+        keywords="contact GoTravio, travel assistance contact, cab booking enquiry, train ticket help, flight booking support, tour package enquiry, travel agency contact India, 24/7 travel support, GoTravio contact"
+        canonicalUrl="/contact"
+        ogImage="https://gotravio.com/contact-og-image.jpg"
+        schemaData={[contactSchema, faqSchema]}
+      />
+
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white w-full overflow-x-hidden">
+        {/* Notification Banner */}
+        {submitStatus.type && (
+          <div className={`fixed top-4 right-4 z-50 max-w-md w-[calc(100%-2rem)] sm:w-full ${submitStatus.type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'} border rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-5 transition-all duration-300`}>
+            <div className="flex items-start justify-between">
+              <div className="flex items-start gap-3 sm:gap-4">
+                {submitStatus.type === 'success' ? (
+                  <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 flex-shrink-0 mt-0.5" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 text-red-600 flex-shrink-0 mt-0.5" />
+                )}
+                <div>
+                  <p className={`font-semibold text-sm sm:text-base ${submitStatus.type === 'success' ? 'text-green-800' : 'text-red-800'}`}>
+                    {submitStatus.type === 'success' ? 'Success!' : 'Error!'}
+                  </p>
+                  <p className={`text-xs sm:text-sm mt-1 ${submitStatus.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+                    {submitStatus.message}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={closeNotification}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-4 h-4 sm:w-5 sm:h-5" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Hero Section */}
+        <div className="relative bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 text-white w-full">
+          <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 py-12 sm:py-16 lg:py-20">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center max-w-4xl mx-auto">
+                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-6 sm:mb-8">
+                  <Sparkles size={16} className="sm:w-5 sm:h-5 text-yellow-300" />
+                  <span className="text-sm sm:text-base lg:text-lg font-medium">24/7 Expert Travel Support</span>
+                </div>
+                
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6">
+                  Contact Our
+                  <span className="block text-blue-300 mt-2 sm:mt-3">Travel Experts</span>
+                </h1>
+                
+                <p className="text-base sm:text-lg lg:text-xl text-blue-100 max-w-2xl mx-auto">
+                  Get personalized assistance for all your travel needs - cab bookings, train tickets, flight bookings, and tour packages.
                 </p>
               </div>
             </div>
-            <button
-              onClick={closeNotification}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <X className="w-4 h-4 sm:w-5 sm:h-5" />
-            </button>
           </div>
         </div>
-      )}
 
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 text-white w-full">
-        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 py-12 sm:py-16 lg:py-20">
+        {/* Quick Contact Options */}
+        <section className="px-4 sm:px-6 lg:px-12 xl:px-16 -mt-6 relative z-10">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center max-w-4xl mx-auto">
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-6 sm:mb-8">
-                <Sparkles size={16} className="sm:w-5 sm:h-5 text-yellow-300" />
-                <span className="text-sm sm:text-base lg:text-lg font-medium">Expert Travel Support</span>
+            <div className="grid md:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
+              {quickContacts.map((contact, idx) => (
+                <QuickContactCard key={idx} {...contact} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Main Content */}
+        <section className="w-full py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16">
+          <div className="max-w-4xl mx-auto">
+            {/* Main Enquiry Form */}
+            <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
+              {/* Form Header */}
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 sm:p-8 lg:p-10">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-5">
+                  <div>
+                    <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold mb-2">Travel Enquiry Form</h2>
+                    <p className="text-sm sm:text-base lg:text-lg text-blue-100">Our expert will personally review your request</p>
+                  </div>
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <ShieldCheck size={20} className="sm:w-6 sm:h-6 text-yellow-300" />
+                    <span className="text-xs sm:text-sm lg:text-base font-medium">Secure & Private</span>
+                  </div>
+                </div>
               </div>
-              
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6">
-                Contact Our
-                <span className="block text-blue-300 mt-2 sm:mt-3">Travel Experts</span>
-              </h1>
-              
-              <p className="text-base sm:text-lg lg:text-xl text-blue-100 max-w-2xl mx-auto">
-                Get personalized assistance for all your travel needs
+
+              {/* Form Content */}
+              <form onSubmit={handleSubmit} className="p-6 sm:p-8 lg:p-10 space-y-6 sm:space-y-7 lg:space-y-8">
+                {/* Form-level success/error messages */}
+                {submitStatus.type && (
+                  <div className={`p-4 sm:p-5 ${submitStatus.type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'} border rounded-xl sm:rounded-2xl`}>
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      {submitStatus.type === 'success' ? (
+                        <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
+                      ) : (
+                        <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 text-red-600" />
+                      )}
+                      <p className={`font-medium text-sm sm:text-base lg:text-lg ${submitStatus.type === 'success' ? 'text-green-700' : 'text-red-700'}`}>
+                        {submitStatus.message}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="grid md:grid-cols-2 gap-5 sm:gap-6 lg:gap-8">
+                  {/* Name Field */}
+                  <div className="space-y-2 sm:space-y-3">
+                    <label className="block text-sm sm:text-base lg:text-lg font-semibold text-gray-700">
+                      Full Name *
+                    </label>
+                    <div className="relative">
+                      <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                      <input
+                        type="text"
+                        name="name"
+                        value={form.name}
+                        onChange={handleChange}
+                        className={`w-full pl-12 pr-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border ${
+                          errors.name ? 'border-red-500' : 'border-gray-300'
+                        } focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors text-sm sm:text-base lg:text-lg`}
+                        placeholder="Enter your full name"
+                      />
+                    </div>
+                    {errors.name && (
+                      <p className="text-red-500 text-xs sm:text-sm lg:text-base mt-1">{errors.name}</p>
+                    )}
+                  </div>
+
+                  {/* Email Field */}
+                  <div className="space-y-2 sm:space-y-3">
+                    <label className="block text-sm sm:text-base lg:text-lg font-semibold text-gray-700">
+                      Email Address *
+                    </label>
+                    <div className="relative">
+                      <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                      <input
+                        type="email"
+                        name="email"
+                        value={form.email}
+                        onChange={handleChange}
+                        className={`w-full pl-12 pr-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border ${
+                          errors.email ? 'border-red-500' : 'border-gray-300'
+                        } focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors text-sm sm:text-base lg:text-lg`}
+                        placeholder="your.email@example.com"
+                      />
+                    </div>
+                    {errors.email && (
+                      <p className="text-red-500 text-xs sm:text-sm lg:text-base mt-1">{errors.email}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-5 sm:gap-6 lg:gap-8">
+                  {/* Phone Field */}
+                  <div className="space-y-2 sm:space-y-3">
+                    <label className="block text-sm sm:text-base lg:text-lg font-semibold text-gray-700">
+                      Phone Number *
+                    </label>
+                    <div className="relative">
+                      <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={form.phone}
+                        onChange={handleChange}
+                        className={`w-full pl-12 pr-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border ${
+                          errors.phone ? 'border-red-500' : 'border-gray-300'
+                        } focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors text-sm sm:text-base lg:text-lg`}
+                        placeholder="+91 98765 43210"
+                      />
+                    </div>
+                    {errors.phone && (
+                      <p className="text-red-500 text-xs sm:text-sm lg:text-base mt-1">{errors.phone}</p>
+                    )}
+                  </div>
+
+                  {/* Service Type */}
+                  <div className="space-y-2 sm:space-y-3">
+                    <label className="block text-sm sm:text-base lg:text-lg font-semibold text-gray-700">
+                      Service Needed *
+                    </label>
+                    <div className="relative">
+                      <HelpCircle className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                      <select
+                        name="serviceType"
+                        value={form.serviceType}
+                        onChange={handleChange}
+                        className={`w-full pl-12 pr-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl border ${
+                          errors.serviceType ? 'border-red-500' : 'border-gray-300'
+                        } focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors appearance-none cursor-pointer text-sm sm:text-base lg:text-lg`}
+                      >
+                        <option value="">Select a service</option>
+                        {SERVICE_TYPES.map((service, idx) => (
+                          <option key={idx} value={service}>{service}</option>
+                        ))}
+                      </select>
+                      <ChevronRight className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 rotate-90" size={18} />
+                    </div>
+                    {errors.serviceType && (
+                      <p className="text-red-500 text-xs sm:text-sm lg:text-base mt-1">{errors.serviceType}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Message Field */}
+                <div className="space-y-2 sm:space-y-3">
+                  <label className="block text-sm sm:text-base lg:text-lg font-semibold text-gray-700">
+                    Your Message *
+                  </label>
+                  <textarea
+                    name="message"
+                    value={form.message}
+                    onChange={handleChange}
+                    rows={4}
+                    className={`w-full px-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border ${
+                      errors.message ? 'border-red-500' : 'border-gray-300'
+                    } focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors resize-none text-sm sm:text-base lg:text-lg`}
+                    placeholder="Please provide details about your travel plans, dates, destinations, number of travelers, budget, and any specific requirements..."
+                  />
+                  {errors.message && (
+                    <p className="text-red-500 text-xs sm:text-sm lg:text-base mt-1">{errors.message}</p>
+                  )}
+                  <p className="text-xs sm:text-sm lg:text-base text-gray-500">
+                    Provide as much detail as possible for better assistance
+                  </p>
+                </div>
+
+                {/* Trust Note */}
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-blue-100">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <ShieldCheck size={20} className="sm:w-6 sm:h-6 text-blue-600 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium text-sm sm:text-base lg:text-lg text-gray-900">Your information is secure</p>
+                      <p className="text-xs sm:text-sm lg:text-base text-gray-600">
+                        We respect your privacy. Your details are encrypted and never shared with third parties.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 sm:py-5 lg:py-6 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg lg:text-xl transition-all hover:shadow-xl active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 sm:gap-4"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-2 border-white border-t-transparent"></div>
+                      <span className="text-sm sm:text-base lg:text-lg">Sending...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send size={20} className="sm:w-6 sm:h-6" />
+                      <span className="text-sm sm:text-base lg:text-lg">Send Enquiry</span>
+                    </>
+                  )}
+                </button>
+
+                {/* Alternative Options */}
+                <div className="text-center pt-4 sm:pt-5">
+                  <p className="text-gray-600 text-sm sm:text-base lg:text-lg">
+                    Prefer to talk?{' '}
+                    <a
+                      href={`https://wa.me/${BUSINESS_CONFIG.whatsapp}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-1"
+                    >
+                      WhatsApp us directly
+                      <MessageCircle size={16} className="sm:w-5 sm:h-5" />
+                    </a>
+                  </p>
+                </div>
+              </form>
+            </div>
+
+            {/* Simple Response Info */}
+            <div className="mt-8 sm:mt-10 lg:mt-12 grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 lg:gap-8">
+              <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 border border-gray-200">
+                <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                  <div className="p-2 sm:p-3 lg:p-4 bg-blue-100 rounded-lg">
+                    <Clock className="text-blue-600" size={20} />
+                  </div>
+                  <h3 className="font-bold text-lg sm:text-xl lg:text-2xl xl:text-3xl text-gray-900">Response Time</h3>
+                </div>
+                <div className="space-y-2 sm:space-y-3">
+                  <div className="flex justify-between text-xs sm:text-sm lg:text-base">
+                    <span className="text-gray-600">WhatsApp</span>
+                    <span className="font-medium text-green-600">5-10 minutes</span>
+                  </div>
+                  <div className="flex justify-between text-xs sm:text-sm lg:text-base">
+                    <span className="text-gray-600">Phone Calls</span>
+                    <span className="font-medium text-blue-600">Instant</span>
+                  </div>
+                  <div className="flex justify-between text-xs sm:text-sm lg:text-base">
+                    <span className="text-gray-600">Email</span>
+                    <span className="font-medium text-purple-600">1 hour</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 border border-gray-200">
+                <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                  <div className="p-2 sm:p-3 lg:p-4 bg-green-100 rounded-lg">
+                    <Headphones className="text-green-600" size={20} />
+                  </div>
+                  <h3 className="font-bold text-lg sm:text-xl lg:text-2xl xl:text-3xl text-gray-900">24/7 Emergency Support</h3>
+                </div>
+                <p className="text-xs sm:text-sm lg:text-base text-gray-600 mb-3 sm:mb-4">
+                  For urgent travel issues, cancellations, or immediate assistance
+                </p>
+                <a
+                  href={`tel:${BUSINESS_CONFIG.phone}`}
+                  className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium text-sm sm:text-base lg:text-lg"
+                >
+                  <Phone size={16} className="sm:w-5 sm:h-5" />
+                  Call +91 90238 84833
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section - EXACTLY LIKE HOME PAGE STYLE */}
+        <section className="w-full bg-gradient-to-b from-white to-gray-50 py-10 sm:py-14 md:py-16 px-4 sm:px-6 lg:px-8 xl:px-12">
+          <div className="max-w-4xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-6 sm:mb-10">
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-2 sm:mb-3">
+                <HelpCircle size={14} className="sm:w-4 sm:h-4 text-blue-500" />
+                <span className="text-[10px] sm:text-xs md:text-sm font-medium text-blue-700">Got Questions?</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-1 sm:mb-2 px-2">
+                Frequently Asked{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                  Questions
+                </span>
+              </h2>
+              <p className="text-xs sm:text-sm md:text-base text-gray-600 max-w-2xl mx-auto px-4">
+                Find answers to common questions about contacting us and our services
               </p>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Quick Contact Options */}
-      <section className="px-4 sm:px-6 lg:px-12 xl:px-16 -mt-6 relative z-10">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
-            {quickContacts.map((contact, idx) => (
-              <QuickContactCard key={idx} {...contact} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Main Content */}
-      <section className="w-full py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16">
-        <div className="max-w-4xl mx-auto">
-          {/* Main Enquiry Form */}
-          <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
-            {/* Form Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 sm:p-8 lg:p-10">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-5">
-                <div>
-                  <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold mb-2">Detailed Enquiry Form</h2>
-                  <p className="text-sm sm:text-base lg:text-lg text-blue-100">Our expert will personally review your request</p>
+            {/* FAQ Accordion - Single Column */}
+            <div className="space-y-3 sm:space-y-4">
+              {faqs.map((faq, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-xl sm:rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 overflow-hidden"
+                >
+                  <button
+                    onClick={() => toggleFaq(index)}
+                    className="w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between text-left focus:outline-none"
+                    aria-expanded={openFaq === index}
+                  >
+                    <span className="text-xs sm:text-sm lg:text-base font-semibold text-gray-900 pr-4">
+                      {faq.question}
+                    </span>
+                    <ChevronDown
+                      size={18}
+                      className={`text-blue-600 transition-transform duration-300 flex-shrink-0 ${
+                        openFaq === index ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+                  
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ${
+                      openFaq === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                    }`}
+                  >
+                    <div className="px-4 sm:px-6 pb-3 sm:pb-4 text-xs sm:text-sm lg:text-base text-gray-600 border-t border-gray-100 pt-2 sm:pt-3">
+                      {faq.answer}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <ShieldCheck size={20} className="sm:w-6 sm:h-6 text-yellow-300" />
-                  <span className="text-xs sm:text-sm lg:text-base font-medium">Secure & Private</span>
-                </div>
-              </div>
+              ))}
             </div>
 
-            {/* Form Content */}
-            <form onSubmit={handleSubmit} className="p-6 sm:p-8 lg:p-10 space-y-6 sm:space-y-7 lg:space-y-8">
-              {/* Form-level success/error messages */}
-              {submitStatus.type && (
-                <div className={`p-4 sm:p-5 ${submitStatus.type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'} border rounded-xl sm:rounded-2xl`}>
-                  <div className="flex items-center gap-3 sm:gap-4">
-                    {submitStatus.type === 'success' ? (
-                      <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
-                    ) : (
-                      <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 text-red-600" />
-                    )}
-                    <p className={`font-medium text-sm sm:text-base lg:text-lg ${submitStatus.type === 'success' ? 'text-green-700' : 'text-red-700'}`}>
-                      {submitStatus.message}
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              <div className="grid md:grid-cols-2 gap-5 sm:gap-6 lg:gap-8">
-                {/* Name Field */}
-                <div className="space-y-2 sm:space-y-3">
-                  <label className="block text-sm sm:text-base lg:text-lg font-semibold text-gray-700">
-                    Full Name *
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                    <input
-                      type="text"
-                      name="name"
-                      value={form.name}
-                      onChange={handleChange}
-                      className={`w-full pl-12 pr-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border ${
-                        errors.name ? 'border-red-500' : 'border-gray-300'
-                      } focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors text-sm sm:text-base lg:text-lg`}
-                      placeholder="Enter your full name"
-                    />
-                  </div>
-                  {errors.name && (
-                    <p className="text-red-500 text-xs sm:text-sm lg:text-base mt-1">{errors.name}</p>
-                  )}
-                </div>
-
-                {/* Email Field */}
-                <div className="space-y-2 sm:space-y-3">
-                  <label className="block text-sm sm:text-base lg:text-lg font-semibold text-gray-700">
-                    Email Address *
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                    <input
-                      type="email"
-                      name="email"
-                      value={form.email}
-                      onChange={handleChange}
-                      className={`w-full pl-12 pr-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border ${
-                        errors.email ? 'border-red-500' : 'border-gray-300'
-                      } focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors text-sm sm:text-base lg:text-lg`}
-                      placeholder="your.email@example.com"
-                    />
-                  </div>
-                  {errors.email && (
-                    <p className="text-red-500 text-xs sm:text-sm lg:text-base mt-1">{errors.email}</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-5 sm:gap-6 lg:gap-8">
-                {/* Phone Field */}
-                <div className="space-y-2 sm:space-y-3">
-                  <label className="block text-sm sm:text-base lg:text-lg font-semibold text-gray-700">
-                    Phone Number *
-                  </label>
-                  <div className="relative">
-                    <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={form.phone}
-                      onChange={handleChange}
-                      className={`w-full pl-12 pr-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border ${
-                        errors.phone ? 'border-red-500' : 'border-gray-300'
-                      } focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors text-sm sm:text-base lg:text-lg`}
-                      placeholder="+91 98765 43210"
-                    />
-                  </div>
-                  {errors.phone && (
-                    <p className="text-red-500 text-xs sm:text-sm lg:text-base mt-1">{errors.phone}</p>
-                  )}
-                </div>
-
-                {/* Service Type */}
-                <div className="space-y-2 sm:space-y-3">
-                  <label className="block text-sm sm:text-base lg:text-lg font-semibold text-gray-700">
-                    Service Needed *
-                  </label>
-                  <div className="relative">
-                    <HelpCircle className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                    <select
-                      name="serviceType"
-                      value={form.serviceType}
-                      onChange={handleChange}
-                      className={`w-full pl-12 pr-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl border ${
-                        errors.serviceType ? 'border-red-500' : 'border-gray-300'
-                      } focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors appearance-none cursor-pointer text-sm sm:text-base lg:text-lg`}
-                    >
-                      <option value="">Select a service</option>
-                      {SERVICE_TYPES.map((service, idx) => (
-                        <option key={idx} value={service}>{service}</option>
-                      ))}
-                    </select>
-                    <ChevronRight className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 rotate-90" size={18} />
-                  </div>
-                  {errors.serviceType && (
-                    <p className="text-red-500 text-xs sm:text-sm lg:text-base mt-1">{errors.serviceType}</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Message Field */}
-              <div className="space-y-2 sm:space-y-3">
-                <label className="block text-sm sm:text-base lg:text-lg font-semibold text-gray-700">
-                  Your Message *
-                </label>
-                <textarea
-                  name="message"
-                  value={form.message}
-                  onChange={handleChange}
-                  rows={4}
-                  className={`w-full px-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl border ${
-                    errors.message ? 'border-red-500' : 'border-gray-300'
-                  } focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors resize-none text-sm sm:text-base lg:text-lg`}
-                  placeholder="Please provide details about your travel plans, dates, budget, and specific requirements..."
-                />
-                {errors.message && (
-                  <p className="text-red-500 text-xs sm:text-sm lg:text-base mt-1">{errors.message}</p>
-                )}
-                <p className="text-xs sm:text-sm lg:text-base text-gray-500">
-                  Provide as much detail as possible for better assistance
+            {/* Still have questions banner */}
+            <div className="mt-8 sm:mt-10 md:mt-12 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 text-white text-center">
+              <div className="max-w-3xl mx-auto">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3">Still Have Questions?</h3>
+                <p className="text-xs sm:text-sm md:text-base text-blue-100 mb-3 sm:mb-4">
+                  Can't find the answer you're looking for? Chat with our friendly team.
                 </p>
-              </div>
-
-              {/* Trust Note */}
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-blue-100">
-                <div className="flex items-center gap-3 sm:gap-4">
-                  <ShieldCheck size={20} className="sm:w-6 sm:h-6 text-blue-600 flex-shrink-0" />
-                  <div>
-                    <p className="font-medium text-sm sm:text-base lg:text-lg text-gray-900">Your information is secure</p>
-                    <p className="text-xs sm:text-sm lg:text-base text-gray-600">
-                      We respect your privacy. Your details are encrypted and never shared with third parties.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 sm:py-5 lg:py-6 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg lg:text-xl transition-all hover:shadow-xl active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 sm:gap-4"
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-2 border-white border-t-transparent"></div>
-                    <span className="text-sm sm:text-base lg:text-lg">Sending...</span>
-                  </>
-                ) : (
-                  <>
-                    <Send size={20} className="sm:w-6 sm:h-6" />
-                    <span className="text-sm sm:text-base lg:text-lg">Send Enquiry</span>
-                  </>
-                )}
-              </button>
-
-              {/* Alternative Options */}
-              <div className="text-center pt-4 sm:pt-5">
-                <p className="text-gray-600 text-sm sm:text-base lg:text-lg">
-                  Prefer to talk?{' '}
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
                   <a
                     href={`https://wa.me/${BUSINESS_CONFIG.whatsapp}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-1"
+                    className="inline-flex items-center justify-center gap-1.5 bg-white text-blue-600 px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg font-semibold text-xs sm:text-sm hover:bg-blue-50 transition-all hover:scale-105"
                   >
-                    WhatsApp us directly
-                    <MessageCircle size={16} className="sm:w-5 sm:h-5" />
+                    <MessageCircle size={16} className="sm:w-4 sm:h-4" />
+                    WhatsApp Us
                   </a>
-                </p>
-              </div>
-            </form>
-          </div>
-
-          {/* Simple Response Info */}
-          <div className="mt-8 sm:mt-10 lg:mt-12 grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 lg:gap-8">
-            <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 border border-gray-200">
-              <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                <div className="p-2 sm:p-3 lg:p-4 bg-blue-100 rounded-lg">
-                  <Clock className="text-blue-600" size={20} />
-                </div>
-                <h3 className="font-bold text-lg sm:text-xl lg:text-2xl xl:text-3xl text-gray-900">Response Time</h3>
-              </div>
-              <div className="space-y-2 sm:space-y-3">
-                <div className="flex justify-between text-xs sm:text-sm lg:text-base">
-                  <span className="text-gray-600">WhatsApp</span>
-                  <span className="font-medium text-green-600">15 minutes</span>
-                </div>
-                <div className="flex justify-between text-xs sm:text-sm lg:text-base">
-                  <span className="text-gray-600">Phone Calls</span>
-                  <span className="font-medium text-blue-600">Instant</span>
-                </div>
-                <div className="flex justify-between text-xs sm:text-sm lg:text-base">
-                  <span className="text-gray-600">Email</span>
-                  <span className="font-medium text-purple-600">1 hour</span>
+                  <button
+                    onClick={() => {
+                      const formElement = document.getElementById('enquiry-form');
+                      if (formElement) {
+                        formElement.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                    className="inline-flex items-center justify-center gap-1.5 bg-transparent border-2 border-white text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg font-semibold text-xs sm:text-sm hover:bg-white/10 transition-all hover:scale-105"
+                  >
+                    <Send size={16} className="sm:w-4 sm:h-4" />
+                    Send Enquiry
+                  </button>
                 </div>
               </div>
             </div>
-
-            <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 border border-gray-200">
-              <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                <div className="p-2 sm:p-3 lg:p-4 bg-green-100 rounded-lg">
-                  <Headphones className="text-green-600" size={20} />
-                </div>
-                <h3 className="font-bold text-lg sm:text-xl lg:text-2xl xl:text-3xl text-gray-900">24/7 Emergency Support</h3>
-              </div>
-              <p className="text-xs sm:text-sm lg:text-base text-gray-600 mb-3 sm:mb-4">
-                For urgent travel issues, cancellations, or immediate assistance
-              </p>
-              <a
-                href={`tel:${BUSINESS_CONFIG.phone}`}
-                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium text-sm sm:text-base lg:text-lg"
-              >
-                <Phone size={16} className="sm:w-5 sm:h-5" />
-                Call +91 63711 06588
-              </a>
-            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Success Modal */}
-      <SuccessModal 
-        isOpen={showSuccessModal} 
-        onClose={() => setShowSuccessModal(false)}
-        onContinueWhatsApp={() => {
-          const message = encodeURIComponent(BUSINESS_CONFIG.whatsappMessage);
-          window.open(`https://wa.me/${BUSINESS_CONFIG.whatsapp}?text=${message}`, '_blank');
-          setShowSuccessModal(false);
-        }}
-      />
-    </div>
+        {/* Success Modal */}
+        <SuccessModal 
+          isOpen={showSuccessModal} 
+          onClose={() => setShowSuccessModal(false)}
+          onContinueWhatsApp={() => {
+            const message = encodeURIComponent(BUSINESS_CONFIG.whatsappMessage);
+            window.open(`https://wa.me/${BUSINESS_CONFIG.whatsapp}?text=${message}`, '_blank');
+            setShowSuccessModal(false);
+          }}
+        />
+      </div>
+    </>
   );
 };
 

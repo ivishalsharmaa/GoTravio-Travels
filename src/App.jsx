@@ -1,31 +1,38 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { HelmetProvider } from 'react-helmet-async';
 import Layout from "./components/Layout.jsx";
 import Home from "./pages/Home.jsx";
 import Cabs from "./pages/Cabs.jsx";
 import Tickets from "./pages/Tickets.jsx";
 import Packages from "./pages/Packages.jsx";
 import Contact from "./pages/Contact.jsx";
-import AboutUs from "./pages/AboutUs.jsx";  // ← FIXED: Uppercase U
+import AboutUs from "./pages/AboutUs.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import AdminPackages from "./pages/AdminPackages.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx";
+import AIAssistant from "./components/AIAssistant.jsx";
 
 const App = () => {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/cabs" element={<Cabs />} />
-        <Route path="/tickets" element={<Tickets />} />
-        <Route path="/packages" element={<Packages />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/packages" element={<AdminPackages />} />
-      </Routes>
-    </Layout>
+    <HelmetProvider>
+      <ScrollToTop />
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/cabs" element={<Cabs />} />
+          <Route path="/tickets" element={<Tickets />} />
+          <Route path="/packages" element={<Packages />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/packages" element={<AdminPackages />} />
+        </Routes>
+      </Layout>
+      <AIAssistant />
+    </HelmetProvider>
   );
 };
 

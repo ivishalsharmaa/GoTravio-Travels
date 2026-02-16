@@ -1,6 +1,6 @@
-// client/src/pages/AboutUs.jsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import SEO from "../components/SEO";
 import {
   Users,
   Shield,
@@ -307,6 +307,71 @@ const AboutUs = () => {
     }
   ];
 
+  // Schema.org structured data for About page
+  const aboutSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About GoTravio Travels",
+    "description": "Learn about GoTravio, India's premier travel assistance platform providing expert help for cab rentals, train tickets, flight bookings, and tour packages.",
+    "url": "https://gotravio.com/about",
+    "mainEntity": {
+      "@type": "TravelAgency",
+      "name": "GoTravio Travels",
+      "description": "India's premier travel assistance platform providing expert help for cab rentals, train tickets, flight bookings, and tour packages.",
+      "foundingDate": "2025-11",
+      "numberOfEmployees": "10+",
+      "areaServed": "India",
+      "award": "98% Customer Satisfaction Rate",
+      "knowsAbout": ["Travel Planning", "Cab Booking", "Train Tickets", "Flight Bookings", "Tour Packages", "Tatkal Booking"],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "India",
+        "addressCountry": "IN"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "150",
+        "bestRating": "5",
+        "worstRating": "1"
+      }
+    }
+  };
+
+  // FAQ Schema
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+
+  // Organization Schema
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "GoTravio Travels",
+    "url": "https://gotravio.com",
+    "logo": "https://gotravio.com/logo.png",
+    "sameAs": [
+      "https://www.facebook.com/gotravio",
+      "https://www.instagram.com/go_travio_",
+      "https://twitter.com/gotravio"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+91-90238-84833",
+      "contactType": "customer service",
+      "availableLanguage": ["English", "Hindi", "Tamil", "Telugu", "Kannada", "Malayalam", "Bengali", "Gujarati"]
+    }
+  };
+
   const toggleFaq = (index) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
   };
@@ -319,460 +384,471 @@ const AboutUs = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white overflow-x-hidden">
-      
-      {/* ================= HERO SECTION ================= */}
-      <section className="relative bg-gradient-to-br from-indigo-900 via-blue-800 to-purple-900 text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-20 left-20 w-64 h-64 bg-blue-500 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-20 w-64 h-64 bg-purple-500 rounded-full blur-3xl"></div>
-        </div>
+    <>
+      <SEO 
+        title="About GoTravio Travels | India's Premier Travel Assistance Platform"
+        description="Learn about GoTravio, India's trusted travel assistance platform. We provide expert help for cab rentals, train tickets (including Tatkal), flight bookings, and custom tour packages across India with 98% customer satisfaction."
+        keywords="about GoTravio, travel assistance company, travel agency India, about us, travel experts India, travel planning service, Indian travel agency, cab booking service, train ticket assistance, flight booking help, tour packages India"
+        canonicalUrl="/about"
+        ogImage="https://gotravio.com/about-og-image.jpg"
+        schemaData={[aboutSchema, faqSchema, organizationSchema]}
+      />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <Sparkles size={16} className="text-yellow-300" />
-              <span className="text-sm font-medium">India's Emerging Travel Assistance Platform</span>
-            </div>
-            
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-              Your Personal
-              <span className="block text-yellow-300 mt-2">Travel Assistant</span>
-            </h1>
-            
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto mb-8">
-              GoTravio provides expert travel assistance across India - from cab rentals and train tickets 
-              to flight bookings and tour packages. We do the research, you enjoy the journey.
-            </p>
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white overflow-x-hidden">
+        
+        {/* ================= HERO SECTION ================= */}
+        <section className="relative bg-gradient-to-br from-indigo-900 via-blue-800 to-purple-900 text-white overflow-hidden">
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute top-20 left-20 w-64 h-64 bg-blue-500 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-20 right-20 w-64 h-64 bg-purple-500 rounded-full blur-3xl"></div>
+          </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={scrollToContact}
-                className="group px-8 py-4 bg-white text-indigo-900 rounded-xl font-bold hover:bg-slate-100 transition-all duration-300 shadow-xl flex items-center justify-center gap-2"
-              >
-                <MessageCircle size={18} />
-                Get Travel Help
-                <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </button>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+            <div className="text-center max-w-4xl mx-auto">
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+                <Sparkles size={16} className="text-yellow-300" />
+                <span className="text-sm font-medium">India's Emerging Travel Assistance Platform</span>
+              </div>
               
-              <Link
-                to="/contact"
-                className="px-8 py-4 border-2 border-white/60 text-white rounded-xl font-bold hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-2 backdrop-blur-sm"
-              >
-                <Phone size={18} />
-                Talk to an Expert
-              </Link>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                Your Personal
+                <span className="block text-yellow-300 mt-2">Travel Assistant</span>
+              </h1>
+              
+              <p className="text-xl text-blue-100 max-w-3xl mx-auto mb-8">
+                GoTravio provides expert travel assistance across India - from cab rentals and train tickets 
+                to flight bookings and tour packages. We do the research, you enjoy the journey.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onClick={scrollToContact}
+                  className="group px-8 py-4 bg-white text-indigo-900 rounded-xl font-bold hover:bg-slate-100 transition-all duration-300 shadow-xl flex items-center justify-center gap-2"
+                >
+                  <MessageCircle size={18} />
+                  Get Travel Help
+                  <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                </button>
+                
+                <Link
+                  to="/contact"
+                  className="px-8 py-4 border-2 border-white/60 text-white rounded-xl font-bold hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-2 backdrop-blur-sm"
+                >
+                  <Phone size={18} />
+                  Talk to an Expert
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ================= STATS SECTION ================= */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center group hover:scale-105 transition-transform">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl mb-3 mx-auto group-hover:shadow-md transition-all">
-                  <div className="text-blue-600">{stat.icon}</div>
+        {/* ================= STATS SECTION ================= */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10">
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+              {stats.map((stat, index) => (
+                <div key={index} className="text-center group hover:scale-105 transition-transform">
+                  <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl mb-3 mx-auto group-hover:shadow-md transition-all">
+                    <div className="text-blue-600">{stat.icon}</div>
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
+                  <div className="text-sm font-medium text-gray-700 mb-1">{stat.label}</div>
+                  <div className="text-xs text-gray-500 hidden sm:block">{stat.description}</div>
                 </div>
-                <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
-                <div className="text-sm font-medium text-gray-700 mb-1">{stat.label}</div>
-                <div className="text-xs text-gray-500 hidden sm:block">{stat.description}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= OUR STORY ================= */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-6">
-                <BookOpen size={16} className="text-blue-600" />
-                <span className="text-sm font-medium text-blue-700">Our Story</span>
-              </div>
-              
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">GoTravio</span> Story
-              </h2>
-              
-              <div className="space-y-4 text-gray-600 text-lg">
-                <p>
-                  GoTravio was founded in November 2025 with a clear vision: <span className="font-semibold text-blue-600">to make travel planning simple, personal, and stress-free for every Indian traveler.</span> Our founder, after years of struggling with impersonal booking platforms and automated customer service, decided it was time for a change.
-                </p>
-                <p>
-                  We started with a simple belief - that behind every travel plan is a person with unique needs, preferences, and dreams. Whether it's a family vacation, a business trip, or an emergency journey, travelers deserve personalized attention and expert guidance.
-                </p>
-                <p>
-                  Today, we serve customers <span className="font-bold text-blue-600">across India</span> - from the bustling streets of Mumbai to the serene hills of Manali, from the beaches of Goa to the temples of Tamil Nadu. Our network of 200+ verified partners ensures that wherever you want to go, we can help you get there.
-                </p>
-                <p className="bg-blue-50 p-4 rounded-xl italic">
-                  "We're not just another travel website. We're your personal travel assistant - available 24/7, always honest, and genuinely invested in making your journey memorable."
-                </p>
-              </div>
+              ))}
             </div>
+          </div>
+        </section>
 
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-3xl"></div>
-              <div className="relative bg-white rounded-3xl shadow-2xl p-8 border border-gray-200">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                  <AwardIcon className="text-blue-600" />
-                  Our Journey
-                </h3>
-                <div className="space-y-6">
-                  {milestones.map((milestone, index) => (
-                    <div key={index} className="flex gap-4 items-start group hover:bg-gray-50 p-2 rounded-lg transition-all">
-                      <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-lg flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
-                        {milestone.icon}
-                      </div>
-                      <div className="flex-grow">
-                        <div className="flex items-baseline gap-2 mb-1">
-                          <span className="text-lg font-bold text-blue-600">{milestone.year}</span>
-                        </div>
-                        <p className="text-gray-700">{milestone.event}</p>
-                      </div>
-                    </div>
-                  ))}
+        {/* ================= OUR STORY ================= */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-6">
+                  <BookOpen size={16} className="text-blue-600" />
+                  <span className="text-sm font-medium text-blue-700">Our Story</span>
                 </div>
                 
-                <div className="mt-8 pt-6 border-t border-gray-200">
-                  <p className="text-center text-gray-700">
-                    <span className="font-bold text-blue-600">98%</span> of our customers say they'd recommend us to friends and family
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                  The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">GoTravio</span> Story
+                </h2>
+                
+                <div className="space-y-4 text-gray-600 text-lg">
+                  <p>
+                    GoTravio was founded in November 2025 with a clear vision: <span className="font-semibold text-blue-600">to make travel planning simple, personal, and stress-free for every Indian traveler.</span> Our founder, after years of struggling with impersonal booking platforms and automated customer service, decided it was time for a change.
+                  </p>
+                  <p>
+                    We started with a simple belief - that behind every travel plan is a person with unique needs, preferences, and dreams. Whether it's a family vacation, a business trip, or an emergency journey, travelers deserve personalized attention and expert guidance.
+                  </p>
+                  <p>
+                    Today, we serve customers <span className="font-bold text-blue-600">across India</span> - from the bustling streets of Mumbai to the serene hills of Manali, from the beaches of Goa to the temples of Tamil Nadu. Our network of 200+ verified partners ensures that wherever you want to go, we can help you get there.
+                  </p>
+                  <p className="bg-blue-50 p-4 rounded-xl italic">
+                    "We're not just another travel website. We're your personal travel assistant - available 24/7, always honest, and genuinely invested in making your journey memorable."
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* ================= WHY BOOK WITH GOTRAVIO ================= */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
-              <AwardIcon size={16} className="text-blue-600" />
-              <span className="text-sm font-medium text-blue-700">Why Choose Us</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">GoTravio</span> Advantage
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Here's why hundreds of travelers choose us over booking directly
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {advantages.map((advantage, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-200">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-lg flex items-center justify-center text-blue-600 mb-4">
-                  {advantage.icon}
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{advantage.title}</h3>
-                <ul className="space-y-2">
-                  {advantage.points.map((point, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-gray-600">
-                      <CheckCircle size={16} className="text-green-500 flex-shrink-0 mt-1" />
-                      <span className="text-sm">{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= CORE VALUES ================= */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
-              <Target size={16} className="text-blue-600" />
-              <span className="text-sm font-medium text-blue-700">Our Principles</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              What We <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Stand For</span>
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              The values that guide every interaction with our customers
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {coreValues.map((value, index) => (
-              <div key={index} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-100 group">
-                <div className="inline-flex p-3 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl text-blue-600 mb-4 group-hover:scale-110 transition-transform">
-                  {value.icon}
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{value.title}</h3>
-                <p className="text-gray-600">{value.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= OUR SERVICES ================= */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
-              <Briefcase size={16} className="text-blue-600" />
-              <span className="text-sm font-medium text-blue-700">Our Services</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Comprehensive <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Travel Assistance</span>
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              From cab rentals to flight bookings - we've got you covered across India
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {serviceFeatures.map((service, index) => (
-              <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all border border-gray-200">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-2xl
-                    ${index === 0 ? 'bg-gradient-to-br from-blue-500 to-blue-600' :
-                      index === 1 ? 'bg-gradient-to-br from-purple-500 to-purple-600' :
-                      index === 2 ? 'bg-gradient-to-br from-green-500 to-green-600' :
-                      'bg-gradient-to-br from-orange-500 to-orange-600'}`}>
-                    {service.icon}
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900">{service.category}</h3>
-                    <p className="text-sm text-blue-600 font-medium">{service.coverage}</p>
-                  </div>
-                </div>
-                
-                <ul className="space-y-3 mb-4">
-                  {service.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <CheckCircle size={18} className="text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <Link 
-                  to={`/${service.category.toLowerCase().replace(' ', '')}`}
-                  className="inline-flex items-center text-blue-600 font-semibold hover:gap-2 transition-all group mt-2"
-                >
-                  Learn more about {service.category}
-                  <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= PAN INDIA COVERAGE ================= */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="max-w-7xl mx-auto text-center">
-          <Globe size={48} className="mx-auto mb-4 text-white/80" />
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Serving Customers Across India</h2>
-          <p className="text-xl text-blue-100 max-w-3xl mx-auto mb-8">
-            From metro cities to remote towns - wherever you are, we're here to help with your travel needs
-          </p>
-          <div className="flex flex-wrap justify-center gap-3 text-sm">
-            {["Mumbai", "Delhi", "Bangalore", "Chennai", "Kolkata", "Hyderabad", "Pune", "Ahmedabad", "Jaipur", "Lucknow", "Goa", "Chandigarh", "Kochi", "Indore", "Nagpur", "And 500+ more locations"].map((city, idx) => (
-              <span key={idx} className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full">
-                {city}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= TRAVEL TIPS ================= */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
-              <BookOpen size={16} className="text-blue-600" />
-              <span className="text-sm font-medium text-blue-700">Expert Advice</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Travel Tips From <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Our Experts</span>
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Insider knowledge to make your journey smoother and more affordable
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {travelTips.map((tip, index) => (
-              <div key={index} className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all border border-gray-200 group">
-                <div className="h-2 bg-gradient-to-r from-blue-500 to-purple-500"></div>
-                <div className="p-6">
-                  <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-semibold rounded-full mb-3">
-                    {tip.category}
-                  </span>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                    {tip.title}
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-3xl"></div>
+                <div className="relative bg-white rounded-3xl shadow-2xl p-8 border border-gray-200">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <AwardIcon className="text-blue-600" />
+                    Our Journey
                   </h3>
-                  <p className="text-gray-600 text-sm">{tip.tip}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= TESTIMONIALS ================= */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-full px-4 py-2 mb-4">
-              <Star size={16} className="text-yellow-600" />
-              <span className="text-sm font-medium text-yellow-700">Customer Stories</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              What Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600">Travelers</span> Say
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Real experiences from people who've traveled with us
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-200 relative group">
-                <Quote className="absolute top-4 right-4 w-8 h-8 text-blue-100 group-hover:text-blue-200 transition-colors" />
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} size={16} className="fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-4 italic">"{testimonial.text}"</p>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-bold text-gray-900">{testimonial.name}</p>
-                    <p className="text-sm text-gray-500">{testimonial.location}</p>
+                  <div className="space-y-6">
+                    {milestones.map((milestone, index) => (
+                      <div key={index} className="flex gap-4 items-start group hover:bg-gray-50 p-2 rounded-lg transition-all">
+                        <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-lg flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
+                          {milestone.icon}
+                        </div>
+                        <div className="flex-grow">
+                          <div className="flex items-baseline gap-2 mb-1">
+                            <span className="text-lg font-bold text-blue-600">{milestone.year}</span>
+                          </div>
+                          <p className="text-gray-700">{milestone.event}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <span className="text-xs px-3 py-1 bg-blue-50 text-blue-600 rounded-full font-medium">
-                    {testimonial.service}
-                  </span>
+                  
+                  <div className="mt-8 pt-6 border-t border-gray-200">
+                    <p className="text-center text-gray-700">
+                      <span className="font-bold text-blue-600">98%</span> of our customers say they'd recommend us to friends and family
+                    </p>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= FAQ SECTION ================= */}
-      <section className="w-full bg-gray-100 py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
-              <HelpCircle size={16} className="text-blue-600" />
-              <span className="text-sm font-medium text-blue-700">FAQ</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Common <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Questions</span>
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Everything you need to know about GoTravio
-            </p>
           </div>
+        </section>
 
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
-                <button
-                  onClick={() => toggleFaq(index)}
-                  className="w-full text-left px-6 py-4 flex items-center justify-between focus:outline-none hover:bg-gray-50 transition-colors"
-                >
-                  <h3 className="font-semibold text-base sm:text-lg text-gray-900 pr-4">{faq.question}</h3>
-                  <ChevronDown
-                    className={`w-5 h-5 text-blue-600 transform transition-transform duration-300 flex-shrink-0 ${
-                      openFaqIndex === index ? 'rotate-180' : ''
+        {/* ================= WHY BOOK WITH GOTRAVIO ================= */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
+                <AwardIcon size={16} className="text-blue-600" />
+                <span className="text-sm font-medium text-blue-700">Why Choose Us</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">GoTravio</span> Advantage
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Here's why hundreds of travelers choose us over booking directly
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {advantages.map((advantage, index) => (
+                <div key={index} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-200">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-lg flex items-center justify-center text-blue-600 mb-4">
+                    {advantage.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{advantage.title}</h3>
+                  <ul className="space-y-2">
+                    {advantage.points.map((point, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-gray-600">
+                        <CheckCircle size={16} className="text-green-500 flex-shrink-0 mt-1" />
+                        <span className="text-sm">{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ================= CORE VALUES ================= */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
+                <Target size={16} className="text-blue-600" />
+                <span className="text-sm font-medium text-blue-700">Our Principles</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                What We <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Stand For</span>
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                The values that guide every interaction with our customers
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {coreValues.map((value, index) => (
+                <div key={index} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-100 group">
+                  <div className="inline-flex p-3 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl text-blue-600 mb-4 group-hover:scale-110 transition-transform">
+                    {value.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{value.title}</h3>
+                  <p className="text-gray-600">{value.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ================= OUR SERVICES ================= */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
+                <Briefcase size={16} className="text-blue-600" />
+                <span className="text-sm font-medium text-blue-700">Our Services</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Comprehensive <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Travel Assistance</span>
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                From cab rentals to flight bookings - we've got you covered across India
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {serviceFeatures.map((service, index) => (
+                <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all border border-gray-200">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-2xl
+                      ${index === 0 ? 'bg-gradient-to-br from-blue-500 to-blue-600' :
+                        index === 1 ? 'bg-gradient-to-br from-purple-500 to-purple-600' :
+                        index === 2 ? 'bg-gradient-to-br from-green-500 to-green-600' :
+                        'bg-gradient-to-br from-orange-500 to-orange-600'}`}>
+                      {service.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900">{service.category}</h3>
+                      <p className="text-sm text-blue-600 font-medium">{service.coverage}</p>
+                    </div>
+                  </div>
+                  
+                  <ul className="space-y-3 mb-4">
+                    {service.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <CheckCircle size={18} className="text-green-500 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <Link 
+                    to={`/${service.category.toLowerCase().replace(' ', '')}`}
+                    className="inline-flex items-center text-blue-600 font-semibold hover:gap-2 transition-all group mt-2"
+                  >
+                    Learn more about {service.category}
+                    <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ================= PAN INDIA COVERAGE ================= */}
+        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+          <div className="max-w-7xl mx-auto text-center">
+            <Globe size={48} className="mx-auto mb-4 text-white/80" />
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Serving Customers Across India</h2>
+            <p className="text-xl text-blue-100 max-w-3xl mx-auto mb-8">
+              From metro cities to remote towns - wherever you are, we're here to help with your travel needs
+            </p>
+            <div className="flex flex-wrap justify-center gap-3 text-sm">
+              {["Mumbai", "Delhi", "Bangalore", "Chennai", "Kolkata", "Hyderabad", "Pune", "Ahmedabad", "Jaipur", "Lucknow", "Goa", "Chandigarh", "Kochi", "Indore", "Nagpur", "And 500+ more locations"].map((city, idx) => (
+                <span key={idx} className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full">
+                  {city}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ================= TRAVEL TIPS ================= */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
+                <BookOpen size={16} className="text-blue-600" />
+                <span className="text-sm font-medium text-blue-700">Expert Advice</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Travel Tips From <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Our Experts</span>
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Insider knowledge to make your journey smoother and more affordable
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {travelTips.map((tip, index) => (
+                <div key={index} className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all border border-gray-200 group">
+                  <div className="h-2 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+                  <div className="p-6">
+                    <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-semibold rounded-full mb-3">
+                      {tip.category}
+                    </span>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                      {tip.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm">{tip.tip}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ================= TESTIMONIALS ================= */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-full px-4 py-2 mb-4">
+                <Star size={16} className="text-yellow-600" />
+                <span className="text-sm font-medium text-yellow-700">Customer Stories</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                What Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600">Travelers</span> Say
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Real experiences from people who've traveled with us
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {testimonials.map((testimonial, index) => (
+                <div key={index} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-200 relative group">
+                  <Quote className="absolute top-4 right-4 w-8 h-8 text-blue-100 group-hover:text-blue-200 transition-colors" />
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} size={16} className="fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-gray-700 mb-4 italic">"{testimonial.text}"</p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-bold text-gray-900">{testimonial.name}</p>
+                      <p className="text-sm text-gray-500">{testimonial.location}</p>
+                    </div>
+                    <span className="text-xs px-3 py-1 bg-blue-50 text-blue-600 rounded-full font-medium">
+                      {testimonial.service}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ================= FAQ SECTION ================= */}
+        <section className="w-full bg-gray-100 py-20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
+                <HelpCircle size={16} className="text-blue-600" />
+                <span className="text-sm font-medium text-blue-700">FAQ</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Common <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Questions</span>
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Everything you need to know about GoTravio
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {faqs.map((faq, index) => (
+                <div key={index} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                  <button
+                    onClick={() => toggleFaq(index)}
+                    className="w-full text-left px-6 py-4 flex items-center justify-between focus:outline-none hover:bg-gray-50 transition-colors"
+                  >
+                    <h3 className="font-semibold text-base sm:text-lg text-gray-900 pr-4">{faq.question}</h3>
+                    <ChevronDown
+                      className={`w-5 h-5 text-blue-600 transform transition-transform duration-300 flex-shrink-0 ${
+                        openFaqIndex === index ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+                  
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ${
+                      openFaqIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                     }`}
-                  />
-                </button>
-                
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openFaqIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                  }`}
-                >
-                  <div className="px-6 pb-4 text-gray-600 border-t border-gray-100 pt-3 leading-relaxed">
-                    {faq.answer}
+                  >
+                    <div className="px-6 pb-4 text-gray-600 border-t border-gray-100 pt-3 leading-relaxed">
+                      {faq.answer}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ================= CONTACT SECTION ================= */}
-      <section id="contact-section" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-900 via-blue-800 to-purple-900 text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Plan Your Journey?
-          </h2>
-          <p className="text-xl text-blue-100 mb-8">
-            Our travel experts are available 24/7 to help you with personalized assistance
-          </p>
+        {/* ================= CONTACT SECTION ================= */}
+        <section id="contact-section" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-900 via-blue-800 to-purple-900 text-white">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Ready to Plan Your Journey?
+            </h2>
+            <p className="text-xl text-blue-100 mb-8">
+              Our travel experts are available 24/7 to help you with personalized assistance
+            </p>
 
-          <div className="grid sm:grid-cols-3 gap-6 mb-8">
-            <a href="tel:+919023884833" className="group bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all border border-white/20">
-              <Phone className="w-8 h-8 mx-auto mb-3 text-yellow-300" />
-              <p className="font-semibold mb-1">Call Us</p>
-              <p className="text-sm text-blue-200">+91 90238 84833</p>
-              <p className="text-xs text-blue-300 mt-2">24/7 Available</p>
-            </a>
-            
-            <a href="https://wa.me/919023884833" target="_blank" rel="noopener noreferrer" className="group bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all border border-white/20">
-              <MessageCircle className="w-8 h-8 mx-auto mb-3 text-green-300" />
-              <p className="font-semibold mb-1">WhatsApp</p>
-              <p className="text-sm text-blue-200">Quick Chat</p>
-              <p className="text-xs text-blue-300 mt-2">Avg response: 15 min</p>
-            </a>
-            
-            <a href="mailto:gotravio.travel@gmail.com" className="group bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all border border-white/20">
-              <Mail className="w-8 h-8 mx-auto mb-3 text-purple-300" />
-              <p className="font-semibold mb-1">Email Us</p>
-              <p className="text-sm text-blue-200">gotravio.travel@gmail.com</p>
-              <p className="text-xs text-blue-300 mt-2">Reply within 2 hrs</p>
-            </a>
+            <div className="grid sm:grid-cols-3 gap-6 mb-8">
+              <a href="tel:+919023884833" className="group bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all border border-white/20">
+                <Phone className="w-8 h-8 mx-auto mb-3 text-yellow-300" />
+                <p className="font-semibold mb-1">Call Us</p>
+                <p className="text-sm text-blue-200">+91 90238 84833</p>
+                <p className="text-xs text-blue-300 mt-2">24/7 Available</p>
+              </a>
+              
+              <a href="https://wa.me/919023884833" target="_blank" rel="noopener noreferrer" className="group bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all border border-white/20">
+                <MessageCircle className="w-8 h-8 mx-auto mb-3 text-green-300" />
+                <p className="font-semibold mb-1">WhatsApp</p>
+                <p className="text-sm text-blue-200">Quick Chat</p>
+                <p className="text-xs text-blue-300 mt-2">Avg response: 15 min</p>
+              </a>
+              
+              <a href="mailto:gotravio.travel@gmail.com" className="group bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all border border-white/20">
+                <Mail className="w-8 h-8 mx-auto mb-3 text-purple-300" />
+                <p className="font-semibold mb-1">Email Us</p>
+                <p className="text-sm text-blue-200">gotravio.travel@gmail.com</p>
+                <p className="text-xs text-blue-300 mt-2">Reply within 2 hrs</p>
+              </a>
+            </div>
+
+            <div className="flex justify-center gap-4">
+              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
+                <Facebook size={18} />
+              </a>
+              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
+                <Twitter size={18} />
+              </a>
+              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
+                <Instagram size={18} />
+              </a>
+            </div>
           </div>
+        </section>
 
-          <div className="flex justify-center gap-4">
-            <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
-              <Facebook size={18} />
-            </a>
-            <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
-              <Twitter size={18} />
-            </a>
-            <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
-              <Instagram size={18} />
-            </a>
+        {/* ================= FLOATING WHATSAPP ================= */}
+        <a
+          href="https://wa.me/919023884833"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fixed bottom-6 right-6 z-50 group"
+        >
+          <div className="relative">
+            <div className="absolute inset-0 bg-green-500 rounded-full blur-lg group-hover:blur-xl transition-all opacity-70"></div>
+            <div className="relative bg-gradient-to-br from-green-500 to-green-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110">
+              <MessageCircle size={24} />
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* ================= FLOATING WHATSAPP ================= */}
-      <a
-        href="https://wa.me/919023884833"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 group"
-      >
-        <div className="relative">
-          <div className="absolute inset-0 bg-green-500 rounded-full blur-lg group-hover:blur-xl transition-all opacity-70"></div>
-          <div className="relative bg-gradient-to-br from-green-500 to-green-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110">
-            <MessageCircle size={24} />
-          </div>
-        </div>
-      </a>
-    </div>
+        </a>
+      </div>
+    </>
   );
 };
 

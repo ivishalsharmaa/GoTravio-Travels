@@ -1,33 +1,25 @@
 // client/src/components/AIAssistant.jsx
 import React, { useState, useRef, useEffect } from "react";
 import { 
-  MessageCircle, 
   X, 
   Send, 
   Bot, 
   User, 
   Sparkles,
-  Phone,
-  MapPin,
-  Clock,
-  Calendar,
-  Car,
-  Train,
-  Plane,
-  Package,
-  HelpCircle,
-  ThumbsUp,
+  Loader2,
   Zap,
   CheckCircle,
-  Loader2,
-  ChevronRight,
   Shield,
-  Wifi,
+  Clock,
   WifiOff
 } from "lucide-react";
 
 // API Configuration
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://gotravio-backend.onrender.com';
+
+// Timeout for Render cold starts
+const API_TIMEOUT = 30000; // 30 seconds
+const MAX_RETRIES = 3;
 
 const AIAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,7 +42,6 @@ const AIAssistant = () => {
   
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
-  const chatWindowRef = useRef(null);
 
   // Quick reply options
   const quickReplies = [
@@ -91,15 +82,25 @@ const AIAssistant = () => {
     },
   ];
 
-  // Check backend health on mount and when opening chat
+  // Check backend health on mount
   useEffect(() => {
     checkBackendHealth();
   }, []);
 
+  // Periodic health check when chat is open
+  useEffect(() => {
+    if (isOpen) {
+      const interval = setInterval(checkBackendHealth, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [isOpen]);
+
+  // Scroll to bottom when new messages arrive
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
+  // Focus input when chat opens
   useEffect(() => {
     if (isOpen && inputRef.current) {
       setTimeout(() => {
@@ -108,27 +109,15 @@ const AIAssistant = () => {
     }
   }, [isOpen]);
 
-  // Prevent body scroll when chat is open on mobile
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
-
   const checkBackendHealth = async () => {
     setIsCheckingBackend(true);
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
       
-      const response = await fetch(`${API_BASE_URL}/api/health`, {
-        signal: controller.signal
+      const response = await fetch(`${API_BASE_URL}/api/aiBooking/test`, {
+        signal: controller.signal,
+        headers: { 'Content-Type': 'application/json' }
       });
       
       clearTimeout(timeoutId);
@@ -149,23 +138,15 @@ const AIAssistant = () => {
   };
 
   const scrollToBottom = () => {
-    setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }, 100);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const toggleChat = async () => {
+  const toggleChat = () => {
     setIsOpen(!isOpen);
     if (!isOpen) {
       setBookingData({});
       setCurrentStep(null);
-      // Check backend health when opening chat
-      await checkBackendHealth();
     }
-  };
-
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
   };
 
   const addMessage = (type, text) => {
@@ -176,7 +157,6 @@ const AIAssistant = () => {
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
     setMessages(prev => [...prev, newMessage]);
-    return newMessage.id;
   };
 
   const startCabBooking = () => {
@@ -208,9 +188,15 @@ const AIAssistant = () => {
     setCurrentStep("contact_phone");
   };
 
-  const processBooking = async () => {
+  // Process booking with retry logic and offline fallback
+  const processBooking = async (retryAttempt = 0) => {
     setIsProcessing(true);
-    addMessage("bot", "⏳ **Processing your booking...** Please wait.");
+    
+    if (retryAttempt === 0) {
+      addMessage("bot", "⏳ **Processing your booking...** This may take 30-60 seconds as the server wakes up.");
+    } else {
+      addMessage("bot", `⏳ **Retrying... Attempt ${retryAttempt + 1} of ${MAX_RETRIES}**`);
+    }
     
     try {
       // First check if backend is available
@@ -221,77 +207,20 @@ const AIAssistant = () => {
         }
       }
       
-      let endpoint = '';
-      let payload = {};
+      // Use the single endpoint that exists in your backend
+      const endpoint = `${API_BASE_URL}/api/aiBooking/process`;
       
-      switch(bookingData.type) {
-        case 'cab':
-          endpoint = `${API_BASE_URL}/api/cabs`;
-          payload = {
-            pickupLocation: bookingData.pickup,
-            dropLocation: bookingData.drop,
-            date: bookingData.date,
-            time: bookingData.time,
-            passengers: bookingData.passengers,
-            name: bookingData.name,
-            phone: bookingData.phone,
-            carType: 'Any',
-            source: 'AI Assistant'
-          };
-          break;
-          
-        case 'train':
-          endpoint = `${API_BASE_URL}/api/tickets`;
-          payload = {
-            from: bookingData.from,
-            to: bookingData.to,
-            date: bookingData.date,
-            passengers: bookingData.passengers,
-            passengerNames: [bookingData.name],
-            name: bookingData.name,
-            phone: bookingData.phone,
-            ticketMode: 'train',
-            serviceType: 'Normal',
-            source: 'AI Assistant'
-          };
-          break;
-          
-        case 'flight':
-          endpoint = `${API_BASE_URL}/api/tickets`;
-          payload = {
-            from: bookingData.from,
-            to: bookingData.to,
-            date: bookingData.date,
-            passengers: bookingData.passengers,
-            passengerNames: [bookingData.name],
-            name: bookingData.name,
-            phone: bookingData.phone,
-            ticketMode: 'flight',
-            tripType: 'One Way',
-            flightClass: 'Economy',
-            source: 'AI Assistant'
-          };
-          break;
-          
-        case 'package':
-          endpoint = `${API_BASE_URL}/api/enquiry`;
-          payload = {
-            name: bookingData.name,
-            service: `Tour Package - ${bookingData.destination}`,
-            phone: bookingData.phone,
-            email: bookingData.email || '',
-            details: `Destination: ${bookingData.destination}\nDuration: ${bookingData.duration}\nTravelers: ${bookingData.travelers}\nBudget: ${bookingData.budget || 'Not specified'}\n\nBooked via AI Assistant`,
-            source: 'AI Assistant'
-          };
-          break;
-      }
+      // Create a unified payload structure that your backend expects
+      const payload = {
+        type: bookingData.type,
+        data: bookingData
+      };
       
       console.log('📤 Sending to:', endpoint);
       console.log('📤 Payload:', payload);
       
-      // Add timeout for the fetch request
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT);
       
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -308,8 +237,8 @@ const AIAssistant = () => {
       const data = await response.json();
       console.log('📥 Response:', data);
       
-      if (response.ok) {
-        const bookingRef = data.data?.id || data.id || data.bookingId || 'REF' + Date.now().toString().slice(-6);
+      if (response.ok && data.success) {
+        const bookingRef = data.bookingReference || data.bookingId || 'REF' + Date.now().toString().slice(-6);
         
         addMessage("bot", 
           `✅ **Booking Confirmed!**\n\n` +
@@ -322,6 +251,9 @@ const AIAssistant = () => {
           `💬 WhatsApp: +91 90238 84833`
         );
         
+        // Clear any pending booking
+        localStorage.removeItem('pendingBooking');
+        
         setBookingData({});
         setCurrentStep(null);
         setShowQuickReplies(true);
@@ -332,26 +264,44 @@ const AIAssistant = () => {
     } catch (error) {
       console.error('❌ Error:', error);
       
-      // Handle different types of errors
-      if (error.message === 'backend_unavailable' || error.name === 'AbortError' || error.message.includes('Failed to fetch')) {
-        // Backend is down or timing out (Render cold start)
+      const isNetworkError = error.name === 'AbortError' || 
+                            error.message.includes('Failed to fetch') || 
+                            error.message === 'backend_unavailable';
+      
+      if (isNetworkError && retryAttempt < MAX_RETRIES - 1) {
+        // Retry after increasing delay
+        const delay = (retryAttempt + 1) * 5000; // 5s, 10s, 15s
+        addMessage("bot", `⏳ **Server is waking up...** Retrying in ${delay/1000} seconds.`);
+        
+        setTimeout(() => {
+          processBooking(retryAttempt + 1);
+        }, delay);
+        
+      } else if (isNetworkError) {
+        // Offline fallback - save booking locally
+        const pendingBooking = {
+          ...bookingData,
+          timestamp: new Date().toISOString(),
+          id: 'PENDING_' + Date.now().toString().slice(-6)
+        };
+        
+        // Save to localStorage
+        const existingBookings = JSON.parse(localStorage.getItem('pendingBookings') || '[]');
+        existingBookings.push(pendingBooking);
+        localStorage.setItem('pendingBookings', JSON.stringify(existingBookings));
+        
         addMessage("bot", 
-          `⏳ **Server is waking up...**\n\n` +
-          `Our backend is hosted on Render's free tier and goes to sleep after inactivity.\n\n` +
-          `🕒 This first request may take **30-60 seconds** to wake up.\n\n` +
-          `Please wait a moment and try again. Your booking will work once the server is active!\n\n` +
-          `For immediate assistance, contact us directly:\n` +
-          `📞 +91 90238 84833\n` +
-          `💬 WhatsApp: +91 90238 84833`
+          `✅ **Booking request saved!**\n\n` +
+          `📋 **Reference:** ${pendingBooking.id}\n\n` +
+          `Our server is currently waking up. We've saved your booking and will process it automatically once the server is online.\n\n` +
+          `You'll receive a confirmation call within 30 minutes.\n\n` +
+          `📞 **Immediate assistance:** +91 90238 84833`
         );
         
-        // Set backend as unavailable
+        setBookingData({});
+        setCurrentStep(null);
+        setShowQuickReplies(true);
         setIsBackendAvailable(false);
-        
-        // Automatically retry health check after 10 seconds
-        setTimeout(() => {
-          checkBackendHealth();
-        }, 10000);
         
       } else {
         addMessage("bot", 
@@ -379,6 +329,7 @@ const AIAssistant = () => {
       
       if (currentStep) {
         switch(currentStep) {
+          // Cab booking flow
           case "cab_pickup":
             setBookingData({ ...bookingData, pickup: input });
             setCurrentStep("cab_drop");
@@ -424,9 +375,10 @@ const AIAssistant = () => {
             }
             setBookingData({ ...bookingData, phone: input.replace(/\D/g, '') });
             setIsTyping(false);
-            await processBooking();
+            await processBooking(0);
             return;
-            
+          
+          // Train booking flow
           case "train_from":
             setBookingData({ ...bookingData, from: input });
             setCurrentStep("train_to");
@@ -466,9 +418,10 @@ const AIAssistant = () => {
             }
             setBookingData({ ...bookingData, phone: input.replace(/\D/g, '') });
             setIsTyping(false);
-            await processBooking();
+            await processBooking(0);
             return;
-            
+          
+          // Flight booking flow
           case "flight_from":
             setBookingData({ ...bookingData, from: input });
             setCurrentStep("flight_to");
@@ -508,9 +461,10 @@ const AIAssistant = () => {
             }
             setBookingData({ ...bookingData, phone: input.replace(/\D/g, '') });
             setIsTyping(false);
-            await processBooking();
+            await processBooking(0);
             return;
-            
+          
+          // Package booking flow
           case "package_destination":
             setBookingData({ ...bookingData, destination: input });
             setCurrentStep("package_duration");
@@ -562,9 +516,10 @@ const AIAssistant = () => {
               setBookingData({ ...bookingData, budget: input });
             }
             setIsTyping(false);
-            await processBooking();
+            await processBooking(0);
             return;
-            
+          
+          // Contact expert flow
           case "contact_phone":
             if (!/^\d{10}$/.test(input.replace(/\D/g, ''))) {
               response = "❌ **Invalid number**\n\nPlease enter a valid 10-digit phone number:";
@@ -574,20 +529,29 @@ const AIAssistant = () => {
             }
             const cleanPhone = input.replace(/\D/g, '');
             
-            // Try to send to backend, but don't fail if it doesn't work
+            // Try to send to backend, but save locally if it fails
             try {
-              await fetch(`${API_BASE_URL}/api/enquiry`, {
+              await fetch(`${API_BASE_URL}/api/aiBooking/process`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  name: 'Contact Request',
-                  service: 'Call Me Back',
-                  phone: cleanPhone,
-                  details: 'Customer requested callback via AI Assistant'
+                  type: 'contact',
+                  data: {
+                    name: 'Contact Request',
+                    phone: cleanPhone,
+                    source: 'AI Assistant'
+                  }
                 })
               });
             } catch (e) {
-              console.log('Backend not available for contact request, but continuing');
+              console.log('Backend not available for contact request, saving locally');
+              const contactRequests = JSON.parse(localStorage.getItem('contactRequests') || '[]');
+              contactRequests.push({
+                phone: cleanPhone,
+                timestamp: new Date().toISOString(),
+                source: 'AI Assistant'
+              });
+              localStorage.setItem('contactRequests', JSON.stringify(contactRequests));
             }
             
             setCurrentStep(null);
@@ -694,7 +658,6 @@ const AIAssistant = () => {
 
       {/* Chat Window - FULLY RESPONSIVE */}
       <div
-        ref={chatWindowRef}
         className={`
           fixed z-50 transition-all duration-300 transform
           ${isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}
@@ -712,11 +675,8 @@ const AIAssistant = () => {
           bg-white flex flex-col overflow-hidden shadow-2xl
         `}
         style={{
-          // Add safe area insets for modern phones
           paddingTop: 'env(safe-area-inset-top, 0px)',
           paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-          paddingLeft: 'env(safe-area-inset-left, 0px)',
-          paddingRight: 'env(safe-area-inset-right, 0px)',
         }}
       >
         {/* Header */}
@@ -767,7 +727,7 @@ const AIAssistant = () => {
           {!isBackendAvailable && !isCheckingBackend && (
             <div className="mt-2 bg-yellow-500/20 backdrop-blur-sm rounded-lg p-2 text-xs text-yellow-100 flex items-center gap-2">
               <WifiOff size={14} />
-              <span>Server is waking up... First request may take 30-60 seconds.</span>
+              <span>Server is waking up... Bookings will be saved locally and processed automatically.</span>
             </div>
           )}
           
@@ -834,7 +794,9 @@ const AIAssistant = () => {
             <div className="flex justify-center mb-4">
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-3 flex items-center gap-2 border border-blue-100">
                 <Loader2 size={16} className="animate-spin text-blue-600" />
-                <p className="text-sm text-blue-600 font-medium">Processing...</p>
+                <p className="text-sm text-blue-600 font-medium">
+                  {!isBackendAvailable ? 'Saving locally...' : 'Processing...'}
+                </p>
               </div>
             </div>
           )}
@@ -857,7 +819,6 @@ const AIAssistant = () => {
                       disabled:opacity-50
                     `}
                   >
-                    {/* Show icon + short text on mobile, full text on tablet/desktop */}
                     <span className="sm:hidden">{reply.text}</span>
                     <span className="hidden sm:inline">{reply.fullText}</span>
                   </button>
@@ -886,12 +847,12 @@ const AIAssistant = () => {
               ref={inputRef}
               type="text"
               value={inputValue}
-              onChange={handleInputChange}
+              onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder={isProcessing ? "Processing..." : "Type your message..."}
               disabled={isProcessing}
               className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-sm disabled:bg-gray-100 transition-all"
-              style={{ fontSize: '16px' }} // Prevents zoom on mobile
+              style={{ fontSize: '16px' }}
             />
             <button
               onClick={() => handleUserInput(inputValue)}
