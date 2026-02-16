@@ -177,6 +177,9 @@ const Home = () => {
     }
   ];
 
+  // Google Reviews URL
+  const googleReviewsUrl = "https://g.page/r/CWzur7SdZeacEBM/review";
+
   const contactOptions = [
     {
       icon: <MessageCircle className="w-7 h-7" />,
@@ -997,30 +1000,35 @@ const Home = () => {
                     GoTravio Travels
                   </div>
                   
-                  {/* Scanner/QR Code */}
-                  <div className="relative w-40 h-40 sm:w-48 sm:h-48 lg:w-56 lg:h-56 mx-auto my-6 sm:my-8">
+                  {/* Scanner/QR Code - Links to Google Reviews */}
+                  <a 
+                    href={googleReviewsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative w-40 h-40 sm:w-48 sm:h-48 lg:w-56 lg:h-56 mx-auto my-6 sm:my-8 block cursor-pointer hover:opacity-90 transition-opacity"
+                  >
                     <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-2xl rotate-6 opacity-20"></div>
-                    <div className="absolute inset-0 bg-white rounded-2xl shadow-xl flex items-center justify-center border-2 border-yellow-200 overflow-hidden">
+                    <div className="absolute inset-0 bg-white rounded-2xl shadow-xl flex items-center justify-center border-2 border-yellow-200 overflow-hidden hover:border-yellow-400 transition-colors">
                       <img 
-                        src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://www.google.com/search?q=GoTravio+Travels" 
-                        alt="Google Reviews QR Code"
+                        src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://g.page/r/CWzur7SdZeacEBM/review" 
+                        alt="Scan to write a Google Review for GoTravio"
                         className="w-full h-full object-cover"
                       />
                     </div>
-                  </div>
+                  </a>
                   
                   <p className="text-sm sm:text-base text-gray-600 mb-4">
-                    Scan to read our reviews on Google
+                    Scan to write a review on Google
                   </p>
                   
                   <a 
-                    href="https://www.google.com/search?q=GoTravio+Travels" 
-                    target="_blank" 
+                    href={googleReviewsUrl}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold hover:shadow-lg transition-all hover:scale-105 text-sm sm:text-base"
                   >
                     <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-white" />
-                    View All Reviews
+                    Write a Google Review
                     <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                   </a>
                 </div>
