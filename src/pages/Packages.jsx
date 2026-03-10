@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import SEO from "../components/SEO";
 import { API } from "../api.js";
 import { 
@@ -50,7 +51,220 @@ import {
   Camera
 } from "lucide-react";
 
+// ================= ANIMATION VARIANTS =================
+
+// Slide in animations from different directions - ONCE only
+const slideInFromLeft = {
+  hidden: { opacity: 0, x: -100 },
+  visible: { 
+    opacity: 1, 
+    x: 0, 
+    transition: { 
+      duration: 0.8, 
+      type: "spring", 
+      stiffness: 50,
+      damping: 20
+    } 
+  }
+};
+
+const slideInFromRight = {
+  hidden: { opacity: 0, x: 100 },
+  visible: { 
+    opacity: 1, 
+    x: 0, 
+    transition: { 
+      duration: 0.8, 
+      type: "spring", 
+      stiffness: 50,
+      damping: 20
+    } 
+  }
+};
+
+const slideInFromTop = {
+  hidden: { opacity: 0, y: -100 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { 
+      duration: 0.8, 
+      type: "spring", 
+      stiffness: 50,
+      damping: 20
+    } 
+  }
+};
+
+const slideInFromBottom = {
+  hidden: { opacity: 0, y: 100 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { 
+      duration: 0.8, 
+      type: "spring", 
+      stiffness: 50,
+      damping: 20
+    } 
+  }
+};
+
+const fadeInScale = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { 
+    opacity: 1, 
+    scale: 1, 
+    transition: { 
+      duration: 0.6, 
+      type: "spring", 
+      stiffness: 100,
+      damping: 15
+    } 
+  }
+};
+
+const rotateIn = {
+  hidden: { opacity: 0, rotate: -180, scale: 0.5 },
+  visible: { 
+    opacity: 1, 
+    rotate: 0, 
+    scale: 1, 
+    transition: { 
+      duration: 0.8, 
+      type: "spring", 
+      stiffness: 50,
+      damping: 15
+    } 
+  }
+};
+
+// Stagger container for children animations
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2
+    }
+  }
+};
+
+// ================= ANIMATED SECTION COMPONENT =================
+
+const AnimatedSection = ({ children, direction = "left", delay = 0, className = "", id = "" }) => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { 
+    once: true,  // This ensures animation only happens once
+    amount: 0.2,
+    margin: "-50px 0px -50px 0px"
+  });
+  
+  let animationVariant;
+  switch(direction) {
+    case "left":
+      animationVariant = slideInFromLeft;
+      break;
+    case "right":
+      animationVariant = slideInFromRight;
+      break;
+    case "top":
+      animationVariant = slideInFromTop;
+      break;
+    case "bottom":
+      animationVariant = slideInFromBottom;
+      break;
+    case "scale":
+      animationVariant = fadeInScale;
+      break;
+    case "rotate":
+      animationVariant = rotateIn;
+      break;
+    default:
+      animationVariant = slideInFromLeft;
+  }
+  
+  return (
+    <motion.div
+      ref={ref}
+      id={id}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+      variants={animationVariant}
+      custom={delay}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+// ================= ANIMATED CARD COMPONENT =================
+
+const AnimatedCard = ({ children, index = 0, className = "" }) => {
+  const [hovered, setHovered] = useState(false);
+  
+  return (
+    <motion.div
+      variants={fadeInScale}
+      custom={index}
+      whileHover={{ 
+        y: -8,
+        transition: { duration: 0.3 }
+      }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      className={`relative ${className}`}
+    >
+      {/* Animated shadow on hover */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={hovered ? { opacity: 1, scale: 1.05 } : { opacity: 0, scale: 0.9 }}
+        transition={{ duration: 0.3 }}
+        className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-2xl blur-xl"
+      />
+      
+      {/* Card content */}
+      <div className="relative">
+        {children}
+      </div>
+    </motion.div>
+  );
+};
+
+// ================= LIGHT COLOR GRADIENTS =================
+
+const getCardGradient = (index) => {
+  const gradients = [
+    "bg-gradient-to-br from-blue-50 via-cyan-50 to-white",
+    "bg-gradient-to-br from-purple-50 via-pink-50 to-white",
+    "bg-gradient-to-br from-green-50 via-emerald-50 to-white",
+    "bg-gradient-to-br from-yellow-50 via-amber-50 to-white",
+    "bg-gradient-to-br from-indigo-50 via-blue-50 to-white",
+    "bg-gradient-to-br from-orange-50 via-red-50 to-white",
+    "bg-gradient-to-br from-teal-50 via-cyan-50 to-white",
+    "bg-gradient-to-br from-rose-50 via-pink-50 to-white"
+  ];
+  return gradients[index % gradients.length];
+};
+
+const getIconColor = (index) => {
+  const colors = [
+    "text-blue-500",
+    "text-purple-500",
+    "text-green-500",
+    "text-yellow-500",
+    "text-indigo-500",
+    "text-orange-500",
+    "text-teal-500",
+    "text-rose-500"
+  ];
+  return colors[index % colors.length];
+};
+
 // ================= CIRCULAR CAROUSEL COMPONENT =================
+// ⚠️ THIS SECTION IS UNTOUCHED - NO CHANGES MADE ⚠️
 
 const CircularCarousel = ({ packages }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -474,7 +688,13 @@ Message: ${formData.message || 'No additional message'}`,
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.9, y: 20 }}
+      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+      className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden"
+    >
       <div className="bg-gradient-to-r from-orange-600 to-pink-600 text-white p-4 sm:p-6">
         <div className="flex items-start justify-between">
           <div>
@@ -482,31 +702,40 @@ Message: ${formData.message || 'No additional message'}`,
             <p className="text-orange-100 text-xs sm:text-sm truncate max-w-[200px] sm:max-w-full">{selectedPackage?.title}</p>
           </div>
           {onClose && (
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 90 }}
+              whileTap={{ scale: 0.9 }}
               onClick={onClose}
               className="text-white hover:text-orange-200 p-1"
             >
               <X size={18} className="sm:w-5 sm:h-5" />
-            </button>
+            </motion.button>
           )}
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-3 sm:space-y-4">
-        {submitStatus.type && (
-          <div className={`p-3 sm:p-4 ${submitStatus.type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'} border rounded-xl`}>
-            <div className="flex items-center gap-2 sm:gap-3">
-              {submitStatus.type === 'success' ? (
-                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" />
-              ) : (
-                <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 flex-shrink-0" />
-              )}
-              <p className={`text-xs sm:text-sm ${submitStatus.type === 'success' ? 'text-green-700' : 'text-red-700'}`}>
-                {submitStatus.message}
-              </p>
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {submitStatus.type && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className={`p-3 sm:p-4 ${submitStatus.type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'} border rounded-xl`}
+            >
+              <div className="flex items-center gap-2 sm:gap-3">
+                {submitStatus.type === 'success' ? (
+                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" />
+                ) : (
+                  <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 flex-shrink-0" />
+                )}
+                <p className={`text-xs sm:text-sm ${submitStatus.type === 'success' ? 'text-green-700' : 'text-red-700'}`}>
+                  {submitStatus.message}
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="bg-gray-50 p-3 sm:p-4 rounded-xl">
           <div className="flex items-center gap-2 sm:gap-3">
@@ -642,9 +871,11 @@ Message: ${formData.message || 'No additional message'}`,
           </div>
         </div>
 
-        <button
+        <motion.button
           type="submit"
           disabled={isSubmitting}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           className="w-full bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white py-2.5 sm:py-3 rounded-lg font-medium text-sm sm:text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isSubmitting ? (
@@ -658,7 +889,7 @@ Message: ${formData.message || 'No additional message'}`,
               Submit Package Enquiry
             </>
           )}
-        </button>
+        </motion.button>
 
         <div className="text-center pt-1 sm:pt-2">
           <p className="text-xs text-gray-500">
@@ -667,7 +898,7 @@ Message: ${formData.message || 'No additional message'}`,
           </p>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 };
 
@@ -678,69 +909,124 @@ const HeroSection = ({ scrollToPackages, scrollToCarousel }) => {
     <section className="relative bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 text-white overflow-hidden w-full">
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-orange-500/10"></div>
-        <div className="absolute top-10 left-10 w-64 h-64 sm:w-96 sm:h-96 lg:w-[500px] lg:h-[500px] bg-pink-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 right-10 w-64 h-64 sm:w-96 sm:h-96 lg:w-[500px] lg:h-[500px] bg-orange-500/10 rounded-full blur-3xl"></div>
+        <motion.div 
+          animate={{ 
+            x: [0, 100, 0],
+            y: [0, -50, 0],
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="absolute top-10 left-10 w-64 h-64 sm:w-96 sm:h-96 lg:w-[500px] lg:h-[500px] bg-pink-500/10 rounded-full blur-3xl"
+        />
+        <motion.div 
+          animate={{ 
+            x: [0, -100, 0],
+            y: [0, 50, 0],
+          }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-10 right-10 w-64 h-64 sm:w-96 sm:h-96 lg:w-[500px] lg:h-[500px] bg-orange-500/10 rounded-full blur-3xl"
+        />
       </div>
 
       <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 py-12 sm:py-16 lg:py-24">
         <div className="w-full">
           <div className="text-center max-w-7xl mx-auto px-4">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 lg:py-3 mb-4 sm:mb-6">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 lg:py-3 mb-4 sm:mb-6"
+            >
               <Sparkles size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-yellow-300" />
               <span className="text-xs sm:text-sm lg:text-base font-medium">India Tour Packages & Holiday Deals</span>
-            </div>
+            </motion.div>
           
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 sm:mb-8 lg:mb-10 leading-tight">
+            <motion.h1 
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.2 }}
+              className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 sm:mb-8 lg:mb-10 leading-tight"
+            >
               Discover Amazing
               <span className="block text-orange-300 mt-2 sm:mt-3 lg:mt-4">India Tour Packages</span>
-            </h1>
+            </motion.h1>
           
-            <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-gray-300 mb-6 sm:mb-8 lg:mb-10 max-w-3xl mx-auto px-4">
+            <motion.p 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.4 }}
+              className="text-base sm:text-lg lg:text-xl xl:text-2xl text-gray-300 mb-6 sm:mb-8 lg:mb-10 max-w-3xl mx-auto px-4"
+            >
               Choose from our curated tour packages to Kashmir, Goa, Kerala, Rajasthan, Ladakh, and Himachal. Customizable itineraries, best prices, and expert travel assistance.
-            </p>
+            </motion.p>
           
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 lg:gap-6 justify-center mb-8 sm:mb-10 lg:mb-12 px-4">
-              <button 
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.6 }}
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4 lg:gap-6 justify-center mb-8 sm:mb-10 lg:mb-12 px-4"
+            >
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={scrollToCarousel}
-                className="group relative bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-bold text-sm sm:text-base lg:text-lg xl:text-xl flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                className="group relative bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-bold text-sm sm:text-base lg:text-lg xl:text-xl flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
                 <Globe className="relative z-10 group-hover:animate-pulse" size={18} /> 
                 <span className="relative z-10">View Tour Packages</span>
-              </button>
-              <button 
+              </motion.button>
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={scrollToPackages}
-                className="group relative bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-bold text-sm sm:text-base lg:text-lg xl:text-xl flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                className="group relative bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-bold text-sm sm:text-base lg:text-lg xl:text-xl flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
                 <Grid className="relative z-10 group-hover:animate-pulse" size={18} /> 
                 <span className="relative z-10">Browse All Packages</span>
-              </button>
-              <a 
+              </motion.button>
+              <motion.a 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 href="https://wa.me/916371106588?text=Hi%20GoTravio,%20I'm%20interested%20in%20custom%20tour%20packages"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-bold text-sm sm:text-base lg:text-lg xl:text-xl flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                className="group relative bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-bold text-sm sm:text-base lg:text-lg xl:text-xl flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 <div className="absolute inset-0 bg-white/10 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
                 <MessageCircle className="relative z-10" size={18} /> 
                 <span className="relative z-10">Custom Trip Enquiry</span>
-              </a>
-            </div>
+              </motion.a>
+            </motion.div>
 
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-6 max-w-4xl mx-auto px-4">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.8 }}
+              className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-6 max-w-4xl mx-auto px-4"
+            >
               {[
                 { icon: <Award size={16} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />, text: "6+ Curated Packages", color: "text-yellow-400" },
                 { icon: <Shield size={16} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />, text: "Best Price Guarantee", color: "text-green-400" },
                 { icon: <Star size={16} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />, text: "4.8+ Rating", color: "text-pink-400" },
                 { icon: <Clock size={16} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />, text: "24/7 Support", color: "text-blue-400" },
               ].map((badge, idx) => (
-                <div key={idx} className="flex items-center gap-2 sm:gap-3 lg:gap-4 bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-5 border border-white/10">
-                  <div className={`${badge.color} flex-shrink-0`}>{badge.icon}</div>
+                <motion.div 
+                  key={idx}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  className="flex items-center gap-2 sm:gap-3 lg:gap-4 bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-5 border border-white/10"
+                >
+                  <motion.div 
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, delay: idx * 0.5 }}
+                    className={`${badge.color} flex-shrink-0`}
+                  >
+                    {badge.icon}
+                  </motion.div>
                   <span className="text-xs sm:text-sm lg:text-base font-medium truncate">{badge.text}</span>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -815,39 +1101,43 @@ const PackageTypeFilter = ({ activeFilter, setActiveFilter, packages }) => {
   return (
     <div className="flex flex-col items-center gap-3 sm:gap-4 lg:gap-5 mb-6 sm:mb-8 lg:mb-10">
       <div className="flex flex-wrap gap-2 lg:gap-3 justify-center">
-        {visibleFilters.map((filter) => (
-          <button
+        {visibleFilters.map((filter, index) => (
+          <motion.button
             key={filter.id}
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setActiveFilter(filter.id)}
             className={`flex items-center gap-1.5 sm:gap-2 lg:gap-3 px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 lg:py-3 rounded-full transition-all text-xs sm:text-sm lg:text-base ${
               activeFilter === filter.id
                 ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg"
-                : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
+                : `${getCardGradient(index)} text-gray-700 hover:bg-gray-50 border border-gray-200`
             }`}
           >
-            <span className={activeFilter === filter.id ? "text-white" : "text-gray-500"}>
+            <span className={activeFilter === filter.id ? "text-white" : getIconColor(index)}>
               {filter.icon}
             </span>
             <span className="font-medium">{filter.label}</span>
             <span className={`text-[10px] sm:text-xs lg:text-sm px-1.5 py-0.5 lg:px-2 lg:py-1 rounded-full ${
               activeFilter === filter.id 
                 ? "bg-white/20 text-white" 
-                : "bg-gray-100 text-gray-600"
+                : `${getCardGradient(index)} text-gray-600`
             }`}>
               {filter.count}
             </span>
-          </button>
+          </motion.button>
         ))}
       </div>
       
       {filters.length > 4 && (
-        <button
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={() => setShowAllFilters(!showAllFilters)}
           className="text-xs sm:text-sm lg:text-base text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1"
         >
           {showAllFilters ? 'Show Less' : `+${filters.length - 4} More Filters`}
           <ChevronRightIcon size={14} className={`transform transition-transform ${showAllFilters ? 'rotate-90' : ''}`} />
-        </button>
+        </motion.button>
       )}
     </div>
   );
@@ -862,60 +1152,77 @@ const QuickStats = ({ packages }) => {
     { 
       value: totalPackages + "+", 
       label: "Curated Packages",
-      icon: <Globe className="text-indigo-500" size={18} />,
+      icon: <Globe size={18} />,
       desc: "Domestic & international"
     },
     { 
       value: uniqueDestinations + "+", 
       label: "Destinations",
-      icon: <MapPin className="text-green-500" size={18} />,
+      icon: <MapPin size={18} />,
       desc: "Across India & abroad"
     },
     { 
       value: "95%", 
       label: "Satisfaction",
-      icon: <Star className="text-yellow-500" size={18} />,
+      icon: <Star size={18} />,
       desc: "Rated 4.5+ stars"
     },
     { 
       value: "Custom", 
       label: "Trip Planning",
-      icon: <Sparkles className="text-pink-500" size={18} />,
+      icon: <Sparkles size={18} />,
       desc: "Fully personalized"
     },
   ];
 
   return (
-    <div className="w-full bg-white py-8 sm:py-12 lg:py-16">
-      <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16">
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-          {stats.map((stat, idx) => (
-            <div key={idx} className="group relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-white rounded-xl sm:rounded-2xl lg:rounded-3xl transform group-hover:scale-105 transition-all duration-300"></div>
-              <div className="relative bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-6 xl:p-8 border border-gray-200/50 group-hover:border-indigo-300/50 transition-all">
+    <AnimatedSection direction="left">
+      <div className="w-full bg-white py-8 sm:py-12 lg:py-16">
+        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+            {stats.map((stat, idx) => (
+              <motion.div
+                key={idx}
+                whileHover={{ scale: 1.05, y: -5 }}
+                onHoverStart={() => {}}
+                onHoverEnd={() => {}}
+                className={`group relative ${getCardGradient(idx)} rounded-xl sm:rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-6 xl:p-8 border border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300`}
+              >
                 <div className="flex flex-col xs:flex-row items-center xs:items-start gap-2 sm:gap-3 lg:gap-4 mb-1 sm:mb-2 lg:mb-3">
-                  <div className="p-1.5 sm:p-2 lg:p-3 bg-gradient-to-br from-indigo-50 to-white rounded-lg sm:rounded-xl lg:rounded-2xl flex-shrink-0">
+                  <motion.div
+                    animate={{ rotate: [0, 360] }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    className={`p-1.5 sm:p-2 lg:p-3 rounded-lg sm:rounded-xl lg:rounded-2xl flex-shrink-0 ${getIconColor(idx)}`}
+                  >
                     {stat.icon}
-                  </div>
+                  </motion.div>
                   <div className="text-center xs:text-left">
                     <div className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900">{stat.value}</div>
                     <div className="text-xs sm:text-sm lg:text-base font-medium text-gray-700">{stat.label}</div>
                   </div>
                 </div>
                 <p className="text-[10px] sm:text-xs lg:text-sm text-gray-500 text-center xs:text-left">{stat.desc}</p>
-              </div>
-            </div>
-          ))}
+                
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  whileHover={{ scale: 1, opacity: 0.1 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute inset-0 bg-indigo-500 rounded-xl sm:rounded-2xl lg:rounded-3xl"
+                />
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </AnimatedSection>
   );
 };
 
 // ================= PACKAGE CARD COMPONENT =================
 
-const PackageCard = ({ pkg, onEnquire }) => {
+const PackageCard = ({ pkg, onEnquire, index }) => {
   const [showEnquiryForm, setShowEnquiryForm] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
   const handleEnquire = () => {
     setShowEnquiryForm(true);
@@ -924,79 +1231,110 @@ const PackageCard = ({ pkg, onEnquire }) => {
 
   return (
     <>
-      <div className="group relative bg-white rounded-2xl sm:rounded-3xl lg:rounded-4xl overflow-hidden border border-gray-200/50 group-hover:border-orange-300 transition-all duration-500 shadow-sm group-hover:shadow-2xl">
-        <div className="relative h-48 sm:h-56 lg:h-72 overflow-hidden">
-          <img
-            src={pkg.imageUrl || pkg.image || pkg.images?.[0] || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1200"}
-            alt={`${pkg.title} - Tour package in ${pkg.location || pkg.destination}`}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-          
-          <div className="absolute top-3 sm:top-4 lg:top-5 left-3 sm:left-4 lg:left-5">
-            <span className="px-2 sm:px-3 lg:px-4 py-1 sm:py-1.5 lg:py-2 bg-gradient-to-r from-orange-600 to-pink-600 text-white text-[10px] sm:text-xs lg:text-sm font-bold rounded-full">
-              {pkg.tag || pkg.category || "Popular Package"}
-            </span>
-          </div>
-
-          <div className="absolute bottom-3 sm:bottom-4 lg:bottom-5 left-3 sm:left-4 lg:left-5">
-            <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 px-2 sm:px-3 lg:px-4 py-1 sm:py-1.5 lg:py-2 bg-black/60 backdrop-blur-sm rounded-full text-white text-[10px] sm:text-xs lg:text-sm">
-              <Clock size={12} className="sm:w-3 sm:h-3 lg:w-4 lg:h-4" />
-              <span>{pkg.days || pkg.duration} days</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-4 sm:p-5 lg:p-6 xl:p-8">
-          <div className="flex items-start justify-between mb-2 sm:mb-3 lg:mb-4">
-            <div className="min-w-0 flex-1 pr-2">
-              <h3 className="font-bold text-base sm:text-lg lg:text-xl xl:text-2xl text-gray-900 mb-1 group-hover:text-indigo-700 transition-colors truncate">
-                {pkg.title}
-              </h3>
-              <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 text-gray-600 text-xs sm:text-sm lg:text-base">
-                <MapPin size={12} className="sm:w-3 sm:h-3 lg:w-4 lg:h-4 flex-shrink-0" />
-                <span className="truncate">{pkg.location || pkg.destination}</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-1 flex-shrink-0">
-              <Star size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-yellow-400 fill-yellow-400" />
-              <span className="font-bold text-gray-900 text-xs sm:text-sm lg:text-base">4.5</span>
-            </div>
-          </div>
-
-          <p className="text-gray-600 text-xs sm:text-sm lg:text-base mb-3 sm:mb-4 lg:mb-5 line-clamp-2">
-            {pkg.description || `Experience amazing ${pkg.location || 'destinations'} with our expertly curated package.`}
-          </p>
-
-          <div className="flex flex-col xs:flex-row xs:items-center justify-between pt-3 sm:pt-4 lg:pt-5 border-t border-gray-100 gap-2 xs:gap-0">
-            <div>
-              <div className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900">
-                ₹{pkg.priceFrom?.toLocaleString() || pkg.price?.toLocaleString() || "On Request"}
-              </div>
-              <div className="text-[10px] sm:text-xs lg:text-sm text-gray-500">per person</div>
-            </div>
-            <button
-              onClick={handleEnquire}
-              className="w-full xs:w-auto px-4 sm:px-5 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg font-medium text-xs sm:text-sm lg:text-base flex items-center justify-center gap-1.5 sm:gap-2 lg:gap-3 transition-all hover:scale-105"
+      <AnimatedCard index={index}>
+        <motion.div
+          whileHover={{ y: -8 }}
+          onHoverStart={() => setHovered(true)}
+          onHoverEnd={() => setHovered(false)}
+          className={`group relative ${getCardGradient(index)} rounded-2xl sm:rounded-3xl lg:rounded-4xl overflow-hidden border border-gray-200/50 shadow-lg hover:shadow-2xl transition-all duration-500`}
+        >
+          <div className="relative h-48 sm:h-56 lg:h-72 overflow-hidden">
+            <motion.img
+              animate={hovered ? { scale: 1.1 } : { scale: 1 }}
+              transition={{ duration: 0.7 }}
+              src={pkg.imageUrl || pkg.image || pkg.images?.[0] || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1200"}
+              alt={`${pkg.title} - Tour package in ${pkg.location || pkg.destination}`}
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+            
+            <motion.div 
+              animate={hovered ? { x: 0, opacity: 1 } : { x: -20, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="absolute top-3 sm:top-4 lg:top-5 left-3 sm:left-4 lg:left-5"
             >
-              <MessageCircle size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
-              Enquire Now
-            </button>
-          </div>
-        </div>
-      </div>
+              <span className="px-2 sm:px-3 lg:px-4 py-1 sm:py-1.5 lg:py-2 bg-gradient-to-r from-orange-600 to-pink-600 text-white text-[10px] sm:text-xs lg:text-sm font-bold rounded-full shadow-lg">
+                {pkg.tag || pkg.category || "Popular Package"}
+              </span>
+            </motion.div>
 
-      {showEnquiryForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="w-full max-w-md">
+            <motion.div 
+              animate={hovered ? { x: 0, opacity: 1 } : { x: 20, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="absolute bottom-3 sm:bottom-4 lg:bottom-5 left-3 sm:left-4 lg:left-5"
+            >
+              <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 px-2 sm:px-3 lg:px-4 py-1 sm:py-1.5 lg:py-2 bg-black/60 backdrop-blur-sm rounded-full text-white text-[10px] sm:text-xs lg:text-sm">
+                <Clock size={12} className="sm:w-3 sm:h-3 lg:w-4 lg:h-4" />
+                <span>{pkg.days || pkg.duration} days</span>
+              </div>
+            </motion.div>
+          </div>
+
+          <div className="p-4 sm:p-5 lg:p-6 xl:p-8">
+            <div className="flex items-start justify-between mb-2 sm:mb-3 lg:mb-4">
+              <div className="min-w-0 flex-1 pr-2">
+                <h3 className="font-bold text-base sm:text-lg lg:text-xl xl:text-2xl text-gray-900 mb-1 group-hover:text-indigo-700 transition-colors truncate">
+                  {pkg.title}
+                </h3>
+                <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 text-gray-600 text-xs sm:text-sm lg:text-base">
+                  <MapPin size={12} className="sm:w-3 sm:h-3 lg:w-4 lg:h-4 flex-shrink-0" />
+                  <span className="truncate">{pkg.location || pkg.destination}</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 flex-shrink-0">
+                <Star size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-yellow-400 fill-yellow-400" />
+                <span className="font-bold text-gray-900 text-xs sm:text-sm lg:text-base">4.5</span>
+              </div>
+            </div>
+
+            <p className="text-gray-600 text-xs sm:text-sm lg:text-base mb-3 sm:mb-4 lg:mb-5 line-clamp-2">
+              {pkg.description || `Experience amazing ${pkg.location || 'destinations'} with our expertly curated package.`}
+            </p>
+
+            <div className="flex flex-col xs:flex-row xs:items-center justify-between pt-3 sm:pt-4 lg:pt-5 border-t border-gray-100 gap-2 xs:gap-0">
+              <div>
+                <div className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900">
+                  ₹{pkg.priceFrom?.toLocaleString() || pkg.price?.toLocaleString() || "On Request"}
+                </div>
+                <div className="text-[10px] sm:text-xs lg:text-sm text-gray-500">per person</div>
+              </div>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleEnquire}
+                className="w-full xs:w-auto px-4 sm:px-5 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg font-medium text-xs sm:text-sm lg:text-base flex items-center justify-center gap-1.5 sm:gap-2 lg:gap-3 transition-all shadow-md hover:shadow-xl"
+              >
+                <MessageCircle size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
+                Enquire Now
+              </motion.button>
+            </div>
+          </div>
+
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={hovered ? { scale: 1, opacity: 0.1 } : { scale: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 bg-indigo-500 rounded-2xl sm:rounded-3xl lg:rounded-4xl"
+          />
+        </motion.div>
+      </AnimatedCard>
+
+      <AnimatePresence>
+        {showEnquiryForm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto"
+          >
             <PackageEnquiryForm 
               selectedPackage={pkg}
               onClose={() => setShowEnquiryForm(false)}
             />
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
@@ -1008,99 +1346,129 @@ const CustomPackageCTA = () => {
 
   return (
     <>
-      <section className="w-full py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-12 xl:px-16 bg-gradient-to-br from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-blue-900 rounded-2xl sm:rounded-3xl lg:rounded-4xl overflow-hidden shadow-2xl">
-            <div className="grid lg:grid-cols-2 items-center">
-              <div className="p-6 sm:p-8 lg:p-10 xl:p-12 text-white">
-                <div className="inline-flex items-center gap-1.5 sm:gap-2 lg:gap-3 bg-white/20 backdrop-blur-sm rounded-full px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 lg:py-3 mb-4 sm:mb-6">
-                  <Sparkles size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-yellow-300" />
-                  <span className="text-xs sm:text-sm lg:text-base font-medium">Custom Trip Planning</span>
-                </div>
-                <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold mb-3 sm:mb-4">
-                  Don't See What You're Looking For?
-                </h2>
-                <p className="text-blue-100 text-sm sm:text-base lg:text-lg mb-6 sm:mb-8">
-                  Let our travel experts design a completely personalized itinerary tailored to your preferences, budget, and schedule.
-                </p>
-                <div className="space-y-2 sm:space-y-3 lg:space-y-4">
-                  {[
-                    "100% Customizable itineraries",
-                    "Flexible dates & destinations",
-                    "Personal travel consultant",
-                    "Best price guarantee"
-                  ].map((feature, idx) => (
-                    <div key={idx} className="flex items-center gap-2 sm:gap-3">
-                      <CheckCircle size={16} className="sm:w-[18px] sm:h-[18px] lg:w-5 lg:h-5 text-green-300 flex-shrink-0" />
-                      <span className="text-xs sm:text-sm lg:text-base">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="bg-white p-6 sm:p-8 lg:p-10 xl:p-12">
-                <h3 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Request Custom Package</h3>
-                <button
-                  onClick={() => setShowForm(true)}
-                  className="w-full bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white py-2.5 sm:py-3 lg:py-4 rounded-lg font-medium text-sm sm:text-base lg:text-lg transition-all flex items-center justify-center gap-2"
-                >
-                  <MessageCircle size={18} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
-                  Get Custom Quote
-                </button>
-                <p className="text-xs sm:text-sm lg:text-base text-gray-600 mt-3 sm:mt-4 text-center">
-                  Our travel expert will contact you within 1 hour
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
-          <div className="w-full max-w-md my-4 sm:my-8">
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 sm:p-6">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Custom Package Request</h3>
-                    <p className="text-indigo-100 text-xs sm:text-sm">Tell us your dream trip details</p>
+      <AnimatedSection direction="right">
+        <section className="w-full py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-12 xl:px-16 bg-gradient-to-br from-gray-50 to-white">
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              className="bg-gradient-to-r from-indigo-900 via-purple-900 to-blue-900 rounded-2xl sm:rounded-3xl lg:rounded-4xl overflow-hidden shadow-2xl"
+            >
+              <div className="grid lg:grid-cols-2 items-center">
+                <div className="p-6 sm:p-8 lg:p-10 xl:p-12 text-white">
+                  <div className="inline-flex items-center gap-1.5 sm:gap-2 lg:gap-3 bg-white/20 backdrop-blur-sm rounded-full px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 lg:py-3 mb-4 sm:mb-6">
+                    <Sparkles size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-yellow-300" />
+                    <span className="text-xs sm:text-sm lg:text-base font-medium">Custom Trip Planning</span>
                   </div>
-                  <button
-                    onClick={() => setShowForm(false)}
-                    className="text-white hover:text-indigo-200 p-1"
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold mb-3 sm:mb-4">
+                    Don't See What You're Looking For?
+                  </h2>
+                  <p className="text-blue-100 text-sm sm:text-base lg:text-lg mb-6 sm:mb-8">
+                    Let our travel experts design a completely personalized itinerary tailored to your preferences, budget, and schedule.
+                  </p>
+                  <div className="space-y-2 sm:space-y-3 lg:space-y-4">
+                    {[
+                      "100% Customizable itineraries",
+                      "Flexible dates & destinations",
+                      "Personal travel consultant",
+                      "Best price guarantee"
+                    ].map((feature, idx) => (
+                      <motion.div 
+                        key={idx}
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="flex items-center gap-2 sm:gap-3"
+                      >
+                        <CheckCircle size={16} className="sm:w-[18px] sm:h-[18px] lg:w-5 lg:h-5 text-green-300 flex-shrink-0" />
+                        <span className="text-xs sm:text-sm lg:text-base">{feature}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="bg-white p-6 sm:p-8 lg:p-10 xl:p-12">
+                  <h3 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Request Custom Package</h3>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setShowForm(true)}
+                    className="w-full bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white py-2.5 sm:py-3 lg:py-4 rounded-lg font-medium text-sm sm:text-base lg:text-lg transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                   >
-                    <X size={18} className="sm:w-5 sm:h-5" />
-                  </button>
+                    <MessageCircle size={18} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
+                    Get Custom Quote
+                  </motion.button>
+                  <p className="text-xs sm:text-sm lg:text-base text-gray-600 mt-3 sm:mt-4 text-center">
+                    Our travel expert will contact you within 1 hour
+                  </p>
                 </div>
               </div>
-              
-              <div className="p-4 sm:p-6">
-                <a
-                  href="https://wa.me/916371106588?text=Hi,%20I%20want%20a%20custom%20travel%20package.%20Please%20contact%20me."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-2.5 sm:py-3 rounded-lg font-medium text-sm sm:text-base transition-all flex items-center justify-center gap-2 mb-3 sm:mb-4"
-                >
-                  <MessageCircle size={18} className="sm:w-5 sm:h-5" />
-                  WhatsApp for Custom Package
-                </a>
+            </motion.div>
+          </div>
+        </section>
+      </AnimatedSection>
+
+      <AnimatePresence>
+        {showForm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="w-full max-w-md my-4 sm:my-8"
+            >
+              <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 sm:p-6">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Custom Package Request</h3>
+                      <p className="text-indigo-100 text-xs sm:text-sm">Tell us your dream trip details</p>
+                    </div>
+                    <motion.button
+                      whileHover={{ scale: 1.1, rotate: 90 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setShowForm(false)}
+                      className="text-white hover:text-indigo-200 p-1"
+                    >
+                      <X size={18} className="sm:w-5 sm:h-5" />
+                    </motion.button>
+                  </div>
+                </div>
                 
-                <p className="text-xs sm:text-sm text-gray-600 text-center">
-                  For custom packages, we prefer to discuss details directly on WhatsApp for better planning.
-                </p>
-                
-                <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200">
-                  <div className="text-center">
-                    <Phone className="inline mr-1.5 sm:mr-2 text-gray-400" size={14} />
-                    <span className="text-xs sm:text-sm text-gray-600">Or call: +91 90238 84833</span>
+                <div className="p-4 sm:p-6">
+                  <motion.a
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    href="https://wa.me/916371106588?text=Hi,%20I%20want%20a%20custom%20travel%20package.%20Please%20contact%20me."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-2.5 sm:py-3 rounded-lg font-medium text-sm sm:text-base transition-all flex items-center justify-center gap-2 mb-3 sm:mb-4 shadow-md hover:shadow-xl"
+                  >
+                    <MessageCircle size={18} className="sm:w-5 sm:h-5" />
+                    WhatsApp for Custom Package
+                  </motion.a>
+                  
+                  <p className="text-xs sm:text-sm text-gray-600 text-center">
+                    For custom packages, we prefer to discuss details directly on WhatsApp for better planning.
+                  </p>
+                  
+                  <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200">
+                    <div className="text-center">
+                      <Phone className="inline mr-1.5 sm:mr-2 text-gray-400" size={14} />
+                      <span className="text-xs sm:text-sm text-gray-600">Or call: +91 90238 84833</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
@@ -1168,47 +1536,85 @@ const ImageCarousel = () => {
   }, []);
 
   return (
-    <section className="w-full bg-gradient-to-b from-white to-gray-50 py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-12 xl:px-16">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-8 sm:mb-10 lg:mb-12">
-          <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-3 sm:mb-4">
-            <Camera size={16} className="text-indigo-500" />
-            <span className="text-sm sm:text-base lg:text-lg font-medium text-indigo-700">Top Tour Destinations</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-2 sm:mb-3">
-            Most Visited <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Places in India</span>
-          </h2>
-          <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto">
-            Explore the most popular destinations that travelers love the most
-          </p>
-        </div>
+    <AnimatedSection direction="left">
+      <section className="w-full bg-gradient-to-b from-white to-gray-50 py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-8 sm:mb-10 lg:mb-12"
+          >
+            <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-3 sm:mb-4">
+              <Camera size={16} className="text-indigo-500" />
+              <span className="text-sm sm:text-base lg:text-lg font-medium text-indigo-700">Top Tour Destinations</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-2 sm:mb-3">
+              Most Visited <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Places in India</span>
+            </h2>
+            <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto">
+              Explore the most popular destinations that travelers love the most
+            </p>
+          </motion.div>
 
-        <div className="relative rounded-2xl sm:rounded-3xl lg:rounded-4xl overflow-hidden shadow-2xl">
-          <div className="relative h-[250px] sm:h-[350px] md:h-[450px] lg:h-[550px] xl:h-[550px] w-full">
-            <img
-              src={travelImages[currentImageIndex].url}
-              alt={travelImages[currentImageIndex].alt}
-              className="w-full h-full object-cover transition-all duration-700 ease-in-out"
-            />
-            
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-            
-            <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 lg:p-8 xl:p-10 text-white">
-              <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1 sm:py-1.5 mb-2 sm:mb-3">
-                <MapPin size={12} className="sm:w-3 sm:h-3 lg:w-4 lg:h-4" />
-                <span className="text-[10px] sm:text-xs lg:text-sm font-medium">{travelImages[currentImageIndex].location}</span>
+          <div className="relative rounded-2xl sm:rounded-3xl lg:rounded-4xl overflow-hidden shadow-2xl">
+            <div className="relative h-[250px] sm:h-[350px] md:h-[450px] lg:h-[550px] xl:h-[550px] w-full">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={currentImageIndex}
+                  src={travelImages[currentImageIndex].url}
+                  alt={travelImages[currentImageIndex].alt}
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.7 }}
+                  className="w-full h-full object-cover"
+                />
+              </AnimatePresence>
+              
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+              
+              <motion.div 
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 lg:p-8 xl:p-10 text-white"
+              >
+                <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1 sm:py-1.5 mb-2 sm:mb-3">
+                  <MapPin size={12} className="sm:w-3 sm:h-3 lg:w-4 lg:h-4" />
+                  <span className="text-[10px] sm:text-xs lg:text-sm font-medium">{travelImages[currentImageIndex].location}</span>
+                </div>
+                <h3 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold mb-1 sm:mb-2">
+                  {travelImages[currentImageIndex].location.split(',')[0]}
+                </h3>
+                <p className="text-xs sm:text-sm lg:text-base xl:text-lg text-gray-200 max-w-2xl">
+                  {travelImages[currentImageIndex].description}
+                </p>
+              </motion.div>
+
+              {/* Carousel Indicators */}
+              <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1 sm:gap-2">
+                {travelImages.map((_, index) => (
+                  <motion.button
+                    key={index}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`h-1 sm:h-1.5 rounded-full transition-all duration-300 ${
+                      index === currentImageIndex 
+                        ? 'w-6 sm:w-8 bg-white' 
+                        : 'w-1.5 sm:w-2 bg-white/50 hover:bg-white/80'
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
               </div>
-              <h3 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold mb-1 sm:mb-2">
-                {travelImages[currentImageIndex].location.split(',')[0]}
-              </h3>
-              <p className="text-xs sm:text-sm lg:text-base xl:text-lg text-gray-200 max-w-2xl">
-                {travelImages[currentImageIndex].description}
-              </p>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </AnimatedSection>
   );
 };
 
@@ -1249,74 +1655,98 @@ const FAQSection = () => {
   };
 
   return (
-    <section className="w-full bg-gradient-to-b from-gray-50 to-white py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-12 xl:px-16">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8 sm:mb-10 lg:mb-12">
-          <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-3 sm:mb-4">
-            <HelpCircle size={16} className="text-indigo-500" />
-            <span className="text-sm sm:text-base lg:text-lg font-medium text-indigo-700">Got Questions?</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-2 sm:mb-3">
-            Frequently Asked <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Questions</span>
-          </h2>
-          <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto">
-            Find answers to common questions about our tour packages and booking process
-          </p>
-        </div>
-
-        <div className="space-y-3 sm:space-y-4">
-          {faqs.map((faq, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-xl sm:rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 overflow-hidden"
-            >
-              <button
-                onClick={() => toggleFaq(index)}
-                className="w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between text-left focus:outline-none"
-              >
-                <span className="text-sm sm:text-base lg:text-lg font-semibold text-gray-900 pr-4">
-                  {faq.question}
-                </span>
-                <ChevronDown
-                  size={18}
-                  className={`text-indigo-600 transition-transform duration-300 flex-shrink-0 ${
-                    openFaq === index ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-              
-              <div
-                className={`overflow-hidden transition-all duration-300 ${
-                  openFaq === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                }`}
-              >
-                <div className="px-4 sm:px-6 pb-3 sm:pb-4 text-xs sm:text-sm lg:text-base text-gray-600 border-t border-gray-100 pt-2 sm:pt-3">
-                  {faq.answer}
-                </div>
-              </div>
+    <AnimatedSection direction="right">
+      <section className="w-full bg-gradient-to-b from-gray-50 to-white py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-8 sm:mb-10 lg:mb-12"
+          >
+            <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-3 sm:mb-4">
+              <HelpCircle size={16} className="text-indigo-500" />
+              <span className="text-sm sm:text-base lg:text-lg font-medium text-indigo-700">Got Questions?</span>
             </div>
-          ))}
-        </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-2 sm:mb-3">
+              Frequently Asked <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Questions</span>
+            </h2>
+            <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto">
+              Find answers to common questions about our tour packages and booking process
+            </p>
+          </motion.div>
 
-        <div className="mt-8 sm:mt-10 text-center">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 sm:px-6 py-3 sm:py-4">
-            <MessageCircle size={18} className="text-indigo-600" />
-            <span className="text-xs sm:text-sm lg:text-base text-gray-700">
-              Still have questions?{" "}
-              <a
-                href="https://wa.me/916371106588"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-indigo-600 font-semibold hover:text-indigo-700 underline"
+          <div className="space-y-3 sm:space-y-4">
+            {faqs.map((faq, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className={`${getCardGradient(index)} rounded-xl sm:rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 overflow-hidden`}
               >
-                WhatsApp us
-              </a>{" "}
-              for instant answers
-            </span>
+                <button
+                  onClick={() => toggleFaq(index)}
+                  className="w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between text-left focus:outline-none"
+                >
+                  <span className="text-sm sm:text-base lg:text-lg font-semibold text-gray-900 pr-4">
+                    {faq.question}
+                  </span>
+                  <motion.div
+                    animate={{ rotate: openFaq === index ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ChevronDown size={18} className={`${getIconColor(index)} flex-shrink-0`} />
+                  </motion.div>
+                </button>
+                
+                <AnimatePresence>
+                  {openFaq === index && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-4 sm:px-6 pb-3 sm:pb-4 text-xs sm:text-sm lg:text-base text-gray-600 border-t border-gray-100 pt-2 sm:pt-3">
+                        {faq.answer}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ))}
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            viewport={{ once: true }}
+            className="mt-8 sm:mt-10 text-center"
+          >
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 sm:px-6 py-3 sm:py-4">
+              <MessageCircle size={18} className="text-indigo-600" />
+              <span className="text-xs sm:text-sm lg:text-base text-gray-700">
+                Still have questions?{" "}
+                <a
+                  href="https://wa.me/916371106588"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-600 font-semibold hover:text-indigo-700 underline"
+                >
+                  WhatsApp us
+                </a>{" "}
+                for instant answers
+              </span>
+            </div>
+          </motion.div>
         </div>
-      </div>
-    </section>
+      </section>
+    </AnimatedSection>
   );
 };
 
@@ -1402,6 +1832,14 @@ const Packages = () => {
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [showEnquiryForm, setShowEnquiryForm] = useState(false);
   const [error, setError] = useState(null);
+
+  // References for scroll animations
+  const statsRef = useRef(null);
+  const carouselRef = useRef(null);
+  const packagesRef = useRef(null);
+  const ctaRef = useRef(null);
+  const imageCarouselRef = useRef(null);
+  const faqRef = useRef(null);
 
   // FAQ data for schema
   const faqs = [
@@ -1614,10 +2052,13 @@ const Packages = () => {
 
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white w-full overflow-x-hidden">
         <HeroSection scrollToPackages={scrollToPackages} scrollToCarousel={scrollToCarousel} />
-        <QuickStats packages={packages} />
         
-        {/* Circular Carousel Section */}
-        <section id="circular-carousel" className="w-full py-10 sm:py-12 lg:py-16 bg-gradient-to-b from-white to-indigo-50/30 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <div ref={statsRef}>
+          <QuickStats packages={packages} />
+        </div>
+        
+        {/* Circular Carousel Section - ⚠️ UNTOUCHED - NO CHANGES MADE ⚠️ */}
+        <section id="circular-carousel" ref={carouselRef} className="w-full py-10 sm:py-12 lg:py-16 bg-gradient-to-b from-white to-indigo-50/30 px-4 sm:px-6 lg:px-12 xl:px-16">
           <div className="text-center mb-8 sm:mb-10 lg:mb-12">
             <div className="inline-flex items-center gap-1.5 sm:gap-2 lg:gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 lg:py-3 mb-3 sm:mb-4">
               <Sparkles size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-indigo-500" />
@@ -1663,18 +2104,20 @@ const Packages = () => {
           </div>
         </div>
         
-        {error && (
-          <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 mb-6 sm:mb-8">
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg sm:rounded-xl p-3 sm:p-4">
-              <p className="text-xs sm:text-sm text-yellow-700">
-                ⚠️ {error}. Showing demo packages. Check if backend is running on port 5000.
-              </p>
+        <AnimatePresence>
+          {error && (
+            <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 mb-6 sm:mb-8">
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg sm:rounded-xl p-3 sm:p-4">
+                <p className="text-xs sm:text-sm text-yellow-700">
+                  ⚠️ {error}. Showing demo packages. Check if backend is running on port 5000.
+                </p>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </AnimatePresence>
         
         {/* Packages Grid Section */}
-        <section id="packages-grid" className="w-full py-8 sm:py-10 lg:py-12 px-4 sm:px-6 lg:px-12 xl:px-16">
+        <section id="packages-grid" ref={packagesRef} className="w-full py-8 sm:py-10 lg:py-12 px-4 sm:px-6 lg:px-12 xl:px-16">
           <div className="w-full">
             {filteredPackages.length === 0 ? (
               <div className="text-center py-10 sm:py-12 md:py-16 bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl border border-gray-200/50 px-4">
@@ -1687,7 +2130,9 @@ const Packages = () => {
                   }
                 </p>
                 <div className="flex flex-col xs:flex-row gap-3 justify-center px-4">
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => {
                       setActiveFilter("all");
                       setSearchTerm("");
@@ -1695,7 +2140,7 @@ const Packages = () => {
                     className="w-full xs:w-auto px-5 sm:px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-medium text-sm sm:text-base"
                   >
                     View All Packages
-                  </button>
+                  </motion.button>
                   <a
                     href="https://wa.me/916371106588"
                     target="_blank"
@@ -1730,27 +2175,42 @@ const Packages = () => {
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 xl:gap-8">
-                  {filteredPackages.map((pkg) => (
-                    <PackageCard key={pkg._id} pkg={pkg} onEnquire={handleEnquireClick} />
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.1 }}
+                  className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 xl:gap-8"
+                >
+                  {filteredPackages.map((pkg, index) => (
+                    <PackageCard key={pkg._id} pkg={pkg} onEnquire={handleEnquireClick} index={index} />
                   ))}
-                </div>
+                </motion.div>
               </>
             )}
           </div>
         </section>
 
-        <CustomPackageCTA />
+        <div ref={ctaRef}>
+          <CustomPackageCTA />
+        </div>
         
-        {/* Image Carousel Section */}
-        <ImageCarousel />
+        <div ref={imageCarouselRef}>
+          <ImageCarousel />
+        </div>
         
-        {/* FAQ Section */}
-        <FAQSection />
+        <div ref={faqRef}>
+          <FAQSection />
+        </div>
         
-        {showEnquiryForm && selectedPackage && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
-            <div className="w-full max-w-md my-4 sm:my-8">
+        <AnimatePresence>
+          {showEnquiryForm && selectedPackage && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto"
+            >
               <PackageEnquiryForm 
                 selectedPackage={selectedPackage}
                 onClose={() => {
@@ -1758,24 +2218,32 @@ const Packages = () => {
                   setSelectedPackage(null);
                 }}
               />
-            </div>
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
         
         {/* Floating WhatsApp */}
-        <a
+        <motion.a
           href="https://wa.me/916371106588"
           target="_blank"
           rel="noopener noreferrer"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          whileTap={{ scale: 0.9 }}
           className="fixed bottom-4 sm:bottom-6 lg:bottom-8 right-4 sm:right-6 lg:right-8 z-40 group"
         >
           <div className="relative">
-            <div className="absolute inset-0 bg-green-500 rounded-full blur-lg group-hover:blur-xl transition-all opacity-70"></div>
-            <div className="relative bg-gradient-to-br from-green-500 to-green-600 text-white p-3 sm:p-4 lg:p-5 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110">
+            <motion.div 
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="absolute inset-0 bg-green-500 rounded-full blur-lg group-hover:blur-xl transition-all opacity-70"
+            />
+            <div className="relative bg-gradient-to-br from-green-500 to-green-600 text-white p-3 sm:p-4 lg:p-5 rounded-full shadow-2xl hover:shadow-3xl transition-all">
               <MessageCircle size={22} className="sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
             </div>
           </div>
-        </a>
+        </motion.a>
       </div>
     </>
   );

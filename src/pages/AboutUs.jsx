@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import SEO from "../components/SEO";
 import {
   Users,
@@ -55,8 +56,145 @@ import {
   Coffee as CoffeeCup
 } from "lucide-react";
 
+// ================= ANIMATION VARIANTS =================
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 60 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+};
+
+const fadeInDown = {
+  hidden: { opacity: 0, y: -60 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+};
+
+const fadeInLeft = {
+  hidden: { opacity: 0, x: -60 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
+};
+
+const fadeInRight = {
+  hidden: { opacity: 0, x: 60 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
+};
+
+const fadeInScale = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: "easeOut" } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+  }
+};
+
+const slideInLeft = {
+  hidden: { opacity: 0, x: -100 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, type: "spring", stiffness: 50 } }
+};
+
+const slideInRight = {
+  hidden: { opacity: 0, x: 100 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, type: "spring", stiffness: 50 } }
+};
+
+const slideInUp = {
+  hidden: { opacity: 0, y: 100 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, type: "spring", stiffness: 50 } }
+};
+
+const slideInDown = {
+  hidden: { opacity: 0, y: -100 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, type: "spring", stiffness: 50 } }
+};
+
+const rotateIn = {
+  hidden: { opacity: 0, rotate: -10, scale: 0.8 },
+  visible: { opacity: 1, rotate: 0, scale: 1, transition: { duration: 0.6, type: "spring", stiffness: 100 } }
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.6, type: "spring", stiffness: 200 } }
+};
+
+// ================= ANIMATED SECTION COMPONENT =================
+
+const AnimatedSection = ({ children, delay = 0, className = "", direction = "left", once = true }) => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: once, amount: 0.2 });
+  
+  let initialX = 0;
+  let initialY = 0;
+  
+  if (direction === "left") initialX = -100;
+  else if (direction === "right") initialX = 100;
+  else if (direction === "up") initialY = 100;
+  else if (direction === "down") initialY = -100;
+  
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: initialX, y: initialY }}
+      animate={inView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: initialX, y: initialY }}
+      transition={{ duration: 0.8, delay, type: "spring", stiffness: 50 }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+// ================= LIGHT COLOR GRADIENTS =================
+
+const getCardGradient = (index) => {
+  const gradients = [
+    "bg-gradient-to-br from-blue-50 via-cyan-50 to-white",
+    "bg-gradient-to-br from-purple-50 via-pink-50 to-white",
+    "bg-gradient-to-br from-green-50 via-emerald-50 to-white",
+    "bg-gradient-to-br from-yellow-50 via-amber-50 to-white",
+    "bg-gradient-to-br from-indigo-50 via-blue-50 to-white",
+    "bg-gradient-to-br from-orange-50 via-red-50 to-white",
+    "bg-gradient-to-br from-teal-50 via-cyan-50 to-white",
+    "bg-gradient-to-br from-rose-50 via-pink-50 to-white"
+  ];
+  return gradients[index % gradients.length];
+};
+
+const getIconColor = (index) => {
+  const colors = [
+    "text-blue-500",
+    "text-purple-500",
+    "text-green-500",
+    "text-yellow-500",
+    "text-indigo-500",
+    "text-orange-500",
+    "text-teal-500",
+    "text-rose-500"
+  ];
+  return colors[index % colors.length];
+};
+
+const getHoverColor = (index) => {
+  const colors = [
+    "group-hover:bg-blue-50",
+    "group-hover:bg-purple-50",
+    "group-hover:bg-green-50",
+    "group-hover:bg-yellow-50",
+    "group-hover:bg-indigo-50",
+    "group-hover:bg-orange-50",
+    "group-hover:bg-teal-50",
+    "group-hover:bg-rose-50"
+  ];
+  return colors[index % colors.length];
+};
+
 const AboutUs = () => {
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  const [hoveredCard, setHoveredCard] = useState(null);
 
   // Company milestones
   const milestones = [
@@ -397,129 +535,233 @@ const AboutUs = () => {
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white overflow-x-hidden">
         
         {/* ================= HERO SECTION ================= */}
-        <section className="relative bg-gradient-to-br from-indigo-900 via-blue-800 to-purple-900 text-white overflow-hidden">
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute top-20 left-20 w-64 h-64 bg-blue-500 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-20 right-20 w-64 h-64 bg-purple-500 rounded-full blur-3xl"></div>
-          </div>
+        <AnimatedSection direction="down">
+          <section className="relative bg-gradient-to-br from-indigo-900 via-blue-800 to-purple-900 text-white overflow-hidden">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute top-20 left-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"
+            />
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+              className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
+            />
 
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-            <div className="text-center max-w-4xl mx-auto">
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <Sparkles size={16} className="text-yellow-300" />
-                <span className="text-sm font-medium">India's Emerging Travel Assistance Platform</span>
-              </div>
-              
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-                Your Personal
-                <span className="block text-yellow-300 mt-2">Travel Assistant</span>
-              </h1>
-              
-              <p className="text-xl text-blue-100 max-w-3xl mx-auto mb-8">
-                GoTravio provides expert travel assistance across India - from cab rentals and train tickets 
-                to flight bookings and tour packages. We do the research, you enjoy the journey.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button
-                  onClick={scrollToContact}
-                  className="group px-8 py-4 bg-white text-indigo-900 rounded-xl font-bold hover:bg-slate-100 transition-all duration-300 shadow-xl flex items-center justify-center gap-2"
+            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+              <div className="text-center max-w-4xl mx-auto">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8 }}
+                  whileHover={{ scale: 1.05 }}
+                  className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6"
                 >
-                  <MessageCircle size={18} />
-                  Get Travel Help
-                  <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                </button>
+                  <Sparkles size={16} className="text-yellow-300" />
+                  <span className="text-sm font-medium">India's Emerging Travel Assistance Platform</span>
+                </motion.div>
                 
-                <Link
-                  to="/contact"
-                  className="px-8 py-4 border-2 border-white/60 text-white rounded-xl font-bold hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-2 backdrop-blur-sm"
+                <motion.h1 
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
                 >
-                  <Phone size={18} />
-                  Talk to an Expert
-                </Link>
+                  Your Personal
+                  <motion.span 
+                    animate={{ y: [0, -5, 0] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    className="block text-yellow-300 mt-2"
+                  >
+                    Travel Assistant
+                  </motion.span>
+                </motion.h1>
+                
+                <motion.p 
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.9, delay: 0.4 }}
+                  className="text-xl text-blue-100 max-w-3xl mx-auto mb-8"
+                >
+                  GoTravio provides expert travel assistance across India - from cab rentals and train tickets 
+                  to flight bookings and tour packages. We do the research, you enjoy the journey.
+                </motion.p>
+
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.9, delay: 0.6 }}
+                  className="flex flex-col sm:flex-row gap-4 justify-center"
+                >
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={scrollToContact}
+                    className="group px-8 py-4 bg-white text-indigo-900 rounded-xl font-bold hover:bg-slate-100 transition-all duration-300 shadow-xl flex items-center justify-center gap-2"
+                  >
+                    <MessageCircle size={18} />
+                    Get Travel Help
+                    <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                  </motion.button>
+                  
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Link
+                      to="/contact"
+                      className="px-8 py-4 border-2 border-white/60 text-white rounded-xl font-bold hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-2 backdrop-blur-sm"
+                    >
+                      <Phone size={18} />
+                      Talk to an Expert
+                    </Link>
+                  </motion.div>
+                </motion.div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </AnimatedSection>
 
         {/* ================= STATS SECTION ================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10">
-          <div className="bg-white rounded-2xl shadow-xl p-8">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center group hover:scale-105 transition-transform">
-                  <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl mb-3 mx-auto group-hover:shadow-md transition-all">
-                    <div className="text-blue-600">{stat.icon}</div>
-                  </div>
-                  <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
-                  <div className="text-sm font-medium text-gray-700 mb-1">{stat.label}</div>
-                  <div className="text-xs text-gray-500 hidden sm:block">{stat.description}</div>
-                </div>
-              ))}
+        <AnimatedSection direction="up">
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10">
+            <div className="bg-white rounded-2xl shadow-xl p-8">
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"
+              >
+                {stats.map((stat, index) => (
+                  <motion.div
+                    key={index}
+                    variants={fadeInScale}
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    onHoverStart={() => setHoveredCard(index)}
+                    onHoverEnd={() => setHoveredCard(null)}
+                    className={`group relative ${getCardGradient(index)} rounded-xl p-4 text-center shadow-lg hover:shadow-xl transition-all duration-300`}
+                  >
+                    <motion.div
+                      animate={hoveredCard === index ? { rotate: 360, scale: 1.1 } : { rotate: 0, scale: 1 }}
+                      transition={{ duration: 0.5 }}
+                      className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 mx-auto ${getIconColor(index)}`}
+                    >
+                      {stat.icon}
+                    </motion.div>
+                    <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
+                    <div className="text-sm font-medium text-gray-700 mb-1">{stat.label}</div>
+                    <div className="text-xs text-gray-500 hidden sm:block">{stat.description}</div>
+                    
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={hoveredCard === index ? { scale: 1, opacity: 0.1 } : { scale: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute inset-0 bg-indigo-500 rounded-xl"
+                    />
+                  </motion.div>
+                ))}
+              </motion.div>
             </div>
-          </div>
-        </section>
+          </section>
+        </AnimatedSection>
 
         {/* ================= OUR STORY ================= */}
         <section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-6">
-                  <BookOpen size={16} className="text-blue-600" />
-                  <span className="text-sm font-medium text-blue-700">Our Story</span>
-                </div>
-                
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                  The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">GoTravio</span> Story
-                </h2>
-                
-                <div className="space-y-4 text-gray-600 text-lg">
-                  <p>
-                    GoTravio was founded in November 2025 with a clear vision: <span className="font-semibold text-blue-600">to make travel planning simple, personal, and stress-free for every Indian traveler.</span> Our founder, after years of struggling with impersonal booking platforms and automated customer service, decided it was time for a change.
-                  </p>
-                  <p>
-                    We started with a simple belief - that behind every travel plan is a person with unique needs, preferences, and dreams. Whether it's a family vacation, a business trip, or an emergency journey, travelers deserve personalized attention and expert guidance.
-                  </p>
-                  <p>
-                    Today, we serve customers <span className="font-bold text-blue-600">across India</span> - from the bustling streets of Mumbai to the serene hills of Manali, from the beaches of Goa to the temples of Tamil Nadu. Our network of 200+ verified partners ensures that wherever you want to go, we can help you get there.
-                  </p>
-                  <p className="bg-blue-50 p-4 rounded-xl italic">
-                    "We're not just another travel website. We're your personal travel assistant - available 24/7, always honest, and genuinely invested in making your journey memorable."
-                  </p>
-                </div>
-              </div>
-
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-3xl"></div>
-                <div className="relative bg-white rounded-3xl shadow-2xl p-8 border border-gray-200">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                    <AwardIcon className="text-blue-600" />
-                    Our Journey
-                  </h3>
-                  <div className="space-y-6">
-                    {milestones.map((milestone, index) => (
-                      <div key={index} className="flex gap-4 items-start group hover:bg-gray-50 p-2 rounded-lg transition-all">
-                        <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-lg flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
-                          {milestone.icon}
-                        </div>
-                        <div className="flex-grow">
-                          <div className="flex items-baseline gap-2 mb-1">
-                            <span className="text-lg font-bold text-blue-600">{milestone.year}</span>
-                          </div>
-                          <p className="text-gray-700">{milestone.event}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+              <AnimatedSection direction="left">
+                <div>
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-6"
+                  >
+                    <BookOpen size={16} className="text-blue-600" />
+                    <span className="text-sm font-medium text-blue-700">Our Story</span>
+                  </motion.div>
                   
-                  <div className="mt-8 pt-6 border-t border-gray-200">
-                    <p className="text-center text-gray-700">
-                      <span className="font-bold text-blue-600">98%</span> of our customers say they'd recommend us to friends and family
-                    </p>
+                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                    The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">GoTravio</span> Story
+                  </h2>
+                  
+                  <div className="space-y-4 text-gray-600 text-lg">
+                    <motion.p
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 }}
+                    >
+                      GoTravio was founded in November 2025 with a clear vision: <span className="font-semibold text-blue-600">to make travel planning simple, personal, and stress-free for every Indian traveler.</span> Our founder, after years of struggling with impersonal booking platforms and automated customer service, decided it was time for a change.
+                    </motion.p>
+                    <motion.p
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      We started with a simple belief - that behind every travel plan is a person with unique needs, preferences, and dreams. Whether it's a family vacation, a business trip, or an emergency journey, travelers deserve personalized attention and expert guidance.
+                    </motion.p>
+                    <motion.p
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      Today, we serve customers <span className="font-bold text-blue-600">across India</span> - from the bustling streets of Mumbai to the serene hills of Manali, from the beaches of Goa to the temples of Tamil Nadu. Our network of 200+ verified partners ensures that wherever you want to go, we can help you get there.
+                    </motion.p>
+                    <motion.p
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.4 }}
+                      className="bg-blue-50 p-4 rounded-xl italic"
+                    >
+                      "We're not just another travel website. We're your personal travel assistant - available 24/7, always honest, and genuinely invested in making your journey memorable."
+                    </motion.p>
                   </div>
                 </div>
-              </div>
+              </AnimatedSection>
+
+              <AnimatedSection direction="right">
+                <div className="relative">
+                  <motion.div
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-3xl"
+                  />
+                  <div className={`relative ${getCardGradient(0)} rounded-3xl shadow-2xl p-8 border border-gray-200`}>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                      <AwardIcon className="text-blue-600" />
+                      Our Journey
+                    </h3>
+                    <div className="space-y-6">
+                      {milestones.map((milestone, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, x: 20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          whileHover={{ scale: 1.02, x: 5 }}
+                          className={`flex gap-4 items-start p-2 rounded-lg transition-all ${getCardGradient(index)}`}
+                        >
+                          <motion.div
+                            whileHover={{ rotate: 360 }}
+                            transition={{ duration: 0.5 }}
+                            className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center ${getIconColor(index)}`}
+                          >
+                            {milestone.icon}
+                          </motion.div>
+                          <div className="flex-grow">
+                            <div className="flex items-baseline gap-2 mb-1">
+                              <span className={`text-lg font-bold ${getIconColor(index)}`}>{milestone.year}</span>
+                            </div>
+                            <p className="text-gray-700">{milestone.event}</p>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                    
+                    <div className="mt-8 pt-6 border-t border-gray-200">
+                      <p className="text-center text-gray-700">
+                        <span className="font-bold text-blue-600">98%</span> of our customers say they'd recommend us to friends and family
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </AnimatedSection>
             </div>
           </div>
         </section>
@@ -527,97 +769,183 @@ const AboutUs = () => {
         {/* ================= WHY BOOK WITH GOTRAVIO ================= */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
-                <AwardIcon size={16} className="text-blue-600" />
-                <span className="text-sm font-medium text-blue-700">Why Choose Us</span>
+            <AnimatedSection direction="down">
+              <div className="text-center mb-12">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4"
+                >
+                  <AwardIcon size={16} className="text-blue-600" />
+                  <span className="text-sm font-medium text-blue-700">Why Choose Us</span>
+                </motion.div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">GoTravio</span> Advantage
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  Here's why hundreds of travelers choose us over booking directly
+                </p>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">GoTravio</span> Advantage
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Here's why hundreds of travelers choose us over booking directly
-              </p>
-            </div>
+            </AnimatedSection>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
               {advantages.map((advantage, index) => (
-                <div key={index} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-200">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-lg flex items-center justify-center text-blue-600 mb-4">
+                <motion.div
+                  key={index}
+                  variants={fadeInScale}
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  onHoverStart={() => setHoveredCard(index + 10)}
+                  onHoverEnd={() => setHoveredCard(null)}
+                  className={`group relative ${getCardGradient(index)} rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-200`}
+                >
+                  <motion.div
+                    animate={hoveredCard === index + 10 ? { rotate: 360, scale: 1.1 } : { rotate: 0, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${getIconColor(index)}`}
+                  >
                     {advantage.icon}
-                  </div>
+                  </motion.div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">{advantage.title}</h3>
                   <ul className="space-y-2">
                     {advantage.points.map((point, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-gray-600">
-                        <CheckCircle size={16} className="text-green-500 flex-shrink-0 mt-1" />
+                      <motion.li
+                        key={idx}
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="flex items-start gap-2 text-gray-600"
+                      >
+                        <CheckCircle size={16} className={`${getIconColor(idx)} flex-shrink-0 mt-1`} />
                         <span className="text-sm">{point}</span>
-                      </li>
+                      </motion.li>
                     ))}
                   </ul>
-                </div>
+                  
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={hoveredCard === index + 10 ? { scale: 1, opacity: 0.1 } : { scale: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute inset-0 bg-indigo-500 rounded-xl"
+                  />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* ================= CORE VALUES ================= */}
         <section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
-                <Target size={16} className="text-blue-600" />
-                <span className="text-sm font-medium text-blue-700">Our Principles</span>
+            <AnimatedSection direction="down">
+              <div className="text-center mb-12">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4"
+                >
+                  <Target size={16} className="text-blue-600" />
+                  <span className="text-sm font-medium text-blue-700">Our Principles</span>
+                </motion.div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  What We <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Stand For</span>
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  The values that guide every interaction with our customers
+                </p>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                What We <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Stand For</span>
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                The values that guide every interaction with our customers
-              </p>
-            </div>
+            </AnimatedSection>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            >
               {coreValues.map((value, index) => (
-                <div key={index} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-100 group">
-                  <div className="inline-flex p-3 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl text-blue-600 mb-4 group-hover:scale-110 transition-transform">
+                <motion.div
+                  key={index}
+                  variants={fadeInScale}
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  onHoverStart={() => setHoveredCard(index + 20)}
+                  onHoverEnd={() => setHoveredCard(null)}
+                  className={`group relative ${getCardGradient(index)} rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-100`}
+                >
+                  <motion.div
+                    animate={hoveredCard === index + 20 ? { rotate: 360, scale: 1.1 } : { rotate: 0, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className={`inline-flex p-3 rounded-xl mb-4 ${getIconColor(index)}`}
+                  >
                     {value.icon}
-                  </div>
+                  </motion.div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">{value.title}</h3>
                   <p className="text-gray-600">{value.desc}</p>
-                </div>
+                  
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={hoveredCard === index + 20 ? { scale: 1, opacity: 0.1 } : { scale: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute inset-0 bg-indigo-500 rounded-2xl"
+                  />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* ================= OUR SERVICES ================= */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
-                <Briefcase size={16} className="text-blue-600" />
-                <span className="text-sm font-medium text-blue-700">Our Services</span>
+            <AnimatedSection direction="down">
+              <div className="text-center mb-12">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4"
+                >
+                  <Briefcase size={16} className="text-blue-600" />
+                  <span className="text-sm font-medium text-blue-700">Our Services</span>
+                </motion.div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  Comprehensive <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Travel Assistance</span>
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  From cab rentals to flight bookings - we've got you covered across India
+                </p>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Comprehensive <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Travel Assistance</span>
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                From cab rentals to flight bookings - we've got you covered across India
-              </p>
-            </div>
+            </AnimatedSection>
 
-            <div className="grid md:grid-cols-2 gap-8">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              className="grid md:grid-cols-2 gap-8"
+            >
               {serviceFeatures.map((service, index) => (
-                <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all border border-gray-200">
+                <motion.div
+                  key={index}
+                  variants={fadeInUp}
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  onHoverStart={() => setHoveredCard(index + 30)}
+                  onHoverEnd={() => setHoveredCard(null)}
+                  className={`group relative ${getCardGradient(index)} rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all border border-gray-200`}
+                >
                   <div className="flex items-center gap-3 mb-4">
-                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-2xl
-                      ${index === 0 ? 'bg-gradient-to-br from-blue-500 to-blue-600' :
-                        index === 1 ? 'bg-gradient-to-br from-purple-500 to-purple-600' :
-                        index === 2 ? 'bg-gradient-to-br from-green-500 to-green-600' :
-                        'bg-gradient-to-br from-orange-500 to-orange-600'}`}>
+                    <motion.div
+                      animate={hoveredCard === index + 30 ? { rotate: 360, scale: 1.1 } : { rotate: 0, scale: 1 }}
+                      transition={{ duration: 0.5 }}
+                      className={`w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-2xl
+                        ${index === 0 ? 'bg-gradient-to-br from-blue-500 to-blue-600' :
+                          index === 1 ? 'bg-gradient-to-br from-purple-500 to-purple-600' :
+                          index === 2 ? 'bg-gradient-to-br from-green-500 to-green-600' :
+                          'bg-gradient-to-br from-orange-500 to-orange-600'}`}
+                    >
                       {service.icon}
-                    </div>
+                    </motion.div>
                     <div>
                       <h3 className="text-2xl font-bold text-gray-900">{service.category}</h3>
                       <p className="text-sm text-blue-600 font-medium">{service.coverage}</p>
@@ -626,102 +954,192 @@ const AboutUs = () => {
                   
                   <ul className="space-y-3 mb-4">
                     {service.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <CheckCircle size={18} className="text-green-500 flex-shrink-0 mt-0.5" />
+                      <motion.li
+                        key={idx}
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="flex items-start gap-2"
+                      >
+                        <CheckCircle size={18} className={`${getIconColor(idx)} flex-shrink-0 mt-0.5`} />
                         <span className="text-gray-700">{feature}</span>
-                      </li>
+                      </motion.li>
                     ))}
                   </ul>
                   
-                  <Link 
-                    to={`/${service.category.toLowerCase().replace(' ', '')}`}
-                    className="inline-flex items-center text-blue-600 font-semibold hover:gap-2 transition-all group mt-2"
-                  >
-                    Learn more about {service.category}
-                    <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
+                  <motion.div whileHover={{ x: 5 }}>
+                    <Link 
+                      to={`/${service.category.toLowerCase().replace(' ', '')}`}
+                      className={`inline-flex items-center font-semibold hover:gap-2 transition-all group mt-2 ${getIconColor(index)}`}
+                    >
+                      Learn more about {service.category}
+                      <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </motion.div>
+                  
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={hoveredCard === index + 30 ? { scale: 1, opacity: 0.1 } : { scale: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute inset-0 bg-indigo-500 rounded-2xl"
+                  />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* ================= PAN INDIA COVERAGE ================= */}
-        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-          <div className="max-w-7xl mx-auto text-center">
-            <Globe size={48} className="mx-auto mb-4 text-white/80" />
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Serving Customers Across India</h2>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto mb-8">
-              From metro cities to remote towns - wherever you are, we're here to help with your travel needs
-            </p>
-            <div className="flex flex-wrap justify-center gap-3 text-sm">
-              {["Mumbai", "Delhi", "Bangalore", "Chennai", "Kolkata", "Hyderabad", "Pune", "Ahmedabad", "Jaipur", "Lucknow", "Goa", "Chandigarh", "Kochi", "Indore", "Nagpur", "And 500+ more locations"].map((city, idx) => (
-                <span key={idx} className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full">
-                  {city}
-                </span>
-              ))}
+        <AnimatedSection direction="up">
+          <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+            <div className="max-w-7xl mx-auto text-center">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              >
+                <Globe size={48} className="mx-auto mb-4 text-white/80" />
+              </motion.div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Serving Customers Across India</h2>
+              <p className="text-xl text-blue-100 max-w-3xl mx-auto mb-8">
+                From metro cities to remote towns - wherever you are, we're here to help with your travel needs
+              </p>
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="flex flex-wrap justify-center gap-3 text-sm"
+              >
+                {["Mumbai", "Delhi", "Bangalore", "Chennai", "Kolkata", "Hyderabad", "Pune", "Ahmedabad", "Jaipur", "Lucknow", "Goa", "Chandigarh", "Kochi", "Indore", "Nagpur", "And 500+ more locations"].map((city, idx) => (
+                  <motion.span
+                    key={idx}
+                    variants={fadeInScale}
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-all cursor-default"
+                  >
+                    {city}
+                  </motion.span>
+                ))}
+              </motion.div>
             </div>
-          </div>
-        </section>
+          </section>
+        </AnimatedSection>
 
         {/* ================= TRAVEL TIPS ================= */}
         <section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
-                <BookOpen size={16} className="text-blue-600" />
-                <span className="text-sm font-medium text-blue-700">Expert Advice</span>
+            <AnimatedSection direction="down">
+              <div className="text-center mb-12">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4"
+                >
+                  <BookOpen size={16} className="text-blue-600" />
+                  <span className="text-sm font-medium text-blue-700">Expert Advice</span>
+                </motion.div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  Travel Tips From <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Our Experts</span>
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  Insider knowledge to make your journey smoother and more affordable
+                </p>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Travel Tips From <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Our Experts</span>
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Insider knowledge to make your journey smoother and more affordable
-              </p>
-            </div>
+            </AnimatedSection>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+            >
               {travelTips.map((tip, index) => (
-                <div key={index} className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all border border-gray-200 group">
-                  <div className="h-2 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+                <motion.div
+                  key={index}
+                  variants={fadeInScale}
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  onHoverStart={() => setHoveredCard(index + 40)}
+                  onHoverEnd={() => setHoveredCard(null)}
+                  className={`group relative ${getCardGradient(index)} rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all border border-gray-200`}
+                >
+                  <div className={`h-2 bg-gradient-to-r ${getIconColor(index)}`}></div>
                   <div className="p-6">
-                    <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-semibold rounded-full mb-3">
+                    <motion.span
+                      whileHover={{ scale: 1.05 }}
+                      className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3 ${getCardGradient(index)} ${getIconColor(index)}`}
+                    >
                       {tip.category}
-                    </span>
-                    <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                    </motion.span>
+                    <h3 className={`text-lg font-bold text-gray-900 mb-2 group-hover:${getIconColor(index)} transition-colors`}>
                       {tip.title}
                     </h3>
                     <p className="text-gray-600 text-sm">{tip.tip}</p>
                   </div>
-                </div>
+                  
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={hoveredCard === index + 40 ? { scale: 1, opacity: 0.1 } : { scale: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute inset-0 bg-indigo-500"
+                  />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* ================= TESTIMONIALS ================= */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-full px-4 py-2 mb-4">
-                <Star size={16} className="text-yellow-600" />
-                <span className="text-sm font-medium text-yellow-700">Customer Stories</span>
+            <AnimatedSection direction="down">
+              <div className="text-center mb-12">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-full px-4 py-2 mb-4"
+                >
+                  <Star size={16} className="text-yellow-600" />
+                  <span className="text-sm font-medium text-yellow-700">Customer Stories</span>
+                </motion.div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  What Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600">Travelers</span> Say
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  Real experiences from people who've traveled with us
+                </p>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                What Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600">Travelers</span> Say
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Real experiences from people who've traveled with us
-              </p>
-            </div>
+            </AnimatedSection>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+            >
               {testimonials.map((testimonial, index) => (
-                <div key={index} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-200 relative group">
-                  <Quote className="absolute top-4 right-4 w-8 h-8 text-blue-100 group-hover:text-blue-200 transition-colors" />
+                <motion.div
+                  key={index}
+                  variants={fadeInScale}
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  onHoverStart={() => setHoveredCard(index + 50)}
+                  onHoverEnd={() => setHoveredCard(null)}
+                  className={`group relative ${getCardGradient(index)} rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-200`}
+                >
+                  <motion.div
+                    animate={hoveredCard === index + 50 ? { rotate: 360, scale: 1.1 } : { rotate: 0, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <Quote className={`absolute top-4 right-4 w-8 h-8 ${getIconColor(index)} opacity-30`} />
+                  </motion.div>
                   <div className="flex items-center gap-1 mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} size={16} className="fill-yellow-400 text-yellow-400" />
+                      <motion.div
+                        key={i}
+                        animate={hoveredCard === index + 50 ? { scale: [1, 1.2, 1] } : { scale: 1 }}
+                        transition={{ duration: 0.3, delay: i * 0.1 }}
+                      >
+                        <Star key={i} size={16} className="fill-yellow-400 text-yellow-400" />
+                      </motion.div>
                     ))}
                   </div>
                   <p className="text-gray-700 mb-4 italic">"{testimonial.text}"</p>
@@ -730,123 +1148,228 @@ const AboutUs = () => {
                       <p className="font-bold text-gray-900">{testimonial.name}</p>
                       <p className="text-sm text-gray-500">{testimonial.location}</p>
                     </div>
-                    <span className="text-xs px-3 py-1 bg-blue-50 text-blue-600 rounded-full font-medium">
+                    <motion.span
+                      whileHover={{ scale: 1.05 }}
+                      className={`text-xs px-3 py-1 rounded-full font-medium ${getCardGradient(index)} ${getIconColor(index)}`}
+                    >
                       {testimonial.service}
-                    </span>
+                    </motion.span>
                   </div>
-                </div>
+                  
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={hoveredCard === index + 50 ? { scale: 1, opacity: 0.1 } : { scale: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute inset-0 bg-indigo-500 rounded-2xl"
+                  />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* ================= FAQ SECTION ================= */}
-        <section className="w-full bg-gray-100 py-20 px-4 sm:px-6 lg:px-8">
+        <section className="w-full bg-gradient-to-b from-white to-gray-50 py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4">
-                <HelpCircle size={16} className="text-blue-600" />
-                <span className="text-sm font-medium text-blue-700">FAQ</span>
+            <AnimatedSection direction="down">
+              <div className="text-center mb-12">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 py-2 mb-4"
+                >
+                  <HelpCircle size={16} className="text-blue-600" />
+                  <span className="text-sm font-medium text-blue-700">FAQ</span>
+                </motion.div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  Common <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Questions</span>
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  Everything you need to know about GoTravio
+                </p>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Common <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Questions</span>
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Everything you need to know about GoTravio
-              </p>
-            </div>
+            </AnimatedSection>
 
             <div className="space-y-4">
               {faqs.map((faq, index) => (
-                <div key={index} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ scale: 1.02 }}
+                  className={`${getCardGradient(index)} rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-200 overflow-hidden`}
+                >
                   <button
                     onClick={() => toggleFaq(index)}
-                    className="w-full text-left px-6 py-4 flex items-center justify-between focus:outline-none hover:bg-gray-50 transition-colors"
+                    className="w-full text-left px-6 py-4 flex items-center justify-between focus:outline-none hover:bg-gray-50/50 transition-colors"
                   >
                     <h3 className="font-semibold text-base sm:text-lg text-gray-900 pr-4">{faq.question}</h3>
-                    <ChevronDown
-                      className={`w-5 h-5 text-blue-600 transform transition-transform duration-300 flex-shrink-0 ${
-                        openFaqIndex === index ? 'rotate-180' : ''
-                      }`}
-                    />
+                    <motion.div
+                      animate={{ rotate: openFaqIndex === index ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <ChevronDown className={`w-5 h-5 ${getIconColor(index)} flex-shrink-0`} />
+                    </motion.div>
                   </button>
                   
-                  <div
-                    className={`overflow-hidden transition-all duration-300 ${
-                      openFaqIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                    }`}
-                  >
-                    <div className="px-6 pb-4 text-gray-600 border-t border-gray-100 pt-3 leading-relaxed">
-                      {faq.answer}
-                    </div>
-                  </div>
-                </div>
+                  <AnimatePresence>
+                    {openFaqIndex === index && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-6 pb-4 text-gray-600 border-t border-gray-100 pt-3 leading-relaxed">
+                          {faq.answer}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
 
         {/* ================= CONTACT SECTION ================= */}
-        <section id="contact-section" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-900 via-blue-800 to-purple-900 text-white">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to Plan Your Journey?
-            </h2>
-            <p className="text-xl text-blue-100 mb-8">
-              Our travel experts are available 24/7 to help you with personalized assistance
-            </p>
+        <AnimatedSection direction="up">
+          <section id="contact-section" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-900 via-blue-800 to-purple-900 text-white">
+            <div className="max-w-4xl mx-auto text-center">
+              <motion.h2
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="text-3xl md:text-4xl font-bold mb-6"
+              >
+                Ready to Plan Your Journey?
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="text-xl text-blue-100 mb-8"
+              >
+                Our travel experts are available 24/7 to help you with personalized assistance
+              </motion.p>
 
-            <div className="grid sm:grid-cols-3 gap-6 mb-8">
-              <a href="tel:+919023884833" className="group bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all border border-white/20">
-                <Phone className="w-8 h-8 mx-auto mb-3 text-yellow-300" />
-                <p className="font-semibold mb-1">Call Us</p>
-                <p className="text-sm text-blue-200">+91 90238 84833</p>
-                <p className="text-xs text-blue-300 mt-2">24/7 Available</p>
-              </a>
-              
-              <a href="https://wa.me/919023884833" target="_blank" rel="noopener noreferrer" className="group bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all border border-white/20">
-                <MessageCircle className="w-8 h-8 mx-auto mb-3 text-green-300" />
-                <p className="font-semibold mb-1">WhatsApp</p>
-                <p className="text-sm text-blue-200">Quick Chat</p>
-                <p className="text-xs text-blue-300 mt-2">Avg response: 15 min</p>
-              </a>
-              
-              <a href="mailto:gotravio.travel@gmail.com" className="group bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all border border-white/20">
-                <Mail className="w-8 h-8 mx-auto mb-3 text-purple-300" />
-                <p className="font-semibold mb-1">Email Us</p>
-                <p className="text-sm text-blue-200">gotravio.travel@gmail.com</p>
-                <p className="text-xs text-blue-300 mt-2">Reply within 2 hrs</p>
-              </a>
-            </div>
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="grid sm:grid-cols-3 gap-6 mb-8"
+              >
+                <motion.a
+                  variants={fadeInScale}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  href="tel:+919023884833"
+                  className="group bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all border border-white/20"
+                >
+                  <motion.div
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <Phone className="w-8 h-8 mx-auto mb-3 text-yellow-300" />
+                  </motion.div>
+                  <p className="font-semibold mb-1">Call Us</p>
+                  <p className="text-sm text-blue-200">+91 90238 84833</p>
+                  <p className="text-xs text-blue-300 mt-2">24/7 Available</p>
+                </motion.a>
+                
+                <motion.a
+                  variants={fadeInScale}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  href="https://wa.me/919023884833"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all border border-white/20"
+                >
+                  <motion.div
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <MessageCircle className="w-8 h-8 mx-auto mb-3 text-green-300" />
+                  </motion.div>
+                  <p className="font-semibold mb-1">WhatsApp</p>
+                  <p className="text-sm text-blue-200">Quick Chat</p>
+                  <p className="text-xs text-blue-300 mt-2">Avg response: 15 min</p>
+                </motion.a>
+                
+                <motion.a
+                  variants={fadeInScale}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  href="mailto:gotravio.travel@gmail.com"
+                  className="group bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all border border-white/20"
+                >
+                  <motion.div
+                    animate={{ y: [0, -5, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <Mail className="w-8 h-8 mx-auto mb-3 text-purple-300" />
+                  </motion.div>
+                  <p className="font-semibold mb-1">Email Us</p>
+                  <p className="text-sm text-blue-200">gotravio.travel@gmail.com</p>
+                  <p className="text-xs text-blue-300 mt-2">Reply within 2 hrs</p>
+                </motion.a>
+              </motion.div>
 
-            <div className="flex justify-center gap-4">
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
-                <Facebook size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
-                <Twitter size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
-                <Instagram size={18} />
-              </a>
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+                className="flex justify-center gap-4"
+              >
+                <motion.a
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  href="#"
+                  className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all"
+                >
+                  <Facebook size={18} />
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  href="#"
+                  className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all"
+                >
+                  <Twitter size={18} />
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  href="#"
+                  className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all"
+                >
+                  <Instagram size={18} />
+                </motion.a>
+              </motion.div>
             </div>
-          </div>
-        </section>
+          </section>
+        </AnimatedSection>
 
         {/* ================= FLOATING WHATSAPP ================= */}
-        <a
+        <motion.a
           href="https://wa.me/919023884833"
           target="_blank"
           rel="noopener noreferrer"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          whileTap={{ scale: 0.9 }}
           className="fixed bottom-6 right-6 z-50 group"
         >
           <div className="relative">
-            <div className="absolute inset-0 bg-green-500 rounded-full blur-lg group-hover:blur-xl transition-all opacity-70"></div>
-            <div className="relative bg-gradient-to-br from-green-500 to-green-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110">
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="absolute inset-0 bg-green-500 rounded-full blur-lg group-hover:blur-xl transition-all opacity-70"
+            />
+            <div className="relative bg-gradient-to-br from-green-500 to-green-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all">
               <MessageCircle size={24} />
             </div>
           </div>
-        </a>
+        </motion.a>
       </div>
     </>
   );
