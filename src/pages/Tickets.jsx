@@ -43,7 +43,11 @@ import {
   Wifi,
   Battery,
   Camera,
-  Headphones
+  Headphones,
+  Bed,
+  Armchair,
+  Sofa,
+  Car
 } from "lucide-react";
 
 // Animation variants
@@ -172,6 +176,17 @@ const Tickets = () => {
     ];
     return colors[index % colors.length];
   };
+
+  // Train class options with icons and colors
+  const TRAIN_CLASS_OPTIONS = [
+    { value: "Sleeper (SL)", label: "Sleeper (SL)", icon: <Bed size={16} />, color: "text-green-600", bgColor: "bg-green-50" },
+    { value: "3A (AC 3 Tier)", label: "3A - AC 3 Tier", icon: <Armchair size={16} />, color: "text-blue-600", bgColor: "bg-blue-50" },
+    { value: "2A (AC 2 Tier)", label: "2A - AC 2 Tier", icon: <Sofa size={16} />, color: "text-purple-600", bgColor: "bg-purple-50" },
+    { value: "1A (AC First Class)", label: "1A - AC First Class", icon: <Gem size={16} />, color: "text-amber-600", bgColor: "bg-amber-50" },
+    { value: "CC (Chair Car)", label: "CC - Chair Car", icon: <Car size={16} />, color: "text-indigo-600", bgColor: "bg-indigo-50" },
+    { value: "EC (Executive Chair Car)", label: "EC - Executive Chair Car", icon: <Award size={16} />, color: "text-rose-600", bgColor: "bg-rose-50" },
+    { value: "2S (Second Seating)", label: "2S - Second Seating", icon: <Users size={16} />, color: "text-teal-600", bgColor: "bg-teal-50" }
+  ];
 
   // HD Travel Images Array
   const travelImages = [
@@ -315,16 +330,6 @@ const Tickets = () => {
 
   const TRAIN_SERVICE_TYPES = ["Normal", "Tatkal", "Premium Tatkal", "Emergency"];
   
-  const TRAIN_CLASS_OPTIONS = [
-    "Sleeper (SL)",
-    "3A (AC 3 Tier)",
-    "2A (AC 2 Tier)",
-    "1A (AC First Class)",
-    "CC (Chair Car)",
-    "EC (Executive Chair Car)",
-    "2S (Second Seating)"
-  ];
-
   const FLIGHT_TRIP_TYPES = ["One Way", "Round Trip", "Multi City"];
   const FLIGHT_CLASS_OPTIONS = ["Economy", "Premium Economy", "Business", "First Class"];
 
@@ -1139,33 +1144,65 @@ const Tickets = () => {
                       </motion.div>
                     )}
 
-                    {/* Class and Passengers */}
+                    {/* Class and Passengers - UPDATED SECTION WITH TRAIN CLASSES */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 lg:gap-6">
                       <div className="space-y-1 sm:space-y-2 lg:space-y-3">
                         <label className="block text-xs sm:text-sm lg:text-base font-medium text-gray-700">
-                          {ticketType === "train" ? "Travel Class" : "Flight Class"}
+                          {ticketType === "train" ? "Travel Class *" : "Flight Class"}
                         </label>
                         <div className="relative">
-                          <select
-                            name={ticketType === "train" ? "travelClass" : "flightClass"}
-                            value={ticketType === "train" ? form.travelClass : form.flightClass}
-                            onChange={handleChange}
-                            className="w-full rounded-lg sm:rounded-xl lg:rounded-2xl border border-gray-300 px-3 sm:px-4 lg:px-5 py-2 sm:py-3 lg:py-4 pl-8 sm:pl-10 lg:pl-12 text-sm sm:text-base lg:text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none appearance-none bg-white transition-all"
-                          >
-                            <option value="">Select Class</option>
-                            {ticketType === "train" 
-                              ? TRAIN_CLASS_OPTIONS.map(option => (
-                                  <option key={option} value={option}>{option}</option>
-                                ))
-                              : FLIGHT_CLASS_OPTIONS.map(option => (
-                                  <option key={option} value={option}>{option}</option>
-                                ))
-                            }
-                          </select>
                           {ticketType === "train" ? (
-                            <Train size={16} className="absolute left-2 sm:left-3 lg:left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                            <>
+                              <select
+                                name="travelClass"
+                                value={form.travelClass}
+                                onChange={handleChange}
+                                className="w-full rounded-lg sm:rounded-xl lg:rounded-2xl border border-gray-300 px-3 sm:px-4 lg:px-5 py-2 sm:py-3 lg:py-4 pl-8 sm:pl-10 lg:pl-12 text-sm sm:text-base lg:text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none appearance-none bg-white transition-all"
+                              >
+                                <option value="">Select Train Class</option>
+                                {TRAIN_CLASS_OPTIONS.map((option) => (
+                                  <option key={option.value} value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                              </select>
+                              <Train size={16} className="absolute left-2 sm:left-3 lg:left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                              
+                              {/* Quick class selection buttons for mobile/desktop */}
+                              {form.travelClass && (
+                                <div className="mt-2 flex flex-wrap gap-1 sm:gap-2">
+                                  {TRAIN_CLASS_OPTIONS.map((option) => (
+                                    <button
+                                      key={option.value}
+                                      type="button"
+                                      onClick={() => setForm(prev => ({ ...prev, travelClass: option.value }))}
+                                      className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-all ${
+                                        form.travelClass === option.value
+                                          ? `${option.bgColor} ${option.color} border-2 border-current`
+                                          : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                                      }`}
+                                    >
+                                      <span className={option.color}>{option.icon}</span>
+                                      <span>{option.label.split(' ')[0]}</span>
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                            </>
                           ) : (
-                            <Plane size={16} className="absolute left-2 sm:left-3 lg:left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                            <>
+                              <select
+                                name="flightClass"
+                                value={form.flightClass}
+                                onChange={handleChange}
+                                className="w-full rounded-lg sm:rounded-xl lg:rounded-2xl border border-gray-300 px-3 sm:px-4 lg:px-5 py-2 sm:py-3 lg:py-4 pl-8 sm:pl-10 lg:pl-12 text-sm sm:text-base lg:text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none appearance-none bg-white transition-all"
+                              >
+                                {FLIGHT_CLASS_OPTIONS.map(option => (
+                                  <option key={option} value={option}>{option}</option>
+                                ))}
+                              </select>
+                              <Plane size={16} className="absolute left-2 sm:left-3 lg:left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                            </>
                           )}
                         </div>
                       </div>
