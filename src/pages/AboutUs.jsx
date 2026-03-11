@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback, memo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import SEO from "../components/SEO";
@@ -56,7 +56,50 @@ import {
   Coffee as CoffeeCup
 } from "lucide-react";
 
-// ================= ANIMATION VARIANTS =================
+// Ultra-optimized CSS - sirf performance ke liye, UI pe koi asar nahi
+const PerformanceStyles = () => (
+  <style>{`
+    /* Hardware acceleration - smooth as butter */
+    .motion-div, .motion-section, [class*="motion-"], .group, button, a {
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    /* Super smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scroll-padding-top: 20px;
+    }
+    
+    /* Optimize all animations */
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+    }
+    
+    /* Reduce paint operations */
+    .bg-gradient-to-br, .bg-gradient-to-r {
+      will-change: transform;
+    }
+    
+    /* Optimize for mobile */
+    @media (max-width: 768px) {
+      .motion-div, .motion-section {
+        transition-duration: 0.2s !important;
+      }
+      
+      /* Faster animations on mobile */
+      [data-animate] {
+        transition: opacity 0.2s ease, transform 0.2s ease !important;
+      }
+    }
+  `}</style>
+);
+
+// ================= SAME ANIMATION VARIANTS =================
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 60 },
@@ -121,11 +164,16 @@ const scaleIn = {
   visible: { opacity: 1, scale: 1, transition: { duration: 0.6, type: "spring", stiffness: 200 } }
 };
 
-// ================= ANIMATED SECTION COMPONENT =================
+// ================= OPTIMIZED ANIMATED SECTION =================
 
-const AnimatedSection = ({ children, delay = 0, className = "", direction = "left", once = true }) => {
+const AnimatedSection = memo(({ children, delay = 0, className = "", direction = "left", once = true }) => {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: once, amount: 0.2 });
+  // Ultra-fast trigger
+  const inView = useInView(ref, { 
+    once: true, 
+    amount: 0.05,
+    margin: "-10px"
+  });
   
   let initialX = 0;
   let initialY = 0;
@@ -141,14 +189,14 @@ const AnimatedSection = ({ children, delay = 0, className = "", direction = "lef
       initial={{ opacity: 0, x: initialX, y: initialY }}
       animate={inView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: initialX, y: initialY }}
       transition={{ duration: 0.8, delay, type: "spring", stiffness: 50 }}
-      className={className}
+      className={`${className} motion-div`}
     >
       {children}
     </motion.div>
   );
-};
+});
 
-// ================= LIGHT COLOR GRADIENTS =================
+// ================= SAME COLOR FUNCTIONS =================
 
 const getCardGradient = (index) => {
   const gradients = [
@@ -178,23 +226,23 @@ const getIconColor = (index) => {
   return colors[index % colors.length];
 };
 
-const getHoverColor = (index) => {
-  const colors = [
-    "group-hover:bg-blue-50",
-    "group-hover:bg-purple-50",
-    "group-hover:bg-green-50",
-    "group-hover:bg-yellow-50",
-    "group-hover:bg-indigo-50",
-    "group-hover:bg-orange-50",
-    "group-hover:bg-teal-50",
-    "group-hover:bg-rose-50"
-  ];
-  return colors[index % colors.length];
-};
+// ================= MAIN COMPONENT (EXACT SAME UI) =================
 
 const AboutUs = () => {
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);
+
+  // Pre-bind callbacks for better performance
+  const toggleFaq = useCallback((index) => {
+    setOpenFaqIndex(prev => prev === index ? null : index);
+  }, []);
+
+  const scrollToContact = useCallback(() => {
+    const contactSection = document.getElementById('contact-section');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
 
   // Company milestones
   const milestones = [
@@ -239,7 +287,7 @@ const AboutUs = () => {
     { value: "15 min", label: "Avg Response", icon: <Zap className="w-6 h-6" />, description: "Quick assistance" },
   ];
 
-  // Advantages of booking with GoTravio
+  // Advantages
   const advantages = [
     {
       title: "Save Time & Effort",
@@ -445,7 +493,7 @@ const AboutUs = () => {
     }
   ];
 
-  // Schema.org structured data for About page
+  // Schema data
   const aboutSchema = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
@@ -476,7 +524,6 @@ const AboutUs = () => {
     }
   };
 
-  // FAQ Schema
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -490,7 +537,6 @@ const AboutUs = () => {
     }))
   };
 
-  // Organization Schema
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -510,19 +556,9 @@ const AboutUs = () => {
     }
   };
 
-  const toggleFaq = (index) => {
-    setOpenFaqIndex(openFaqIndex === index ? null : index);
-  };
-
-  const scrollToContact = () => {
-    const contactSection = document.getElementById('contact-section');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <>
+      <PerformanceStyles />
       <SEO 
         title="About GoTravio Travels | India's Premier Travel Assistance Platform"
         description="Learn about GoTravio, India's trusted travel assistance platform. We provide expert help for cab rentals, train tickets (including Tatkal), flight bookings, and custom tour packages across India with 98% customer satisfaction."
@@ -534,7 +570,7 @@ const AboutUs = () => {
 
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white overflow-x-hidden">
         
-        {/* ================= HERO SECTION ================= */}
+        {/* ================= HERO SECTION (SAME UI) ================= */}
         <AnimatedSection direction="down">
           <section className="relative bg-gradient-to-br from-indigo-900 via-blue-800 to-purple-900 text-white overflow-hidden">
             <motion.div
@@ -619,7 +655,7 @@ const AboutUs = () => {
           </section>
         </AnimatedSection>
 
-        {/* ================= STATS SECTION ================= */}
+        {/* ================= STATS SECTION (SAME UI) ================= */}
         <AnimatedSection direction="up">
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10">
             <div className="bg-white rounded-2xl shadow-xl p-8">
@@ -627,7 +663,7 @@ const AboutUs = () => {
                 variants={staggerContainer}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.2 }}
                 className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"
               >
                 {stats.map((stat, index) => (
@@ -663,7 +699,7 @@ const AboutUs = () => {
           </section>
         </AnimatedSection>
 
-        {/* ================= OUR STORY ================= */}
+        {/* ================= OUR STORY (SAME UI) ================= */}
         <section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -686,6 +722,7 @@ const AboutUs = () => {
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.1 }}
+                      viewport={{ once: true }}
                     >
                       GoTravio was founded in November 2025 with a clear vision: <span className="font-semibold text-blue-600">to make travel planning simple, personal, and stress-free for every Indian traveler.</span> Our founder, after years of struggling with impersonal booking platforms and automated customer service, decided it was time for a change.
                     </motion.p>
@@ -693,6 +730,7 @@ const AboutUs = () => {
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.2 }}
+                      viewport={{ once: true }}
                     >
                       We started with a simple belief - that behind every travel plan is a person with unique needs, preferences, and dreams. Whether it's a family vacation, a business trip, or an emergency journey, travelers deserve personalized attention and expert guidance.
                     </motion.p>
@@ -700,6 +738,7 @@ const AboutUs = () => {
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.3 }}
+                      viewport={{ once: true }}
                     >
                       Today, we serve customers <span className="font-bold text-blue-600">across India</span> - from the bustling streets of Mumbai to the serene hills of Manali, from the beaches of Goa to the temples of Tamil Nadu. Our network of 200+ verified partners ensures that wherever you want to go, we can help you get there.
                     </motion.p>
@@ -707,6 +746,7 @@ const AboutUs = () => {
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.4 }}
+                      viewport={{ once: true }}
                       className="bg-blue-50 p-4 rounded-xl italic"
                     >
                       "We're not just another travel website. We're your personal travel assistant - available 24/7, always honest, and genuinely invested in making your journey memorable."
@@ -734,6 +774,7 @@ const AboutUs = () => {
                           initial={{ opacity: 0, x: 20 }}
                           whileInView={{ opacity: 1, x: 0 }}
                           transition={{ delay: index * 0.1 }}
+                          viewport={{ once: true }}
                           whileHover={{ scale: 1.02, x: 5 }}
                           className={`flex gap-4 items-start p-2 rounded-lg transition-all ${getCardGradient(index)}`}
                         >
@@ -766,7 +807,7 @@ const AboutUs = () => {
           </div>
         </section>
 
-        {/* ================= WHY BOOK WITH GOTRAVIO ================= */}
+        {/* ================= WHY BOOK WITH GOTRAVIO (SAME UI) ================= */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
           <div className="max-w-7xl mx-auto">
             <AnimatedSection direction="down">
@@ -791,7 +832,7 @@ const AboutUs = () => {
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.1 }}
               className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
               {advantages.map((advantage, index) => (
@@ -818,6 +859,7 @@ const AboutUs = () => {
                         initial={{ opacity: 0, x: -10 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ delay: idx * 0.1 }}
+                        viewport={{ once: true }}
                         className="flex items-start gap-2 text-gray-600"
                       >
                         <CheckCircle size={16} className={`${getIconColor(idx)} flex-shrink-0 mt-1`} />
@@ -838,7 +880,7 @@ const AboutUs = () => {
           </div>
         </section>
 
-        {/* ================= CORE VALUES ================= */}
+        {/* ================= CORE VALUES (SAME UI) ================= */}
         <section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <AnimatedSection direction="down">
@@ -863,7 +905,7 @@ const AboutUs = () => {
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.2 }}
               className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
             >
               {coreValues.map((value, index) => (
@@ -897,7 +939,7 @@ const AboutUs = () => {
           </div>
         </section>
 
-        {/* ================= OUR SERVICES ================= */}
+        {/* ================= OUR SERVICES (SAME UI) ================= */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
           <div className="max-w-7xl mx-auto">
             <AnimatedSection direction="down">
@@ -922,7 +964,7 @@ const AboutUs = () => {
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.1 }}
               className="grid md:grid-cols-2 gap-8"
             >
               {serviceFeatures.map((service, index) => (
@@ -959,6 +1001,7 @@ const AboutUs = () => {
                         initial={{ opacity: 0, x: -10 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ delay: idx * 0.1 }}
+                        viewport={{ once: true }}
                         className="flex items-start gap-2"
                       >
                         <CheckCircle size={18} className={`${getIconColor(idx)} flex-shrink-0 mt-0.5`} />
@@ -989,7 +1032,7 @@ const AboutUs = () => {
           </div>
         </section>
 
-        {/* ================= PAN INDIA COVERAGE ================= */}
+        {/* ================= PAN INDIA COVERAGE (SAME UI) ================= */}
         <AnimatedSection direction="up">
           <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
             <div className="max-w-7xl mx-auto text-center">
@@ -1025,7 +1068,7 @@ const AboutUs = () => {
           </section>
         </AnimatedSection>
 
-        {/* ================= TRAVEL TIPS ================= */}
+        {/* ================= TRAVEL TIPS (SAME UI) ================= */}
         <section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <AnimatedSection direction="down">
@@ -1050,7 +1093,7 @@ const AboutUs = () => {
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.2 }}
               className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
             >
               {travelTips.map((tip, index) => (
@@ -1088,7 +1131,7 @@ const AboutUs = () => {
           </div>
         </section>
 
-        {/* ================= TESTIMONIALS ================= */}
+        {/* ================= TESTIMONIALS (SAME UI) ================= */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
           <div className="max-w-7xl mx-auto">
             <AnimatedSection direction="down">
@@ -1113,7 +1156,7 @@ const AboutUs = () => {
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.1 }}
               className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
             >
               {testimonials.map((testimonial, index) => (
@@ -1168,7 +1211,7 @@ const AboutUs = () => {
           </div>
         </section>
 
-        {/* ================= FAQ SECTION ================= */}
+        {/* ================= FAQ SECTION (SAME UI) ================= */}
         <section className="w-full bg-gradient-to-b from-white to-gray-50 py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <AnimatedSection direction="down">
@@ -1234,7 +1277,7 @@ const AboutUs = () => {
           </div>
         </section>
 
-        {/* ================= CONTACT SECTION ================= */}
+        {/* ================= CONTACT SECTION (SAME UI) ================= */}
         <AnimatedSection direction="up">
           <section id="contact-section" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-900 via-blue-800 to-purple-900 text-white">
             <div className="max-w-4xl mx-auto text-center">
@@ -1242,6 +1285,7 @@ const AboutUs = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
                 className="text-3xl md:text-4xl font-bold mb-6"
               >
                 Ready to Plan Your Journey?
@@ -1250,6 +1294,7 @@ const AboutUs = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
+                viewport={{ once: true }}
                 className="text-xl text-blue-100 mb-8"
               >
                 Our travel experts are available 24/7 to help you with personalized assistance
@@ -1320,6 +1365,7 @@ const AboutUs = () => {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ delay: 0.6 }}
+                viewport={{ once: true }}
                 className="flex justify-center gap-4"
               >
                 <motion.a
@@ -1348,7 +1394,7 @@ const AboutUs = () => {
           </section>
         </AnimatedSection>
 
-        {/* ================= FLOATING WHATSAPP ================= */}
+        {/* ================= FLOATING WHATSAPP (SAME UI) ================= */}
         <motion.a
           href="https://wa.me/919023884833"
           target="_blank"

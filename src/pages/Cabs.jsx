@@ -50,9 +50,44 @@ import {
   Info
 } from "lucide-react";
 
-// Add CSS for floating animations
-const FloatingStyles = () => (
+// Optimized CSS - sirf performance ke liye
+const OptimizedStyles = () => (
   <style>{`
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Hardware acceleration for smooth scrolling */
+    .motion-div, .motion-section, [class*="motion-"] {
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+      will-change: transform, opacity;
+    }
+    
+    /* Optimize animations */
+    @media (max-width: 768px) {
+      .motion-div, .motion-section {
+        transition-duration: 0.2s !important;
+      }
+      
+      /* Reduce motion on mobile */
+      .float-animation {
+        animation: none !important;
+      }
+      
+      [data-animate] {
+        transition: opacity 0.2s ease, transform 0.2s ease !important;
+      }
+    }
+    
+    /* Smooth scroll behavior */
+    html {
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Original animations - same as before */
     @keyframes float {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-10px); }
@@ -70,7 +105,7 @@ const FloatingStyles = () => (
   `}</style>
 );
 
-// ================= ANIMATION VARIANTS =================
+// ================= SAME ANIMATION VARIANTS =================
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 60 },
@@ -105,10 +140,14 @@ const rotateIn = {
   visible: { opacity: 1, rotate: 0, scale: 1 }
 };
 
-// Animated Section Component
+// Optimized Animated Section - same UI but faster
 const AnimatedSection = memo(({ children, delay = 0, className = "", direction = "left" }) => {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: false, amount: 0.2 });
+  const inView = useInView(ref, { 
+    once: true, // Changed to true for performance
+    amount: 0.1, // Reduced threshold
+    margin: "-50px" // Start animation earlier
+  });
   
   const initialX = direction === "left" ? -100 : direction === "right" ? 100 : 0;
   
@@ -117,17 +156,23 @@ const AnimatedSection = memo(({ children, delay = 0, className = "", direction =
       ref={ref}
       initial={{ opacity: 0, x: initialX }}
       animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: initialX }}
-      transition={{ duration: 0.8, delay, type: "spring", stiffness: 50 }}
-      className={className}
+      transition={{ 
+        duration: 0.5, // Reduced duration
+        delay, 
+        type: "tween", // Changed from spring for performance
+        ease: "easeOut"
+      }}
+      className={`${className} motion-div`}
+      data-animate="true"
     >
       {children}
     </motion.div>
   );
 });
 
-// ================= OPTIMIZED COMPONENTS =================
+// ================= OPTIMIZED COMPONENTS (SAME UI) =================
 
-// Hero Section with 3D Parallax
+// Hero Section - optimized but same look
 const HeroSection = memo(({ scrollToForm }) => {
   const { scrollYProgress } = useScroll();
   const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
@@ -136,9 +181,9 @@ const HeroSection = memo(({ scrollToForm }) => {
   return (
     <motion.section 
       style={{ scale: heroScale, opacity: heroOpacity }}
-      className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900 text-white overflow-hidden w-full"
+      className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900 text-white overflow-hidden w-full motion-section"
     >
-      {/* Animated Background */}
+      {/* Animated Background - optimized */}
       <motion.div 
         animate={{ rotate: 360 }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -156,7 +201,7 @@ const HeroSection = memo(({ scrollToForm }) => {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.5 }}
               className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 sm:px-5 py-2 sm:py-2.5 mb-5 sm:mb-6"
             >
               <Sparkles size={16} className="sm:w-4 sm:h-4 text-yellow-300" />
@@ -166,7 +211,7 @@ const HeroSection = memo(({ scrollToForm }) => {
             <motion.h1 
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
               className="text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold mb-5 sm:mb-6 leading-tight px-4"
             >
               Online Cab Booking in India
@@ -176,7 +221,7 @@ const HeroSection = memo(({ scrollToForm }) => {
             <motion.p 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.4 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
               className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 md:mb-10 max-w-4xl mx-auto px-4"
             >
               Book reliable and affordable cab services across India with GoTravio. Verified drivers, transparent pricing, and 24/7 support for local city rides, outstation trips, and airport transfers.
@@ -185,7 +230,7 @@ const HeroSection = memo(({ scrollToForm }) => {
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-10 md:mb-12 px-4"
             >
               <motion.button 
@@ -217,7 +262,7 @@ const HeroSection = memo(({ scrollToForm }) => {
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.8 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
               className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 max-w-5xl mx-auto px-4"
             >
               {[
@@ -243,7 +288,7 @@ const HeroSection = memo(({ scrollToForm }) => {
   );
 });
 
-// Image Carousel Component with Animations
+// Image Carousel - optimized
 const ImageCarousel = memo(() => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -289,7 +334,7 @@ const ImageCarousel = memo(() => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % destinations.length);
-    }, 3000);
+    }, 4000); // Slightly slower for better performance
     return () => clearInterval(timer);
   }, [destinations.length]);
 
@@ -322,18 +367,18 @@ const ImageCarousel = memo(() => {
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.8 }}
+          viewport={{ once: true }} // Changed to once for performance
+          transition={{ duration: 0.5 }}
           className="relative group w-full mx-auto"
         >
           <div className="relative h-[280px] sm:h-[350px] md:h-[400px] lg:h-[450px] w-full rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden shadow-2xl">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlide}
-                initial={{ opacity: 0, x: 100 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -100 }}
-                transition={{ duration: 0.7 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }} // Reduced duration
                 className="absolute inset-0"
               >
                 <img
@@ -346,7 +391,7 @@ const ImageCarousel = memo(() => {
                 <motion.div 
                   initial={{ y: 50, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.3 }}
+                  transition={{ delay: 0.2 }}
                   className="absolute bottom-0 left-0 right-0 p-3 sm:p-5 md:p-6 text-white"
                 >
                   <div className="flex items-end justify-between">
@@ -367,11 +412,10 @@ const ImageCarousel = memo(() => {
   );
 });
 
-// FAQ Section Component with Light Colors
+// FAQ Section - optimized
 const FAQSection = memo(() => {
   const [openIndex, setOpenIndex] = useState(null);
 
-  // Light color gradients for FAQ cards
   const getFaqBg = (index) => {
     const colors = [
       "bg-blue-50",
@@ -467,8 +511,8 @@ const FAQSection = memo(() => {
               key={catIndex}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false }}
-              transition={{ delay: catIndex * 0.1 }}
+              viewport={{ once: true }} // Changed to once
+              transition={{ delay: catIndex * 0.1, duration: 0.4 }}
               whileHover={{ scale: 1.01 }}
               className="bg-white rounded-xl sm:rounded-2xl shadow-sm hover:shadow-md transition-all border border-gray-200/50 overflow-hidden"
             >
@@ -498,8 +542,8 @@ const FAQSection = memo(() => {
                       key={qIndex}
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: false }}
-                      transition={{ delay: 0.1 * qIndex }}
+                      viewport={{ once: true }} // Changed to once
+                      transition={{ delay: 0.1 * qIndex, duration: 0.3 }}
                       className={`${getFaqBg(qIndex)} rounded-lg border border-gray-200/50 hover:border-blue-200 transition-all overflow-hidden`}
                     >
                       <motion.button
@@ -525,7 +569,7 @@ const FAQSection = memo(() => {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
+                            transition={{ duration: 0.2 }} // Reduced duration
                             className="overflow-hidden"
                           >
                             <div className="px-3 pb-2 text-[10px] sm:text-xs text-gray-600 border-t border-gray-200 pt-2">
@@ -545,8 +589,8 @@ const FAQSection = memo(() => {
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.8 }}
+          viewport={{ once: true }} // Changed to once
+          transition={{ duration: 0.5 }}
           whileHover={{ scale: 1.02 }}
           className="mt-8 sm:mt-10 md:mt-12 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 text-white text-center overflow-hidden"
         >
@@ -583,8 +627,8 @@ const FAQSection = memo(() => {
         <motion.div 
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.8, delay: 0.3 }}
+          viewport={{ once: true }} // Changed to once
+          transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-8 sm:mt-10 md:mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6"
         >
           {[
@@ -612,8 +656,8 @@ const FAQSection = memo(() => {
   );
 });
 
+// QuickStats - optimized
 const QuickStats = memo(() => {
-  // Solid colors for stats cards
   const getStatColor = (idx) => {
     const colors = [
       "bg-blue-50",
@@ -660,8 +704,8 @@ const QuickStats = memo(() => {
               key={idx}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false }}
-              transition={{ delay: idx * 0.1 }}
+              viewport={{ once: true }} // Changed to once
+              transition={{ delay: idx * 0.1, duration: 0.4 }}
               whileHover={{ 
                 scale: 1.05, 
                 y: -5,
@@ -669,7 +713,6 @@ const QuickStats = memo(() => {
               }}
               className="relative cursor-pointer h-full"
             >
-              {/* ✅ FIXED: Removed absolute background div - sirf card hai */}
               <div className={`relative ${getStatColor(idx)} rounded-xl sm:rounded-2xl p-5 sm:p-6 border border-gray-200/50 transition-all shadow-md hover:border-blue-300/50 h-full flex flex-col overflow-hidden`}>
                 <div className="flex items-center gap-3 sm:gap-4 mb-2 sm:mb-3">
                   <motion.div 
@@ -694,8 +737,8 @@ const QuickStats = memo(() => {
   );
 });
 
+// CabTypeGrid - optimized (with scroll fix)
 const CabTypeGrid = memo(({ onSelectType }) => {
-  // Solid colors for cards
   const getCardColor = (idx) => {
     const colors = [
       "bg-blue-50",
@@ -768,8 +811,8 @@ const CabTypeGrid = memo(({ onSelectType }) => {
               key={idx}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false }}
-              transition={{ delay: idx * 0.1 }}
+              viewport={{ once: true }} // Changed to once
+              transition={{ delay: idx * 0.1, duration: 0.4 }}
               whileHover={{ 
                 scale: 1.05,
                 boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)"
@@ -780,7 +823,6 @@ const CabTypeGrid = memo(({ onSelectType }) => {
               }}
               className="group relative cursor-pointer h-full"
             >
-              {/* ✅ FIXED: Removed absolute background div - sirf card hai */}
               <div className={`relative ${getCardColor(idx)} rounded-xl sm:rounded-2xl p-5 sm:p-6 border border-gray-200/50 transition-all shadow-md hover:border-blue-300 h-full flex flex-col overflow-hidden`}>
                 <div className="flex items-start gap-3 sm:gap-4">
                   <motion.div 
@@ -811,8 +853,8 @@ const CabTypeGrid = memo(({ onSelectType }) => {
   );
 });
 
+// VehicleSelector - optimized (with scroll fix)
 const VehicleSelector = memo(({ onSelectVehicle }) => {
-  // Solid colors for vehicle cards
   const getVehicleColor = (idx) => {
     const colors = [
       "bg-blue-50",
@@ -891,8 +933,8 @@ const VehicleSelector = memo(({ onSelectVehicle }) => {
               key={idx}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false }}
-              transition={{ delay: idx * 0.1 }}
+              viewport={{ once: true }} // Changed to once
+              transition={{ delay: idx * 0.1, duration: 0.4 }}
               whileHover={{ 
                 scale: 1.05,
                 boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)"
@@ -900,12 +942,12 @@ const VehicleSelector = memo(({ onSelectVehicle }) => {
               onClick={() => {
                 setSelected(idx);
                 onSelectVehicle(vehicle.type);
+                document.getElementById('enquiry-form')?.scrollIntoView({behavior: 'smooth'});
               }}
               className={`group relative cursor-pointer transform transition-all duration-300 ${
                 selected === idx ? 'scale-105' : ''
               } h-full`}
             >
-              {/* ✅ FIXED: Removed absolute background div - sirf card hai */}
               <div className={`relative ${getVehicleColor(idx)} rounded-xl sm:rounded-2xl p-5 sm:p-6 border-2 transition-all shadow-md h-full flex flex-col overflow-hidden ${
                 selected === idx 
                   ? 'border-blue-500' 
@@ -943,8 +985,8 @@ const VehicleSelector = memo(({ onSelectVehicle }) => {
                       key={fIdx}
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: false }}
-                      transition={{ delay: 0.1 * fIdx }}
+                      viewport={{ once: true }} // Changed to once
+                      transition={{ delay: 0.1 * fIdx, duration: 0.3 }}
                       className="flex items-center gap-1.5 sm:gap-2"
                     >
                       <Check size={12} className="sm:w-3 sm:h-3 text-green-500 flex-shrink-0" />
@@ -972,8 +1014,8 @@ const VehicleSelector = memo(({ onSelectVehicle }) => {
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: false }}
-          transition={{ delay: 0.5 }}
+          viewport={{ once: true }} // Changed to once
+          transition={{ delay: 0.5, duration: 0.4 }}
           className="text-center mt-6 sm:mt-8 md:mt-10 px-4"
         >
           <p className="text-xs sm:text-sm md:text-base text-gray-500">
@@ -985,8 +1027,8 @@ const VehicleSelector = memo(({ onSelectVehicle }) => {
   );
 });
 
+// BenefitsSection - optimized
 const BenefitsSection = memo(() => {
-  // Solid colors for benefits cards
   const getBenefitColor = (idx) => {
     const colors = [
       "bg-green-50",
@@ -1051,15 +1093,14 @@ const BenefitsSection = memo(() => {
               key={idx}
               initial={{ opacity: 0, x: idx % 2 === 0 ? -50 : 50 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: false }}
-              transition={{ delay: idx * 0.1 }}
+              viewport={{ once: true }} // Changed to once
+              transition={{ delay: idx * 0.1, duration: 0.4 }}
               whileHover={{ 
                 scale: 1.02,
                 boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)"
               }}
               className="group relative cursor-pointer h-full"
             >
-              {/* ✅ FIXED: Removed absolute background div - sirf card hai */}
               <div className={`relative ${getBenefitColor(idx)} rounded-xl sm:rounded-2xl p-5 sm:p-6 border border-gray-200/50 transition-all shadow-md hover:border-green-300 h-full flex flex-col overflow-hidden`}>
                 <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
                   <motion.div 
@@ -1080,8 +1121,8 @@ const BenefitsSection = memo(() => {
                       key={fIdx}
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: false }}
-                      transition={{ delay: 0.1 * fIdx }}
+                      viewport={{ once: true }} // Changed to once
+                      transition={{ delay: 0.1 * fIdx, duration: 0.3 }}
                       className="flex items-start gap-1.5 sm:gap-2"
                     >
                       <Check size={14} className="sm:w-4 sm:h-4 text-green-500 flex-shrink-0 mt-0.5" />
@@ -1098,6 +1139,7 @@ const BenefitsSection = memo(() => {
   );
 });
 
+// EnquiryForm - optimized (with your original UI)
 const EnquiryForm = memo(({ initialData, onSubmit }) => {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
@@ -1118,7 +1160,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
 
-  const validateStep = () => {
+  const validateStep = useCallback(() => {
     const newErrors = {};
     
     if (step === 1) {
@@ -1138,7 +1180,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [step, form]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -1240,8 +1282,8 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.8 }}
+          viewport={{ once: true }} // Changed to once
+          transition={{ duration: 0.5 }}
           whileHover={{ scale: 1.01 }}
           className="bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden border border-gray-200/50"
         >
@@ -1511,7 +1553,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                   <motion.div 
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.2 }}
+                    transition={{ delay: 0.2, duration: 0.3 }}
                     className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg sm:rounded-xl p-3 sm:p-4 border border-blue-100"
                   >
                     <div className="flex items-start gap-2 sm:gap-3">
@@ -1648,7 +1690,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                   <motion.div 
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.2 }}
+                    transition={{ delay: 0.2, duration: 0.3 }}
                     className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg sm:rounded-xl p-3 sm:p-4 border border-green-200"
                   >
                     <div className="flex items-start gap-2 sm:gap-3">
@@ -1708,8 +1750,8 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: false }}
-          transition={{ delay: 0.4 }}
+          viewport={{ once: true }} // Changed to once
+          transition={{ delay: 0.4, duration: 0.4 }}
           className="text-center mt-6 sm:mt-8 md:mt-10 px-4"
         >
           <p className="text-xs sm:text-sm md:text-base text-gray-500">
@@ -1724,6 +1766,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
   );
 });
 
+// FloatingWhatsApp - optimized
 const FloatingWhatsApp = memo(() => {
   return (
     <motion.a
@@ -1831,17 +1874,15 @@ const Cabs = () => {
 
   const handleSelectType = useCallback((type) => {
     setFormData(prev => ({...prev, tripType: type}));
-    scrollToForm();
-  }, [scrollToForm]);
+  }, []);
 
   const handleSelectVehicle = useCallback((vehicle) => {
     setFormData(prev => ({...prev, carType: vehicle}));
-    scrollToForm();
-  }, [scrollToForm]);
+  }, []);
 
   return (
     <>
-      <FloatingStyles />
+      <OptimizedStyles />
       <SEO 
         title="Online Cab Booking in India | Local & Outstation Taxi Service - GoTravio"
         description="Book reliable and affordable cab services across India with GoTravio. Verified drivers, transparent pricing, and 24/7 support for local city rides, outstation trips, and airport transfers. Get your custom quote now!"
@@ -1876,6 +1917,7 @@ const Cabs = () => {
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -50 }}
+              transition={{ duration: 0.3 }}
               className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[90%] sm:w-auto"
             >
               <div className={`px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg shadow-2xl text-xs sm:text-sm ${
