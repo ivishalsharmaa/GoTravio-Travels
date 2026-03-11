@@ -429,6 +429,11 @@ const Home = () => {
     title: "Post-Booking Support",
     desc: "We stay connected even after booking. Get real-time updates, travel tips, and 24/7 assistance during your journey."
   },
+  {
+  step: "06",
+  title: "Share Your Feedback",
+  desc: "After your journey, share your experience with us. Your feedback helps us improve and assist future travelers better."
+}
   
   ], []);
 
