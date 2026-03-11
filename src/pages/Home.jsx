@@ -424,6 +424,12 @@ const Home = () => {
       title: "Proceed with Confidence",
       desc: "Once you're satisfied, we help you book with no hidden charges. We remain available for support throughout your journey."
     },
+     {
+    step: "05",
+    title: "Post-Booking Support",
+    desc: "We stay connected even after booking. Get real-time updates, travel tips, and 24/7 assistance during your journey."
+  },
+  
   ], []);
 
   const whyBookReasons = useMemo(() => [
