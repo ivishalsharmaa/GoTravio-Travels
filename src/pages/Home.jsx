@@ -30,6 +30,10 @@ import {
   MapPin
 } from "lucide-react";
 import { API } from "../api.js";
+import UniqueImagesSection from "../components/UniqueImagesSection";
+import Carousel3DSection from "../components/Carousel3DSection";
+import PhoneAnimationSection from "../components/PhoneAnimationSection";
+import StackedCardCarousel from "../components/StackedCardCarousel";
 
 // Add CSS as a string for global styles - using style tag in component
 const FloatingStyles = () => (
@@ -985,6 +989,9 @@ const Home = () => {
           </AnimatedSection>
         </section>
 
+        {/* Stacked Card Carousel - Destinations */}
+        <StackedCardCarousel />
+
         {/* Services Section */}
         <section className="w-full bg-gray-100 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16">
           <div className="w-full">
@@ -1040,6 +1047,9 @@ const Home = () => {
           </div>
         </section>
 
+        {/* Unique Images below Why Book With Us */}
+        <UniqueImagesSection />
+
         {/* Process Section */}
         <section className="w-full bg-white py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16">
           <div className="w-full">
@@ -1075,6 +1085,9 @@ const Home = () => {
             </div>
           </div>
         </section>
+
+        {/* 3D Carousel Section */}
+        <Carousel3DSection />
 
         {/* Enquiry Form Section */}
         <section id="travel-enquiry-form" className="w-full bg-gradient-to-br from-indigo-50 to-blue-50 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16 scroll-mt-20">
@@ -1230,6 +1243,9 @@ const Home = () => {
             </div>
           </div>
         </section>
+
+        {/* Phone Animation Section below Enquiry form */}
+        <PhoneAnimationSection />
 
         {/* Benefits Section */}
         <section className="w-full bg-gradient-to-br from-slate-50 to-white py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16">

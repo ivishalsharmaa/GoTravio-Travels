@@ -702,10 +702,10 @@ const QuickStats = memo(() => {
           {stats.map((stat, idx) => (
             <motion.div 
               key={idx}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} // Changed to once
-              transition={{ delay: idx * 0.1, duration: 0.4 }}
+              initial={{ opacity: 0, x: idx % 2 === 0 ? -100 : 100 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false, amount: 0.1 }}
+              transition={{ delay: (idx % 4) * 0.1, duration: 0.6, type: "spring", bounce: 0.4 }}
               whileHover={{ 
                 scale: 1.05, 
                 y: -5,
@@ -809,10 +809,10 @@ const CabTypeGrid = memo(({ onSelectType }) => {
           {types.map((type, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} // Changed to once
-              transition={{ delay: idx * 0.1, duration: 0.4 }}
+              initial={{ opacity: 0, x: idx % 2 === 0 ? -100 : 100 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false, amount: 0.1 }}
+              transition={{ delay: (idx % 3) * 0.1, duration: 0.6, type: "spring", bounce: 0.4 }}
               whileHover={{ 
                 scale: 1.05,
                 boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)"
@@ -931,10 +931,10 @@ const VehicleSelector = memo(({ onSelectVehicle }) => {
           {vehicles.map((vehicle, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} // Changed to once
-              transition={{ delay: idx * 0.1, duration: 0.4 }}
+              initial={{ opacity: 0, x: idx % 2 === 0 ? -100 : 100 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false, amount: 0.1 }}
+              transition={{ delay: (idx % 5) * 0.1, duration: 0.6, type: "spring", bounce: 0.4 }}
               whileHover={{ 
                 scale: 1.05,
                 boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)"
@@ -1091,10 +1091,10 @@ const BenefitsSection = memo(() => {
           {benefits.map((benefit, idx) => (
             <motion.div 
               key={idx}
-              initial={{ opacity: 0, x: idx % 2 === 0 ? -50 : 50 }}
+              initial={{ opacity: 0, x: idx % 2 === 0 ? -120 : 120 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }} // Changed to once
-              transition={{ delay: idx * 0.1, duration: 0.4 }}
+              viewport={{ once: false, amount: 0.1 }}
+              transition={{ delay: (idx % 2) * 0.1, duration: 0.6, type: "spring", bounce: 0.4 }}
               whileHover={{ 
                 scale: 1.02,
                 boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)"
@@ -1793,6 +1793,131 @@ const FloatingWhatsApp = memo(() => {
   );
 });
 
+// InfiniteMarquee - optimized
+const InfiniteMarquee = memo(() => {
+  const images = useMemo(() => [
+    "https://picsum.photos/id/1015/600/400", // Valley River
+    "https://picsum.photos/id/1036/600/400", // Snowy Mountains
+    "https://picsum.photos/id/1039/600/400", // Waterfall
+    "https://picsum.photos/id/1040/600/400", // Castle
+    "https://picsum.photos/id/1043/600/400", // Nature Forest
+    "https://picsum.photos/id/1044/600/400", // Mountain Lake
+    "https://picsum.photos/id/1050/600/400", // Spectacular Bay
+    "https://picsum.photos/id/1045/600/400", // Valley
+    "https://picsum.photos/id/1018/600/400", // Mountain Road
+  ], []);
+
+  return (
+    <div className="w-full bg-white py-6 sm:py-8 overflow-hidden relative border-y border-gray-100">
+      <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+      
+      <motion.div
+        className="flex w-max"
+        animate={{
+          x: ["0%", "-50%"],
+        }}
+        transition={{
+          repeat: Infinity,
+          ease: "linear",
+          duration: 35,
+        }}
+      >
+        {[...images, ...images].map((src, index) => (
+          <div 
+            key={index} 
+            className="w-40 h-28 sm:w-48 sm:h-32 md:w-56 md:h-36 lg:w-64 lg:h-40 flex-shrink-0 pr-4 md:pr-6"
+          >
+            <div className="w-full h-full rounded-xl overflow-hidden shadow-sm border border-gray-100/50 group">
+              <img 
+                src={src} 
+                alt="Travel Destinations" 
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                loading="lazy"
+              />
+            </div>
+          </div>
+        ))}
+      </motion.div>
+      
+      <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+    </div>
+  );
+});
+
+// Second unique carousel - 3D Cylinder Rotating Carousel
+const Cylinder3DCarousel = memo(() => {
+  const images = useMemo(() => [
+    "https://picsum.photos/id/10/600/400",   // Forest clearing
+    "https://picsum.photos/id/11/600/400",   // Mountain Trail
+    "https://picsum.photos/id/13/600/400",   // Beach Waves
+    "https://picsum.photos/id/16/600/400",   // Sea View
+    "https://picsum.photos/id/28/600/400",   // Forest
+    "https://picsum.photos/id/29/600/400",   // Mountains & clouds
+    "https://picsum.photos/id/164/600/400",  // Historic City
+    "https://picsum.photos/id/188/600/400",  // Old town
+  ], []);
+
+  // For 8 items of width 320px, the optimal radius is roughly 420px
+  return (
+    <div className="w-full bg-slate-900 pt-10 pb-24 sm:py-12 overflow-hidden relative" style={{ perspective: "1500px" }}>
+      <div className="text-center mb-0 sm:mb-8 px-4 relative z-10">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          className="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur border border-white/20 text-white text-xs sm:text-sm font-semibold mb-3 tracking-wider uppercase"
+        >
+          Immersive Journey
+        </motion.div>
+        <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white mb-2">Beautiful Destinations</h2>
+      </div>
+
+      <div className="w-full flex justify-center items-center h-[260px] sm:h-[340px] md:h-[380px] mt-8 sm:mt-0 mb-6 sm:mb-16">
+        <div 
+          className="transform scale-[0.6] sm:scale-75 md:scale-100 flex justify-center items-center w-full h-full"
+          style={{ transformStyle: "preserve-3d", transform: "rotateX(-8deg)" }}
+        >
+          <motion.div
+            className="relative w-[320px] h-[220px]"
+            style={{ transformStyle: "preserve-3d" }}
+            animate={{ rotateY: [0, -360] }}
+            transition={{
+              repeat: Infinity,
+              ease: "linear",
+              duration: 40,
+            }}
+          >
+            {images.map((src, idx) => {
+              const angle = (360 / images.length) * idx;
+              return (
+                <div
+                  key={idx}
+                  className="absolute top-0 left-0 w-full h-full rounded-2xl overflow-hidden bg-slate-800"
+                  style={{
+                    transform: `rotateY(${angle}deg) translateZ(450px)`,
+                    WebkitBackfaceVisibility: 'hidden',
+                    backfaceVisibility: 'hidden',
+                    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 0 0 2px rgba(255, 255, 255, 0.15)"
+                  }}
+                >
+                  <img
+                    src={src}
+                    alt={`Destination ${idx}`}
+                    className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-500"
+                    loading="lazy"
+                  />
+                  {/* Subtle vignette/gradient to boost 3D depth pop */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70 pointer-events-none" />
+                </div>
+              );
+            })}
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+});
+
 // ================= MAIN COMPONENT =================
 
 const Cabs = () => {
@@ -1894,10 +2019,14 @@ const Cabs = () => {
 
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white overflow-x-hidden w-full">
         <HeroSection scrollToForm={scrollToForm} />
+        <InfiniteMarquee />
         <QuickStats />
         <CabTypeGrid onSelectType={handleSelectType} />
         <BenefitsSection />
         <VehicleSelector onSelectVehicle={handleSelectVehicle} />
+        
+        {/* 3D Cylinder Carousel */}
+        <Cylinder3DCarousel />
         
         {/* Enquiry Form */}
         <EnquiryForm 
