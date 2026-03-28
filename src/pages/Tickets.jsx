@@ -102,6 +102,42 @@ const bounceIn = {
   }
 };
 
+const floatingEffect = {
+  animate: {
+    y: [0, -15, 0],
+    transition: {
+      duration: 4,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }
+  }
+};
+
+const gentlePulse = {
+  animate: {
+    scale: [1, 1.02, 1],
+    opacity: [0.8, 1, 0.8],
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }
+  }
+};
+
+const cardHover3D = {
+  initial: { scale: 1, rotateX: 0, rotateY: 0 },
+  hover: { 
+    scale: 1.05, 
+    rotateX: 2, 
+    rotateY: -2,
+    boxShadow: "0px 20px 30px rgba(0,0,0,0.1)",
+    transition: {
+      duration: 0.3, type: "spring", stiffness: 300
+    }
+  }
+};
+
 const Tickets = () => {
   const [form, setForm] = useState({
     from: "",
@@ -130,6 +166,7 @@ const Tickets = () => {
   const [ticketType, setTicketType] = useState("train");
   const [openFaq, setOpenFaq] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [animationStep, setAnimationStep] = useState(0);
   
   // Carousel state
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -372,6 +409,24 @@ const Tickets = () => {
     }))
   };
 
+  // Scroll to top on refresh/mount (Robust cross-browser method)
+  useEffect(() => {
+    // Disable the browser's automatic scroll restoration on reload
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    
+    // Force instant scroll without smooth behavior
+    window.scrollTo(0, 0);
+    
+    // A micro-timeout acts as a failsafe if React/Browser painting overrides the first scroll
+    const timer = setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 50);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
   // Auto-slide carousel effect
   useEffect(() => {
     const interval = setInterval(() => {
@@ -381,6 +436,15 @@ const Tickets = () => {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  // Phone Animation Sequence Effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimationStep((prev) => (prev + 1) % 3);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, [ticketType]);
+
 
   const toggleFaq = (index) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -659,8 +723,14 @@ const Tickets = () => {
         <section className="relative bg-gradient-to-br from-indigo-950 via-blue-900 to-purple-900 text-white overflow-hidden w-full">
           <div className="absolute inset-0 w-full h-full">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-indigo-500/10"></div>
-            <div className="absolute top-1/4 left-1/4 w-64 h-64 sm:w-96 sm:h-96 lg:w-[500px] lg:h-[500px] bg-blue-500/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-64 h-64 sm:w-96 sm:h-96 lg:w-[500px] lg:h-[500px] bg-indigo-500/10 rounded-full blur-3xl"></div>
+            <motion.div 
+              animate={{ rotate: 360, scale: [1, 1.1, 1], x: [0, 50, 0] }} 
+              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+              className="absolute top-1/4 left-1/4 w-64 h-64 sm:w-96 sm:h-96 lg:w-[500px] lg:h-[500px] bg-blue-500/10 rounded-full blur-3xl"></motion.div>
+            <motion.div 
+              animate={{ rotate: -360, scale: [1, 1.2, 1], y: [0, -50, 0] }} 
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute bottom-1/4 right-1/4 w-64 h-64 sm:w-96 sm:h-96 lg:w-[500px] lg:h-[500px] bg-indigo-500/10 rounded-full blur-3xl"></motion.div>
           </div>
 
           <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 py-12 sm:py-16 lg:py-24">
@@ -773,17 +843,35 @@ const Tickets = () => {
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: false, amount: 0.3 }}
               className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 w-full"
             >
               {stats.map((stat, index) => (
                 <motion.div
                   key={index}
-                  variants={bounceIn}
-                  whileHover={{ scale: 1.05, y: -5 }}
+                  variants={cardHover3D}
+                  initial={{ 
+                    opacity: 0, 
+                    x: index % 2 === 0 ? -50 : 50, 
+                    y: 30 
+                  }}
+                  whileInView={{ 
+                    opacity: 1, 
+                    x: 0, 
+                    y: 0, 
+                    transition: { 
+                      type: 'tween', 
+                      ease: 'easeOut',
+                      duration: 0.6,
+                      delay: index * 0.1 
+                    } 
+                  }}
+                  whileHover="hover"
+                  viewport={{ once: false, amount: 0.1 }}
                   onHoverStart={() => setHoveredCard(index)}
                   onHoverEnd={() => setHoveredCard(null)}
-                  className={`group relative ${getCardGradient(index)} rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-5 lg:p-6 border border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300 ${getHoverColor(index)}`}
+                  className={`group relative ${getCardGradient(index)} rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-5 lg:p-6 border border-gray-200/50 shadow-lg transition-colors duration-300 ${getHoverColor(index)} transform-gpu`}
+                  style={{ transformStyle: 'preserve-3d', willChange: 'opacity, transform' }}
                 >
                   <motion.div
                     animate={hoveredCard === index ? { rotate: 360, scale: 1.1 } : { rotate: 0, scale: 1 }}
@@ -815,7 +903,7 @@ const Tickets = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               className="text-center mb-8 sm:mb-10 lg:mb-12"
             >
               <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-3 sm:mb-4">
@@ -834,17 +922,37 @@ const Tickets = () => {
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: false, amount: 0.2 }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 w-full"
             >
               {benefits.map((benefit, index) => (
                 <motion.div
                   key={index}
-                  variants={slideInUp}
-                  whileHover={{ scale: 1.02, y: -5 }}
+                  variants={cardHover3D}
+                  initial={{ 
+                    opacity: 0, 
+                    x: index % 2 === 0 ? -50 : 50, 
+                    y: 40,
+                    scale: 0.95 
+                  }}
+                  whileInView={{ 
+                    opacity: 1, 
+                    x: 0, 
+                    y: 0, 
+                    scale: 1, 
+                    transition: { 
+                      duration: 0.6, 
+                      type: 'tween', 
+                      ease: 'easeOut',
+                      delay: index * 0.1 
+                    } 
+                  }}
+                  whileHover="hover"
+                  viewport={{ once: false, amount: 0.1 }}
                   onHoverStart={() => setHoveredCard(index + 10)}
                   onHoverEnd={() => setHoveredCard(null)}
-                  className={`group relative ${getCardGradient(index)} rounded-xl sm:rounded-2xl lg:rounded-3xl p-5 sm:p-6 lg:p-8 border border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300 ${getHoverColor(index)}`}
+                  className={`group relative ${getCardGradient(index)} rounded-xl sm:rounded-2xl lg:rounded-3xl p-5 sm:p-6 lg:p-8 border border-gray-200/50 shadow-lg transition-colors duration-300 ${getHoverColor(index)} transform-gpu`}
+                  style={{ transformStyle: 'preserve-3d', willChange: 'opacity, transform' }}
                 >
                   <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5 lg:gap-6">
                     <motion.div
@@ -891,7 +999,7 @@ const Tickets = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               className="text-center mb-8 sm:mb-10 lg:mb-12"
             >
               <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-3 sm:mb-4">
@@ -910,7 +1018,7 @@ const Tickets = () => {
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               className="bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl lg:rounded-4xl shadow-2xl overflow-hidden border border-gray-200/50"
             >
               {/* Form Header */}
@@ -966,7 +1074,7 @@ const Tickets = () => {
                   initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: 0.1 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   className="bg-gradient-to-br from-blue-50/50 to-white rounded-xl sm:rounded-2xl lg:rounded-3xl p-5 sm:p-6 lg:p-8 border border-blue-100/50 shadow-lg hover:shadow-xl transition-all"
                 >
                   <div className="flex items-center gap-3 sm:gap-4 lg:gap-5 mb-4 sm:mb-5 lg:mb-6">
@@ -1268,7 +1376,7 @@ const Tickets = () => {
                   initial={{ opacity: 0, x: 30 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   className="bg-gradient-to-br from-indigo-50/50 to-white rounded-xl sm:rounded-2xl lg:rounded-3xl p-5 sm:p-6 lg:p-8 border border-indigo-100/50 shadow-lg hover:shadow-xl transition-all"
                 >
                   <div className="flex items-center gap-3 sm:gap-4 lg:gap-5 mb-4 sm:mb-5 lg:mb-6">
@@ -1355,7 +1463,7 @@ const Tickets = () => {
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.3 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg sm:rounded-xl lg:rounded-2xl p-4 sm:p-5 lg:p-6 border border-blue-200 shadow-md"
                 >
                   <div className="flex items-start gap-2 sm:gap-3 lg:gap-4">
@@ -1436,14 +1544,453 @@ const Tickets = () => {
           </div>
         </section>
 
+        {/* ================= LIVE PREVIEW SECTION ================= */}
+        <section className="w-full bg-white py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-12 xl:px-16 overflow-hidden relative">
+          {/* Decorative Background Elements */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
+          
+          <div className="max-w-7xl mx-auto relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: false }}
+              className="text-center mb-12 sm:mb-16"
+            >
+              <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-3 sm:mb-4">
+                <Sparkles size={16} className="text-blue-500" />
+                <span className="text-sm sm:text-base lg:text-lg font-medium text-blue-700">Live Journey Experience</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-4">
+                Visualize Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Travel</span>
+              </h2>
+              <p className="text-base lg:text-lg text-gray-600 max-w-2xl mx-auto">
+                {"See how seamlessly we handle your journey from booking to destination."}
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+              {/* Left Half - Mobile Phone Animation */}
+              <div className="flex justify-center items-center relative">
+                {/* Glow behind phone */}
+                <motion.div 
+                  animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                  className="absolute inset-0 bg-gradient-to-tr from-blue-400/30 to-purple-400/30 rounded-full blur-[60px] w-4/5 h-4/5 mx-auto"
+                ></motion.div>
+                
+                {/* Beautiful Modern Phone Outline */}
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  variants={floatingEffect}
+                  animate="animate"
+                  transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+                  viewport={{ once: false }}
+                  className="relative w-[300px] h-[600px] sm:w-[320px] sm:h-[640px] bg-gray-900 rounded-[50px] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.6)] border-[12px] border-gray-900 overflow-hidden flex-shrink-0 ring-4 ring-gray-800"
+                >
+                  {/* Dynamic Island / Notch */}
+                  <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-[120px] h-[30px] bg-black rounded-full z-50 flex items-center justify-between px-3">
+                    <div className="w-2 h-2 rounded-full bg-green-900/50 flex items-center justify-center">
+                      <div className="w-1 h-1 rounded-full bg-green-500"></div>
+                    </div>
+                    <div className="w-16 h-1.5 rounded-full bg-gray-800"></div>
+                  </div>
+
+                  {/* App Screen Content */}
+                  <div className="w-full h-full bg-gray-50 relative flex flex-col">
+                    {/* App Header */}
+                    <div className="bg-white px-5 pt-12 pb-4 shadow-sm z-40 relative flex justify-between items-center rounded-b-2xl">
+                        <div className="font-bold text-lg text-blue-600 flex items-center gap-1.5">
+                          <TicketIcon size={20} className="text-blue-500" /> GoTravio
+                        </div>
+                        <div className="bg-blue-50 text-blue-700 text-xs px-2.5 py-1 rounded-full font-bold border border-blue-100">
+                          {ticketType === "train" ? "IRCTC Partner" : "IATA Partner"}
+                        </div>
+                    </div>
+
+                    {/* Progress Bar inside app */}
+                    <div className="px-5 py-4 bg-white/50 backdrop-blur-sm z-30">
+                      <div className="flex justify-between items-center relative">
+                        <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-200 transform -translate-y-1/2 rounded-full"></div>
+                        <motion.div 
+                          className="absolute top-1/2 left-0 h-1 bg-green-500 transform -translate-y-1/2 rounded-full transition-all duration-1000 ease-in-out"
+                          animate={{ width: animationStep === 0 ? "0%" : animationStep === 1 ? "50%" : "100%" }}
+                        ></motion.div>
+                        
+                        {[0, 1, 2].map((step) => (
+                          <div key={step} className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-colors duration-500 ${animationStep >= step ? 'bg-green-500 text-white shadow-md shadow-green-200' : 'bg-white text-gray-400 border border-gray-200'}`}>
+                            {animationStep > step ? <Check size={12} strokeWidth={3} /> : step + 1}
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex justify-between mt-2 text-[10px] font-medium text-gray-500">
+                        <span className={animationStep >= 0 ? "text-gray-900" : ""}>Book</span>
+                        <span className={animationStep >= 1 ? "text-gray-900" : ""}>{ticketType === "train" ? "Travel" : "Fly"}</span>
+                        <span className={animationStep >= 2 ? "text-gray-900" : ""}>Arrive</span>
+                      </div>
+                    </div>
+
+                    {/* Animation Container */}
+                    <div className="flex-1 relative bg-gray-100 overflow-hidden">
+                      <AnimatePresence mode="wait">
+                        {animationStep === 0 && (
+                          <motion.div
+                            key="step1"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, x: -50 }}
+                            transition={{ duration: 0.5 }}
+                            className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-white"
+                          >
+                            <motion.div 
+                                animate={{ scale: [1, 1.05, 1], rotate: [0, 5, -5, 0] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                                className="w-24 h-24 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center shadow-lg shadow-blue-100 mb-6"
+                            >
+                                <TicketIcon size={40} />
+                            </motion.div>
+                            <h4 className="font-bold text-gray-900 text-xl text-center mb-2">Booking Confirmed!</h4>
+                            <p className="text-gray-500 text-sm text-center mb-6">Your {ticketType} ticket is successfully generated with confirmed seat.</p>
+                            
+                            <div className="w-full bg-gray-50 p-4 rounded-xl border border-gray-100 shadow-sm relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-16 h-16 bg-blue-100 rounded-bl-full -mr-8 -mt-8"></div>
+                                <div className="flex justify-between items-center mb-3">
+                                  <span className="text-xs font-bold text-gray-400">PNR: 8472910384</span>
+                                  <span className="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-bold">CONFIRMED</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <div>
+                                    <p className="text-lg font-bold text-gray-900">{form.from || "DEL"}</p>
+                                    <p className="text-xs text-gray-500">10:30 AM</p>
+                                  </div>
+                                  <div className="flex flex-col items-center px-4">
+                                    {ticketType === "train" ? <Train size={16} className="text-blue-500" /> : <Plane size={16} className="text-blue-500" />}
+                                    <div className="w-12 border-t-2 border-dashed border-gray-300 my-1"></div>
+                                  </div>
+                                  <div className="text-right">
+                                    <p className="text-lg font-bold text-gray-900">{form.to || "BOM"}</p>
+                                    <p className="text-xs text-gray-500">02:45 PM</p>
+                                  </div>
+                                </div>
+                            </div>
+                          </motion.div>
+                        )}
+
+                        {animationStep === 1 && (
+                          <motion.div
+                            key="step2"
+                            initial={{ opacity: 0, x: 50 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -50 }}
+                            transition={{ duration: 0.5 }}
+                            className="absolute inset-0 flex flex-col items-center justify-center p-0"
+                          >
+                            <div className="w-full h-full relative">
+                              <img 
+                                src={ticketType === "train" ? "/sunsettrain.png" : "/sunsetflight.png"} 
+                                alt={ticketType === "train" ? "Train Journey" : "Flight Journey"}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.target.onerror = null; 
+                                  e.target.src = ticketType === "train" 
+                                    ? "https://images.unsplash.com/photo-1549693578-cbc250fa91bf?auto=format&fit=crop&q=80&w=800" 
+                                    : "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=800";
+                                }}
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
+                              
+                              <div className="absolute bottom-10 left-0 right-0 p-6 text-white text-center">
+                                <motion.div 
+                                    animate={{ y: [0, -10, 0] }}
+                                    transition={{ duration: 2, repeat: Infinity }}
+                                    className="bg-white/20 backdrop-blur-md w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30"
+                                >
+                                    {ticketType === "train" ? <Train size={30} /> : <Plane size={30} />}
+                                </motion.div>
+                                <h4 className="font-bold text-2xl mb-1 shadow-sm">Journey Started</h4>
+                                <p className="text-white/80 text-sm">Enjoy your comfortable trip</p>
+                                
+                                <div className="mt-6 bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 text-left">
+                                  <div className="flex justify-between text-xs text-white/70 mb-1">
+                                    <span>Distance Covered</span>
+                                    <span>65%</span>
+                                  </div>
+                                  <div className="w-full h-1.5 bg-white/20 rounded-full overflow-hidden">
+                                     <motion.div 
+                                        initial={{ width: "20%" }}
+                                        animate={{ width: "80%" }}
+                                        transition={{ duration: 3.5, ease: "linear" }}
+                                        className="h-full bg-white rounded-full"
+                                     ></motion.div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+
+                        {animationStep === 2 && (
+                          <motion.div
+                            key="step3"
+                            initial={{ opacity: 0, x: 50 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.5 }}
+                            className="absolute inset-0 flex flex-col items-center justify-center p-0"
+                          >
+                             <div className="w-full h-full relative">
+                              <img 
+                                src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&q=80&w=800" 
+                                alt="Destination Arrival"
+                                className="w-full h-full object-cover"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/90 via-emerald-900/50 to-transparent"></div>
+                              
+                              <div className="absolute bottom-10 left-0 right-0 p-6 text-white text-center">
+                                <motion.div 
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                                    className="bg-emerald-500 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-lg"
+                                >
+                                    <MapPin size={36} className="text-white" />
+                                </motion.div>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3 }}
+                                >
+                                    <h4 className="font-bold text-3xl mb-1 drop-shadow-md">Arrived!</h4>
+                                    <p className="text-emerald-100 text-sm font-medium mb-6">Welcome to your destination</p>
+                                    
+                                    <button className="bg-white text-emerald-700 w-full py-3.5 rounded-xl font-bold hover:bg-emerald-50 transition-colors shadow-xl">
+                                      Rate Your Journey
+                                    </button>
+                                </motion.div>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Right Half - Destination Suggestions */}
+              <div className="flex flex-col h-full justify-center space-y-6 sm:space-y-8">
+                <div>
+                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
+                    Top Destinations For {ticketType === "train" ? "Train" : "Fly"}
+                  </h3>
+                  <p className="text-base sm:text-lg text-gray-600">
+                    {ticketType === "train" 
+                      ? "Discover breathtaking domestic locations reachable by our extensive railway network." 
+                      : "Explore the far stretches and breathtaking landscapes of India through our fast and premium flight bookings."}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+                  {ticketType === "train" ? (
+                    <>
+                      {/* Train Destination Card 1 */}
+                      <motion.div 
+                        initial={{ opacity: 0, x: -50, y: 30 }}
+                        whileInView={{ opacity: 1, x: 0, y: 0, transition: { duration: 0.6, type: 'tween', ease: 'easeOut', delay: 0.1 } }}
+                        viewport={{ once: false, amount: 0.2 }}
+                        whileHover={{ y: -8, scale: 1.02 }}
+                        className="group relative rounded-2xl overflow-hidden shadow-lg h-48 sm:h-56 lg:h-64 cursor-pointer transform-gpu"
+                        style={{ willChange: 'opacity, transform' }}
+                      >
+                        <img 
+                          src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&q=80&w=800" 
+                          alt="Taj Mahal, Agra" 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/20 to-transparent"></div>
+                        <div className="absolute bottom-0 left-0 p-4 w-full">
+                          <div className="flex justify-between items-end">
+                            <div>
+                              <p className="text-white/80 text-xs font-medium mb-1 inline-flex items-center gap-1">
+                                <MapPin size={10} /> Agra, India
+                              </p>
+                              <h4 className="text-white font-bold text-lg sm:text-xl">The Taj Mahal</h4>
+                            </div>
+                            <div className="bg-white/20 backdrop-blur-md rounded-full p-2 text-white opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
+                              <Train size={16} />
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+
+                      {/* Train Destination Card 2 */}
+                      <motion.div 
+                        initial={{ opacity: 0, x: 50, y: 30 }}
+                        whileInView={{ opacity: 1, x: 0, y: 0, transition: { duration: 0.6, type: 'tween', ease: 'easeOut', delay: 0.2 } }}
+                        viewport={{ once: false, amount: 0.2 }}
+                        whileHover={{ y: -8, scale: 1.02 }}
+                        className="group relative rounded-2xl overflow-hidden shadow-lg h-48 sm:h-56 lg:h-64 cursor-pointer transform-gpu"
+                        style={{ willChange: 'opacity, transform' }}
+                      >
+                        <img 
+                          src="https://images.unsplash.com/photo-1506461883276-594a12b11cf3?auto=format&fit=crop&q=80&w=800" 
+                          alt="Goa Beaches" 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/20 to-transparent"></div>
+                        <div className="absolute bottom-0 left-0 p-4 w-full">
+                          <div className="flex justify-between items-end">
+                            <div>
+                              <p className="text-white/80 text-xs font-medium mb-1 inline-flex items-center gap-1">
+                                <MapPin size={10} /> Goa, India
+                              </p>
+                              <h4 className="text-white font-bold text-lg sm:text-xl">Pristine Beaches</h4>
+                            </div>
+                            <div className="bg-white/20 backdrop-blur-md rounded-full p-2 text-white opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
+                              <Train size={16} />
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+
+                      {/* Train Destination Card 3 (Full width in grid) */}
+                      <motion.div 
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0, transition: { duration: 0.6, type: 'tween', ease: 'easeOut', delay: 0.3 } }}
+                        viewport={{ once: false, amount: 0.2 }}
+                        whileHover={{ y: -8, scale: 1.02 }}
+                        className="group relative rounded-2xl overflow-hidden shadow-lg h-48 sm:h-56 lg:h-48 sm:col-span-2 cursor-pointer transform-gpu"
+                        style={{ willChange: 'opacity, transform' }}
+                      >
+                        <img 
+                          src="https://images.unsplash.com/photo-1587595431973-160d0d94add1?auto=format&fit=crop&q=80&w=1200" 
+                          alt="Jaipur, Rajasthan" 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/20 to-transparent"></div>
+                        <div className="absolute bottom-0 left-0 p-5 sm:p-6 w-full flex justify-between items-end">
+                          <div>
+                            <div className="bg-indigo-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">Popular</div>
+                            <h4 className="text-white font-bold text-xl sm:text-2xl mb-1">Pink City, Jaipur</h4>
+                            <p className="text-white/80 text-sm font-medium flex items-center gap-1">
+                              <MapPin size={12} /> Rajasthan, India
+                            </p>
+                          </div>
+                          <button className="hidden sm:inline-flex bg-white text-gray-900 px-4 py-2 rounded-xl text-sm font-bold items-center gap-2 hover:bg-gray-100 transition-colors shadow-md">
+                            Explore <ChevronRight size={14} />
+                          </button>
+                        </div>
+                      </motion.div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Flight Destination Card 1 */}
+                      <motion.div 
+                        initial={{ opacity: 0, x: -50, y: 30 }}
+                        whileInView={{ opacity: 1, x: 0, y: 0, transition: { duration: 0.6, type: 'tween', ease: 'easeOut', delay: 0.1 } }}
+                        viewport={{ once: false, amount: 0.2 }}
+                        whileHover={{ y: -8, scale: 1.02 }}
+                        className="group relative rounded-2xl overflow-hidden shadow-lg h-48 sm:h-56 lg:h-64 cursor-pointer transform-gpu"
+                        style={{ willChange: 'opacity, transform' }}
+                      >
+                        <img 
+                          src="https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&q=80&w=800" 
+                          alt="Kashmir" 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/20 to-transparent"></div>
+                        <div className="absolute bottom-0 left-0 p-4 w-full">
+                          <div className="flex justify-between items-end">
+                            <div>
+                              <p className="text-white/80 text-xs font-medium mb-1 inline-flex items-center gap-1">
+                                <MapPin size={10} /> Srinagar, J&K
+                              </p>
+                              <h4 className="text-white font-bold text-lg sm:text-xl">Paradise on Earth</h4>
+                            </div>
+                            <div className="bg-white/20 backdrop-blur-md rounded-full p-2 text-white opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
+                              <Plane size={16} />
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+
+                      {/* Flight Destination Card 2 */}
+                      <motion.div 
+                        initial={{ opacity: 0, x: 50, y: 30 }}
+                        whileInView={{ opacity: 1, x: 0, y: 0, transition: { duration: 0.6, type: 'tween', ease: 'easeOut', delay: 0.2 } }}
+                        viewport={{ once: false, amount: 0.2 }}
+                        whileHover={{ y: -8, scale: 1.02 }}
+                        className="group relative rounded-2xl overflow-hidden shadow-lg h-48 sm:h-56 lg:h-64 cursor-pointer transform-gpu"
+                        style={{ willChange: 'opacity, transform' }}
+                      >
+                        <img 
+                          src="https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&q=80&w=800" 
+                          alt="Andaman Islands" 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/20 to-transparent"></div>
+                        <div className="absolute bottom-0 left-0 p-4 w-full">
+                          <div className="flex justify-between items-end">
+                            <div>
+                              <p className="text-white/80 text-xs font-medium mb-1 inline-flex items-center gap-1">
+                                <MapPin size={10} /> Havelock, Andaman
+                              </p>
+                              <h4 className="text-white font-bold text-lg sm:text-xl">Tropical Getaway</h4>
+                            </div>
+                            <div className="bg-white/20 backdrop-blur-md rounded-full p-2 text-white opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
+                              <Plane size={16} />
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+
+                      {/* Flight Destination Card 3 (Full width in grid) */}
+                      <motion.div 
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0, transition: { duration: 0.6, type: 'tween', ease: 'easeOut', delay: 0.3 } }}
+                        viewport={{ once: false, amount: 0.2 }}
+                        whileHover={{ y: -8, scale: 1.02 }}
+                        className="group relative rounded-2xl overflow-hidden shadow-lg h-48 sm:h-56 lg:h-48 sm:col-span-2 cursor-pointer transform-gpu"
+                        style={{ willChange: 'opacity, transform' }}
+                      >
+                        <img 
+                          src="https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&q=80&w=1200" 
+                          alt="Munnar, Kerala" 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/20 to-transparent"></div>
+                        <div className="absolute bottom-0 left-0 p-5 sm:p-6 w-full flex justify-between items-end">
+                          <div>
+                            <div className="bg-blue-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">Popular</div>
+                            <h4 className="text-white font-bold text-xl sm:text-2xl mb-1">God's Own Country</h4>
+                            <p className="text-white/80 text-sm font-medium flex items-center gap-1">
+                              <MapPin size={12} /> Munnar, Kerala
+                            </p>
+                          </div>
+                          <button className="hidden sm:inline-flex bg-white text-gray-900 px-4 py-2 rounded-xl text-sm font-bold items-center gap-2 hover:bg-gray-100 transition-colors shadow-md">
+                            Explore <ChevronRight size={14} />
+                          </button>
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
         {/* ================= PROCESS SECTION ================= */}
+
         <section className="w-full bg-gradient-to-b from-white to-gray-50 py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-12 xl:px-16">
           <div className="w-full">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               className="text-center mb-8 sm:mb-10 lg:mb-12"
             >
               <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
@@ -1458,7 +2005,7 @@ const Tickets = () => {
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: false, amount: 0.3 }}
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 w-full"
             >
               {processSteps.map((step, index) => (
@@ -1509,7 +2056,7 @@ const Tickets = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               className="text-center mb-8 sm:mb-10 lg:mb-12"
             >
               <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-3 sm:mb-4">
@@ -1587,7 +2134,7 @@ const Tickets = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               className="text-center mb-8 sm:mb-10 lg:mb-12"
             >
               <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-2 sm:mb-3">
@@ -1605,7 +2152,7 @@ const Tickets = () => {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   className={`${getCardGradient(index)} rounded-xl sm:rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 overflow-hidden`}
                 >
                   <button
@@ -1647,7 +2194,7 @@ const Tickets = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               className="mt-8 sm:mt-10 text-center"
             >
               <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-4 sm:px-6 py-3 sm:py-4">

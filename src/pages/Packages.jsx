@@ -156,7 +156,7 @@ const staggerContainer = {
 const AnimatedSection = ({ children, direction = "left", delay = 0, className = "", id = "" }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { 
-    once: true,  // This ensures animation only happens once
+    once: false,  // This ensures animation only happens once
     amount: 0.2,
     margin: "-50px 0px -50px 0px"
   });
@@ -207,15 +207,28 @@ const AnimatedCard = ({ children, index = 0, className = "" }) => {
   
   return (
     <motion.div
-      variants={fadeInScale}
-      custom={index}
+      initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50, y: 30, scale: 0.95 }}
+      whileInView={{ 
+        opacity: 1, 
+        x: 0, 
+        y: 0, 
+        scale: 1,
+        transition: { 
+          duration: 0.6, 
+          type: 'tween', 
+          ease: 'easeOut',
+          delay: index * 0.1 
+        } 
+      }}
+      viewport={{ once: false, amount: 0.1 }}
       whileHover={{ 
         y: -8,
         transition: { duration: 0.3 }
       }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
-      className={`relative ${className}`}
+      className={`relative ${className} transform-gpu`}
+      style={{ willChange: 'opacity, transform' }}
     >
       {/* Animated shadow on hover */}
       <motion.div
@@ -1236,7 +1249,8 @@ const PackageCard = ({ pkg, onEnquire, index }) => {
           whileHover={{ y: -8 }}
           onHoverStart={() => setHovered(true)}
           onHoverEnd={() => setHovered(false)}
-          className={`group relative ${getCardGradient(index)} rounded-2xl sm:rounded-3xl lg:rounded-4xl overflow-hidden border border-gray-200/50 shadow-lg hover:shadow-2xl transition-all duration-500`}
+          className={`group relative ${getCardGradient(index)} rounded-2xl sm:rounded-3xl lg:rounded-4xl overflow-hidden border border-gray-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 transform-gpu`}
+          style={{ willChange: 'opacity, transform', transformStyle: 'preserve-3d' }}
         >
           <div className="relative h-48 sm:h-56 lg:h-72 overflow-hidden">
             <motion.img
@@ -1543,7 +1557,7 @@ const ImageCarousel = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             className="text-center mb-8 sm:mb-10 lg:mb-12"
           >
             <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-3 sm:mb-4">
@@ -1662,7 +1676,7 @@ const FAQSection = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             className="text-center mb-8 sm:mb-10 lg:mb-12"
           >
             <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 sm:px-5 py-2 sm:py-3 mb-3 sm:mb-4">
@@ -1684,7 +1698,7 @@ const FAQSection = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 className={`${getCardGradient(index)} rounded-xl sm:rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 overflow-hidden`}
               >
                 <button
@@ -1725,7 +1739,7 @@ const FAQSection = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             className="mt-8 sm:mt-10 text-center"
           >
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full px-4 sm:px-6 py-3 sm:py-4">
@@ -2179,7 +2193,7 @@ const Packages = () => {
                   variants={staggerContainer}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: true, amount: 0.1 }}
+                  viewport={{ once: false, amount: 0.1 }}
                   className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 xl:gap-8"
                 >
                   {filteredPackages.map((pkg, index) => (

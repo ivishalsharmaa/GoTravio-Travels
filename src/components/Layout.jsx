@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-blue-50 overflow-x-hidden">
       <Navbar />
       
       {/* Animated Background Elements */}
@@ -26,8 +26,8 @@ const Layout = ({ children }) => {
       {/* Modern Footer */}
       <footer className="relative z-10 border-t border-gray-200 bg-white/80 backdrop-blur-sm mt-20">
         {/* ... rest of your footer code remains exactly the same ... */}
-        <div className="max-w-7xl mx-auto px-4 py-10 md:py-12">
-          <div className="grid md:grid-cols-4 gap-8">
+        <div className="w-full max-w-7xl mx-auto px-4 py-10 md:py-12 overflow-hidden">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 w-full">
             {/* Brand Section */}
             <div className="space-y-4">
               <Link to="/" className="flex items-center gap-3 group">
@@ -128,9 +128,9 @@ const Layout = ({ children }) => {
                   </div>
                 </div>
                 
-                <div className="flex items-start gap-3">
-                  <span className="text-gray-500 mt-1">✉️</span>
-                  <a href="mailto:gotravio.travel@gmail.com" className="text-sm text-gray-600 hover:text-blue-600">
+                <div className="flex items-start gap-3 w-full pr-2">
+                  <span className="text-gray-500 mt-1 flex-shrink-0">✉️</span>
+                  <a href="mailto:gotravio.travel@gmail.com" className="text-sm text-gray-600 hover:text-blue-600 break-all w-full">
                     gotravio.travel@gmail.com
                   </a>
                 </div>

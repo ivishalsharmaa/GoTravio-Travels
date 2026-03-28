@@ -170,7 +170,7 @@ const AnimatedSection = memo(({ children, delay = 0, className = "", direction =
   const ref = useRef(null);
   // Ultra-fast trigger
   const inView = useInView(ref, { 
-    once: true, 
+    once: false, 
     amount: 0.05,
     margin: "-10px"
   });
@@ -568,7 +568,7 @@ const AboutUs = () => {
         schemaData={[aboutSchema, faqSchema, organizationSchema]}
       />
 
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white overflow-x-hidden">
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
         
         {/* ================= HERO SECTION (SAME UI) ================= */}
         <AnimatedSection direction="down">
@@ -663,7 +663,7 @@ const AboutUs = () => {
                 variants={staggerContainer}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, amount: 0.2 }}
+                viewport={{ once: false, amount: 0.2 }}
                 className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"
               >
                 {stats.map((stat, index) => (
@@ -722,7 +722,7 @@ const AboutUs = () => {
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.1 }}
-                      viewport={{ once: true }}
+                      viewport={{ once: false }}
                     >
                       GoTravio was founded in November 2025 with a clear vision: <span className="font-semibold text-blue-600">to make travel planning simple, personal, and stress-free for every Indian traveler.</span> Our founder, after years of struggling with impersonal booking platforms and automated customer service, decided it was time for a change.
                     </motion.p>
@@ -730,7 +730,7 @@ const AboutUs = () => {
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.2 }}
-                      viewport={{ once: true }}
+                      viewport={{ once: false }}
                     >
                       We started with a simple belief - that behind every travel plan is a person with unique needs, preferences, and dreams. Whether it's a family vacation, a business trip, or an emergency journey, travelers deserve personalized attention and expert guidance.
                     </motion.p>
@@ -738,7 +738,7 @@ const AboutUs = () => {
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.3 }}
-                      viewport={{ once: true }}
+                      viewport={{ once: false }}
                     >
                       Today, we serve customers <span className="font-bold text-blue-600">across India</span> - from the bustling streets of Mumbai to the serene hills of Manali, from the beaches of Goa to the temples of Tamil Nadu. Our network of 200+ verified partners ensures that wherever you want to go, we can help you get there.
                     </motion.p>
@@ -746,7 +746,7 @@ const AboutUs = () => {
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.4 }}
-                      viewport={{ once: true }}
+                      viewport={{ once: false }}
                       className="bg-blue-50 p-4 rounded-xl italic"
                     >
                       "We're not just another travel website. We're your personal travel assistant - available 24/7, always honest, and genuinely invested in making your journey memorable."
@@ -774,7 +774,7 @@ const AboutUs = () => {
                           initial={{ opacity: 0, x: 20 }}
                           whileInView={{ opacity: 1, x: 0 }}
                           transition={{ delay: index * 0.1 }}
-                          viewport={{ once: true }}
+                          viewport={{ once: false }}
                           whileHover={{ scale: 1.02, x: 5 }}
                           className={`flex gap-4 items-start p-2 rounded-lg transition-all ${getCardGradient(index)}`}
                         >
@@ -832,7 +832,7 @@ const AboutUs = () => {
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
+              viewport={{ once: false, amount: 0.1 }}
               className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
               {advantages.map((advantage, index) => (
@@ -859,7 +859,7 @@ const AboutUs = () => {
                         initial={{ opacity: 0, x: -10 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ delay: idx * 0.1 }}
-                        viewport={{ once: true }}
+                        viewport={{ once: false }}
                         className="flex items-start gap-2 text-gray-600"
                       >
                         <CheckCircle size={16} className={`${getIconColor(idx)} flex-shrink-0 mt-1`} />
@@ -901,41 +901,83 @@ const AboutUs = () => {
               </div>
             </AnimatedSection>
 
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
-            >
-              {coreValues.map((value, index) => (
-                <motion.div
-                  key={index}
-                  variants={fadeInScale}
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  onHoverStart={() => setHoveredCard(index + 20)}
-                  onHoverEnd={() => setHoveredCard(null)}
-                  className={`group relative ${getCardGradient(index)} rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-100`}
-                >
+            <div className="flex flex-col-reverse lg:flex-row gap-8 lg:gap-12 items-center">
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.2 }}
+                className="grid sm:grid-cols-2 gap-6 w-full lg:w-3/5"
+              >
+                {coreValues.map((value, index) => (
                   <motion.div
-                    animate={hoveredCard === index + 20 ? { rotate: 360, scale: 1.1 } : { rotate: 0, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                    className={`inline-flex p-3 rounded-xl mb-4 ${getIconColor(index)}`}
+                    key={index}
+                    variants={fadeInScale}
+                    whileHover={{ y: -5, scale: 1.02 }}
+                    onHoverStart={() => setHoveredCard(index + 20)}
+                    onHoverEnd={() => setHoveredCard(null)}
+                    className={`group relative ${getCardGradient(index)} rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-100`}
                   >
-                    {value.icon}
+                    <motion.div
+                      animate={hoveredCard === index + 20 ? { rotate: 360, scale: 1.1 } : { rotate: 0, scale: 1 }}
+                      transition={{ duration: 0.5 }}
+                      className={`inline-flex p-3 rounded-xl mb-4 ${getIconColor(index)}`}
+                    >
+                      {value.icon}
+                    </motion.div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">{value.title}</h3>
+                    <p className="text-gray-600">{value.desc}</p>
+                    
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={hoveredCard === index + 20 ? { scale: 1, opacity: 0.1 } : { scale: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute inset-0 bg-indigo-500 rounded-2xl"
+                    />
                   </motion.div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{value.title}</h3>
-                  <p className="text-gray-600">{value.desc}</p>
-                  
+                ))}
+              </motion.div>
+
+              <AnimatedSection direction="right" className="w-full lg:w-2/5">
+                <div className="relative">
                   <motion.div
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={hoveredCard === index + 20 ? { scale: 1, opacity: 0.1 } : { scale: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="absolute inset-0 bg-indigo-500 rounded-2xl"
+                    animate={{ y: [-15, 15, -15] }}
+                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                    className="relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white aspect-square md:aspect-[4/3] lg:aspect-square z-10"
+                  >
+                    <img 
+                      src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=800"
+                      alt="Travel Principles"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/30 to-purple-900/30 mix-blend-overlay"></div>
+                  </motion.div>
+
+                  {/* Floating Image 1 */}
+                  <motion.div
+                    animate={{ y: [10, -10, 10], rotate: [5, -5, 5] }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    className="absolute -bottom-8 -left-8 w-32 h-32 sm:w-48 sm:h-48 rounded-[2rem] overflow-hidden shadow-2xl border-[6px] border-white z-20 hidden md:block"
+                  >
+                    <img src="https://images.unsplash.com/photo-1503220317375-aaad61436b1b?auto=format&fit=crop&w=400&q=80" className="w-full h-full object-cover" alt="Travel vibe"/>
+                  </motion.div>
+
+                  {/* Floating Image 2 */}
+                  <motion.div
+                    animate={{ y: [-10, 10, -10], rotate: [-5, 5, -5] }}
+                    transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                    className="absolute -top-8 -right-6 w-24 h-24 sm:w-40 sm:h-40 rounded-[2rem] overflow-hidden shadow-2xl border-[6px] border-white z-20 hidden md:block"
+                  >
+                    <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80" className="w-full h-full object-cover" alt="Explore"/>
+                  </motion.div>
+                  <motion.div
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-blue-400/20 to-purple-400/20 rounded-full blur-3xl -z-10"
                   />
-                </motion.div>
-              ))}
-            </motion.div>
+                </div>
+              </AnimatedSection>
+            </div>
           </div>
         </section>
 
@@ -964,7 +1006,7 @@ const AboutUs = () => {
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
+              viewport={{ once: false, amount: 0.1 }}
               className="grid md:grid-cols-2 gap-8"
             >
               {serviceFeatures.map((service, index) => (
@@ -1001,7 +1043,7 @@ const AboutUs = () => {
                         initial={{ opacity: 0, x: -10 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ delay: idx * 0.1 }}
-                        viewport={{ once: true }}
+                        viewport={{ once: false }}
                         className="flex items-start gap-2"
                       >
                         <CheckCircle size={18} className={`${getIconColor(idx)} flex-shrink-0 mt-0.5`} />
@@ -1050,7 +1092,7 @@ const AboutUs = () => {
                 variants={staggerContainer}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 className="flex flex-wrap justify-center gap-3 text-sm"
               >
                 {["Mumbai", "Delhi", "Bangalore", "Chennai", "Kolkata", "Hyderabad", "Pune", "Ahmedabad", "Jaipur", "Lucknow", "Goa", "Chandigarh", "Kochi", "Indore", "Nagpur", "And 500+ more locations"].map((city, idx) => (
@@ -1089,45 +1131,88 @@ const AboutUs = () => {
               </div>
             </AnimatedSection>
 
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-            >
-              {travelTips.map((tip, index) => (
-                <motion.div
-                  key={index}
-                  variants={fadeInScale}
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  onHoverStart={() => setHoveredCard(index + 40)}
-                  onHoverEnd={() => setHoveredCard(null)}
-                  className={`group relative ${getCardGradient(index)} rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all border border-gray-200`}
-                >
-                  <div className={`h-2 bg-gradient-to-r ${getIconColor(index)}`}></div>
-                  <div className="p-6">
-                    <motion.span
-                      whileHover={{ scale: 1.05 }}
-                      className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3 ${getCardGradient(index)} ${getIconColor(index)}`}
-                    >
-                      {tip.category}
-                    </motion.span>
-                    <h3 className={`text-lg font-bold text-gray-900 mb-2 group-hover:${getIconColor(index)} transition-colors`}>
-                      {tip.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm">{tip.tip}</p>
-                  </div>
+            <div className="flex flex-col-reverse lg:flex-row gap-8 lg:gap-12 items-center">
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.2 }}
+                className="grid sm:grid-cols-2 gap-6 w-full lg:w-3/5"
+              >
+                {travelTips.map((tip, index) => (
+                  <motion.div
+                    key={index}
+                    variants={fadeInScale}
+                    whileHover={{ y: -5, scale: 1.02 }}
+                    onHoverStart={() => setHoveredCard(index + 40)}
+                    onHoverEnd={() => setHoveredCard(null)}
+                    className={`group relative ${getCardGradient(index)} rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all border border-gray-200`}
+                  >
+                    <div className={`h-2 bg-gradient-to-r ${getIconColor(index)}`}></div>
+                    <div className="p-6">
+                      <motion.span
+                        whileHover={{ scale: 1.05 }}
+                        className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3 ${getCardGradient(index)} ${getIconColor(index)}`}
+                      >
+                        {tip.category}
+                      </motion.span>
+                      <h3 className={`text-lg font-bold text-gray-900 mb-2 group-hover:${getIconColor(index)} transition-colors`}>
+                        {tip.title}
+                      </h3>
+                      <p className="text-gray-600 text-sm">{tip.tip}</p>
+                    </div>
+                    
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={hoveredCard === index + 40 ? { scale: 1, opacity: 0.1 } : { scale: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute inset-0 bg-indigo-500 pointer-events-none"
+                    />
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              <AnimatedSection direction="right" className="w-full lg:w-2/5">
+                <div className="relative">
+                  <motion.div
+                    animate={{ y: [-15, 15, -15], rotate: [0, 1, -1, 0] }}
+                    transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+                    className="relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white aspect-square md:aspect-[4/3] lg:aspect-square z-10"
+                  >
+                    <img 
+                      src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=800"
+                      alt="Travel Guide"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/30 to-teal-900/30 mix-blend-overlay"></div>
+                  </motion.div>
+
+                  {/* Floating Image 1 */}
+                  <motion.div
+                    animate={{ y: [12, -12, 12], rotate: [-8, 8, -8] }}
+                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    className="absolute -bottom-6 -left-8 w-32 h-32 sm:w-48 sm:h-48 rounded-[2rem] overflow-hidden shadow-2xl border-[6px] border-white z-20 hidden md:block"
+                  >
+                    <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=400&q=80" className="w-full h-full object-cover" alt="Travel Bag"/>
+                  </motion.div>
+
+                  {/* Floating Image 2 */}
+                  <motion.div
+                    animate={{ y: [-10, 10, -10], rotate: [6, -6, 6] }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                    className="absolute top-10 -right-8 w-24 h-24 sm:w-36 sm:h-36 rounded-[2rem] overflow-hidden shadow-2xl border-[6px] border-white z-20 hidden md:block"
+                  >
+                    <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=400&q=80" className="w-full h-full object-cover" alt="Map"/>
+                  </motion.div>
                   
                   <motion.div
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={hoveredCard === index + 40 ? { scale: 1, opacity: 0.1 } : { scale: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="absolute inset-0 bg-indigo-500"
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-cyan-400/20 to-blue-400/20 rounded-full blur-3xl -z-10"
                   />
-                </motion.div>
-              ))}
-            </motion.div>
+                </div>
+              </AnimatedSection>
+            </div>
           </div>
         </section>
 
@@ -1152,62 +1237,115 @@ const AboutUs = () => {
               </div>
             </AnimatedSection>
 
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
-              className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-            >
-              {testimonials.map((testimonial, index) => (
-                <motion.div
-                  key={index}
-                  variants={fadeInScale}
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  onHoverStart={() => setHoveredCard(index + 50)}
-                  onHoverEnd={() => setHoveredCard(null)}
-                  className={`group relative ${getCardGradient(index)} rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-200`}
-                >
+            <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
+              <AnimatedSection direction="left" className="w-full lg:w-1/3">
+                <div className="relative max-w-sm mx-auto lg:max-w-none">
                   <motion.div
-                    animate={hoveredCard === index + 50 ? { rotate: 360, scale: 1.1 } : { rotate: 0, scale: 1 }}
-                    transition={{ duration: 0.5 }}
+                    animate={{ scale: [1, 1.05, 1], rotate: [0, 2, -2, 0] }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                    className="relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white aspect-[4/5] object-cover z-10"
                   >
-                    <Quote className={`absolute top-4 right-4 w-8 h-8 ${getIconColor(index)} opacity-30`} />
-                  </motion.div>
-                  <div className="flex items-center gap-1 mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <motion.div
-                        key={i}
-                        animate={hoveredCard === index + 50 ? { scale: [1, 1.2, 1] } : { scale: 1 }}
-                        transition={{ duration: 0.3, delay: i * 0.1 }}
-                      >
-                        <Star key={i} size={16} className="fill-yellow-400 text-yellow-400" />
-                      </motion.div>
-                    ))}
-                  </div>
-                  <p className="text-gray-700 mb-4 italic">"{testimonial.text}"</p>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-bold text-gray-900">{testimonial.name}</p>
-                      <p className="text-sm text-gray-500">{testimonial.location}</p>
+                    <img 
+                      src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80"
+                      alt="Happy Travelers"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+                    <div className="absolute bottom-6 left-6 right-6 text-white text-center">
+                      <div className="flex justify-center mb-2">
+                        {[1,2,3,4,5].map((_, i) => <Star key={i} size={16} className="fill-yellow-400 text-yellow-400" />)}
+                      </div>
+                      <p className="font-bold text-lg md:text-xl">Trusted by 500+ Travelers</p>
                     </div>
-                    <motion.span
-                      whileHover={{ scale: 1.05 }}
-                      className={`text-xs px-3 py-1 rounded-full font-medium ${getCardGradient(index)} ${getIconColor(index)}`}
-                    >
-                      {testimonial.service}
-                    </motion.span>
-                  </div>
-                  
+                  </motion.div>
+
+                  {/* Floating Image 1 */}
                   <motion.div
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={hoveredCard === index + 50 ? { scale: 1, opacity: 0.1 } : { scale: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="absolute inset-0 bg-indigo-500 rounded-2xl"
+                    animate={{ y: [15, -15, 15], rotate: [-6, 6, -6] }}
+                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    className="absolute top-10 -left-12 w-28 h-28 sm:w-40 sm:h-40 rounded-[2rem] overflow-hidden shadow-2xl border-[6px] border-white z-20 hidden lg:block"
+                  >
+                    <img src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=400&q=80" className="w-full h-full object-cover" alt="Travel friends"/>
+                  </motion.div>
+
+                  {/* Floating Image 2 */}
+                  <motion.div
+                    animate={{ y: [-15, 15, -15], rotate: [6, -6, 6] }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                    className="absolute bottom-20 -right-8 w-32 h-32 sm:w-44 sm:h-44 rounded-[2rem] overflow-hidden shadow-2xl border-[6px] border-white z-20 hidden lg:block"
+                  >
+                    <img src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?auto=format&fit=crop&w=400&q=80" className="w-full h-full object-cover" alt="Happy trip"/>
+                  </motion.div>
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                    className="absolute -top-6 -left-6 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl -z-10"
                   />
-                </motion.div>
-              ))}
-            </motion.div>
+                  <motion.div
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                    className="absolute -bottom-6 -right-6 w-32 h-32 bg-purple-500/20 rounded-full blur-2xl -z-10"
+                  />
+                </div>
+              </AnimatedSection>
+
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.1 }}
+                className="grid sm:grid-cols-2 gap-4 sm:gap-6 w-full lg:w-2/3"
+              >
+                {testimonials.map((testimonial, index) => (
+                  <motion.div
+                    key={index}
+                    variants={fadeInScale}
+                    whileHover={{ y: -5, scale: 1.02 }}
+                    onHoverStart={() => setHoveredCard(index + 50)}
+                    onHoverEnd={() => setHoveredCard(null)}
+                    className={`group relative ${getCardGradient(index)} rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-200`}
+                  >
+                    <motion.div
+                      animate={hoveredCard === index + 50 ? { rotate: 360, scale: 1.1 } : { rotate: 0, scale: 1 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <Quote className={`absolute top-4 right-4 w-6 h-6 sm:w-8 sm:h-8 ${getIconColor(index)} opacity-30`} />
+                    </motion.div>
+                    <div className="flex items-center gap-1 mb-4">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          animate={hoveredCard === index + 50 ? { scale: [1, 1.2, 1] } : { scale: 1 }}
+                          transition={{ duration: 0.3, delay: i * 0.1 }}
+                        >
+                          <Star key={i} size={14} className="sm:w-4 sm:h-4 fill-yellow-400 text-yellow-400" />
+                        </motion.div>
+                      ))}
+                    </div>
+                    <p className="text-sm sm:text-base text-gray-700 mb-4 italic line-clamp-4">"{testimonial.text}"</p>
+                    <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-2 mt-auto">
+                      <div>
+                        <p className="font-bold text-gray-900 text-sm sm:text-base">{testimonial.name}</p>
+                        <p className="text-xs sm:text-sm text-gray-500">{testimonial.location}</p>
+                      </div>
+                      <motion.span
+                        whileHover={{ scale: 1.05 }}
+                        className={`text-[10px] sm:text-xs px-2 sm:px-3 py-1 rounded-full font-medium text-center whitespace-nowrap ${getCardGradient(index)} ${getIconColor(index)}`}
+                      >
+                        {testimonial.service}
+                      </motion.span>
+                    </div>
+                    
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={hoveredCard === index + 50 ? { scale: 1, opacity: 0.1 } : { scale: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute inset-0 bg-indigo-500 rounded-2xl pointer-events-none"
+                    />
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
           </div>
         </section>
 
@@ -1239,7 +1377,7 @@ const AboutUs = () => {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   whileHover={{ scale: 1.02 }}
                   className={`${getCardGradient(index)} rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-200 overflow-hidden`}
                 >
@@ -1285,7 +1423,7 @@ const AboutUs = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 className="text-3xl md:text-4xl font-bold mb-6"
               >
                 Ready to Plan Your Journey?
@@ -1294,7 +1432,7 @@ const AboutUs = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 className="text-xl text-blue-100 mb-8"
               >
                 Our travel experts are available 24/7 to help you with personalized assistance
@@ -1304,7 +1442,7 @@ const AboutUs = () => {
                 variants={staggerContainer}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 className="grid sm:grid-cols-3 gap-6 mb-8"
               >
                 <motion.a
@@ -1365,7 +1503,7 @@ const AboutUs = () => {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ delay: 0.6 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 className="flex justify-center gap-4"
               >
                 <motion.a
