@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SEO from "../components/SEO";
 import { API } from "../api.js";
+import TicketFanCarousel from "../components/TicketFanCarousel";
 import { 
   Train, 
   Calendar, 
@@ -897,6 +898,9 @@ const Tickets = () => {
         </section>
 
         {/* ================= BENEFITS SECTION ================= */}
+        <TicketFanCarousel />
+
+        {/* ================= TICKET ADVANTAGE / BENEFITS ================= */}
         <section className="w-full bg-gradient-to-b from-white to-gray-50 py-10 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-12 xl:px-16">
           <div className="w-full">
             <motion.div

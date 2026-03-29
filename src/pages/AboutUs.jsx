@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback, memo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import SEO from "../components/SEO";
+import AboutCarousel from "../components/AboutCarousel";
 import {
   Users,
   Shield,
@@ -698,6 +699,8 @@ const AboutUs = () => {
             </div>
           </section>
         </AnimatedSection>
+
+        <AboutCarousel />
 
         {/* ================= OUR STORY (SAME UI) ================= */}
         <section className="py-20 px-4 sm:px-6 lg:px-8">

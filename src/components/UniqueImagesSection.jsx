@@ -25,7 +25,7 @@ const UniqueImagesSection = () => {
       url: "https://plus.unsplash.com/premium_photo-1661943546908-7f84a497f5e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8c3BpdGklMjB2YWxsZXl8ZW58MHx8MHx8fDA%3D",
       alt: "Spiti Valley",
       label: "Spiti Valley",
-      subtitle: "The Great White Desert"
+      subtitle: "The Valley"
     }
   ];
 

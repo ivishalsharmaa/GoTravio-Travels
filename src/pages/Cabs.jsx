@@ -2,13 +2,14 @@ import React, { useState, useEffect, useRef, useCallback, memo, useMemo } from "
 import { motion, useInView, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import SEO from "../components/SEO";
 import { API } from "../api.js";
-import { 
-  ArrowUpDown, 
-  Check, 
-  Shield, 
-  Clock, 
-  MapPin, 
-  Phone, 
+import FanCarousel from "../components/FanCarousel";
+import {
+  ArrowUpDown,
+  Check,
+  Shield,
+  Clock,
+  MapPin,
+  Phone,
   MessageCircle,
   Car,
   Users,
@@ -143,22 +144,22 @@ const rotateIn = {
 // Optimized Animated Section - same UI but faster
 const AnimatedSection = memo(({ children, delay = 0, className = "", direction = "left" }) => {
   const ref = useRef(null);
-  const inView = useInView(ref, { 
+  const inView = useInView(ref, {
     once: true, // Changed to true for performance
     amount: 0.1, // Reduced threshold
     margin: "-50px" // Start animation earlier
   });
-  
+
   const initialX = direction === "left" ? -100 : direction === "right" ? 100 : 0;
-  
+
   return (
     <motion.div
       ref={ref}
       initial={{ opacity: 0, x: initialX }}
       animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: initialX }}
-      transition={{ 
+      transition={{
         duration: 0.5, // Reduced duration
-        delay, 
+        delay,
         type: "tween", // Changed from spring for performance
         ease: "easeOut"
       }}
@@ -179,17 +180,17 @@ const HeroSection = memo(({ scrollToForm }) => {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.9]);
 
   return (
-    <motion.section 
+    <motion.section
       style={{ scale: heroScale, opacity: heroOpacity }}
       className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900 text-white overflow-hidden w-full motion-section"
     >
       {/* Animated Background - optimized */}
-      <motion.div 
+      <motion.div
         animate={{ rotate: 360 }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         className="absolute top-1/4 left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-blue-500/10 rounded-full blur-3xl"
       />
-      <motion.div 
+      <motion.div
         animate={{ rotate: -360 }}
         transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
         className="absolute bottom-1/4 right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-purple-500/10 rounded-full blur-3xl"
@@ -207,8 +208,8 @@ const HeroSection = memo(({ scrollToForm }) => {
               <Sparkles size={16} className="sm:w-4 sm:h-4 text-yellow-300" />
               <span className="text-xs sm:text-sm font-medium">Premium Cab Services Across India</span>
             </motion.div>
-            
-            <motion.h1 
+
+            <motion.h1
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
@@ -217,8 +218,8 @@ const HeroSection = memo(({ scrollToForm }) => {
               Online Cab Booking in India
               <span className="block text-blue-300 mt-2">Local & Outstation Taxi Service</span>
             </motion.h1>
-            
-            <motion.p 
+
+            <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
@@ -226,14 +227,14 @@ const HeroSection = memo(({ scrollToForm }) => {
             >
               Book reliable and affordable cab services across India with GoTravio. Verified drivers, transparent pricing, and 24/7 support for local city rides, outstation trips, and airport transfers.
             </motion.p>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-10 md:mb-12 px-4"
             >
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={scrollToForm}
@@ -243,8 +244,8 @@ const HeroSection = memo(({ scrollToForm }) => {
                 <Car className="relative z-10 group-hover:animate-pulse" size={20} />
                 <span className="relative z-10">Book Your Ride Now</span>
               </motion.button>
-              
-              <motion.a 
+
+              <motion.a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 href="https://wa.me/916371106588"
@@ -259,7 +260,7 @@ const HeroSection = memo(({ scrollToForm }) => {
             </motion.div>
 
             {/* Trust Indicators */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
@@ -271,7 +272,7 @@ const HeroSection = memo(({ scrollToForm }) => {
                 { icon: <TrendingUp size={18} className="sm:w-5 sm:h-5" />, text: "Best Price", color: "text-yellow-400" },
                 { icon: <Headphones size={18} className="sm:w-5 sm:h-5" />, text: "Premium Support", color: "text-purple-400" },
               ].map((badge, idx) => (
-                <motion.div 
+                <motion.div
                   key={idx}
                   whileHover={{ scale: 1.05, y: -5 }}
                   className="flex items-center gap-2 sm:gap-3 bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10"
@@ -344,7 +345,7 @@ const ImageCarousel = memo(() => {
         {/* Header */}
         <AnimatedSection direction="up">
           <div className="text-center mb-6 sm:mb-10">
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.05 }}
               className="inline-flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-pink-50 to-rose-50 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-2 sm:mb-3"
             >
@@ -364,7 +365,7 @@ const ImageCarousel = memo(() => {
         </AnimatedSection>
 
         {/* Carousel Container */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }} // Changed to once for performance
@@ -388,7 +389,7 @@ const ImageCarousel = memo(() => {
                   loading="lazy"
                 />
                 <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-                <motion.div 
+                <motion.div
                   initial={{ y: 50, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.2 }}
@@ -486,7 +487,7 @@ const FAQSection = memo(() => {
       <div className="max-w-4xl mx-auto">
         <AnimatedSection direction="up">
           <div className="text-center mb-6 sm:mb-10">
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.05 }}
               className="inline-flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-2 sm:mb-3"
             >
@@ -507,7 +508,7 @@ const FAQSection = memo(() => {
 
         <div className="space-y-5 sm:space-y-6">
           {faqs.map((category, catIndex) => (
-            <motion.div 
+            <motion.div
               key={catIndex}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -517,11 +518,11 @@ const FAQSection = memo(() => {
               className="bg-white rounded-xl sm:rounded-2xl shadow-sm hover:shadow-md transition-all border border-gray-200/50 overflow-hidden"
             >
               <div className="bg-gradient-to-r from-gray-50 to-white px-4 sm:px-5 py-3 border-b border-gray-200/50">
-                <motion.div 
+                <motion.div
                   whileHover={{ x: 5 }}
                   className="flex items-center gap-2"
                 >
-                  <motion.div 
+                  <motion.div
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.6 }}
                     className="p-1.5 bg-gradient-to-br from-white to-gray-50 rounded-md shadow-sm"
@@ -536,7 +537,7 @@ const FAQSection = memo(() => {
                 {category.questions.map((faq, qIndex) => {
                   const uniqueIndex = `${catIndex}-${qIndex}`;
                   const isOpen = openIndex === uniqueIndex;
-                  
+
                   return (
                     <motion.div
                       key={qIndex}
@@ -554,7 +555,7 @@ const FAQSection = memo(() => {
                         <span className="text-xs sm:text-sm font-medium text-gray-900 flex-1">
                           {faq.q}
                         </span>
-                        <motion.div 
+                        <motion.div
                           animate={{ rotate: isOpen ? 180 : 0 }}
                           transition={{ duration: 0.3 }}
                           className="flex-shrink-0 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 flex items-center justify-center"
@@ -562,7 +563,7 @@ const FAQSection = memo(() => {
                           <ChevronDown size={10} className="sm:w-3 sm:h-3 text-blue-600" />
                         </motion.div>
                       </motion.button>
-                      
+
                       <AnimatePresence>
                         {isOpen && (
                           <motion.div
@@ -586,7 +587,7 @@ const FAQSection = memo(() => {
           ))}
         </div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }} // Changed to once
@@ -624,7 +625,7 @@ const FAQSection = memo(() => {
           </div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} // Changed to once
@@ -637,7 +638,7 @@ const FAQSection = memo(() => {
             { icon: <MapPin size={22} className="sm:w-6 sm:h-6 md:w-7 md:h-7" />, text: "All India Destinations" },
             { icon: <CreditCard size={22} className="sm:w-6 sm:h-6 md:w-7 md:h-7" />, text: "Flexible Payment" }
           ].map((tip, idx) => (
-            <motion.div 
+            <motion.div
               key={idx}
               whileHover={{ scale: 1.05, y: -5 }}
               className="bg-white/90 backdrop-blur-sm rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 text-center border border-gray-200/60 hover:border-blue-300 transition-all shadow-md hover:shadow-lg group cursor-pointer overflow-hidden"
@@ -669,26 +670,26 @@ const QuickStats = memo(() => {
   };
 
   const stats = useMemo(() => [
-    { 
-      value: "100+", 
+    {
+      value: "100+",
       label: "Satisfied Travelers",
       icon: <Users className="text-blue-500" size={22} />,
       desc: "Trusted by thousands"
     },
-    { 
-      value: "20+", 
+    {
+      value: "20+",
       label: "Cities Network",
       icon: <Globe className="text-green-500" size={22} />,
       desc: "Pan-India cab coverage"
     },
-    { 
-      value: "99%", 
+    {
+      value: "99%",
       label: "On-time Arrival",
       icon: <Target className="text-purple-500" size={22} />,
       desc: "Punctuality guaranteed"
     },
-    { 
-      value: "24/7", 
+    {
+      value: "24/7",
       label: "Cab Support",
       icon: <Headphones className="text-orange-500" size={22} />,
       desc: "Always here for you"
@@ -700,14 +701,14 @@ const QuickStats = memo(() => {
       <div className="w-full px-6 sm:px-8 lg:px-12 xl:px-16">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 md:gap-8">
           {stats.map((stat, idx) => (
-            <motion.div 
+            <motion.div
               key={idx}
               initial={{ opacity: 0, x: idx % 2 === 0 ? -100 : 100 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, amount: 0.1 }}
               transition={{ delay: (idx % 4) * 0.1, duration: 0.6, type: "spring", bounce: 0.4 }}
-              whileHover={{ 
-                scale: 1.05, 
+              whileHover={{
+                scale: 1.05,
                 y: -5,
                 boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)"
               }}
@@ -715,7 +716,7 @@ const QuickStats = memo(() => {
             >
               <div className={`relative ${getStatColor(idx)} rounded-xl sm:rounded-2xl p-5 sm:p-6 border border-gray-200/50 transition-all shadow-md hover:border-blue-300/50 h-full flex flex-col overflow-hidden`}>
                 <div className="flex items-center gap-3 sm:gap-4 mb-2 sm:mb-3">
-                  <motion.div 
+                  <motion.div
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.6 }}
                     className="p-1.5 sm:p-2 bg-white rounded-lg sm:rounded-xl"
@@ -752,34 +753,34 @@ const CabTypeGrid = memo(({ onSelectType }) => {
   };
 
   const types = useMemo(() => [
-    { 
+    {
       icon: <Navigation className="text-blue-600" size={24} />,
-      title: "City Rides", 
+      title: "City Rides",
       desc: "Hourly & point-to-point within city"
     },
-    { 
+    {
       icon: <MapPin className="text-green-600" size={24} />,
-      title: "Outstation Cabs", 
+      title: "Outstation Cabs",
       desc: "Inter-city & long distance travel"
     },
-    { 
+    {
       icon: <Car className="text-purple-600" size={24} />,
-      title: "Airport Taxi", 
+      title: "Airport Taxi",
       desc: "Pickup & drop from airports"
     },
-    { 
+    {
       icon: <Award className="text-orange-600" size={24} />,
-      title: "Corporate Cabs", 
+      title: "Corporate Cabs",
       desc: "Business & executive travel"
     },
-    { 
+    {
       icon: <Star className="text-yellow-600" size={24} />,
-      title: "Luxury Cars", 
+      title: "Luxury Cars",
       desc: "Premium vehicles & VIP service"
     },
-    { 
+    {
       icon: <Users className="text-indigo-600" size={24} />,
-      title: "Tour Packages", 
+      title: "Tour Packages",
       desc: "Sightseeing & multi-day tours"
     },
   ], []);
@@ -789,7 +790,7 @@ const CabTypeGrid = memo(({ onSelectType }) => {
       <div className="w-full">
         <AnimatedSection direction="up">
           <div className="text-center mb-8 sm:mb-10 md:mb-12">
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.05 }}
               className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-purple-50 rounded-full px-4 sm:px-5 py-2 sm:py-2.5 mb-3 sm:mb-4"
             >
@@ -804,7 +805,7 @@ const CabTypeGrid = memo(({ onSelectType }) => {
             </p>
           </div>
         </AnimatedSection>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
           {types.map((type, idx) => (
             <motion.div
@@ -813,19 +814,19 @@ const CabTypeGrid = memo(({ onSelectType }) => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, amount: 0.1 }}
               transition={{ delay: (idx % 3) * 0.1, duration: 0.6, type: "spring", bounce: 0.4 }}
-              whileHover={{ 
+              whileHover={{
                 scale: 1.05,
                 boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)"
               }}
               onClick={() => {
                 onSelectType(type.title);
-                document.getElementById('enquiry-form')?.scrollIntoView({behavior: 'smooth'});
+                document.getElementById('enquiry-form')?.scrollIntoView({ behavior: 'smooth' });
               }}
               className="group relative cursor-pointer h-full"
             >
               <div className={`relative ${getCardColor(idx)} rounded-xl sm:rounded-2xl p-5 sm:p-6 border border-gray-200/50 transition-all shadow-md hover:border-blue-300 h-full flex flex-col overflow-hidden`}>
                 <div className="flex items-start gap-3 sm:gap-4">
-                  <motion.div 
+                  <motion.div
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.6 }}
                     className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-white flex-shrink-0"
@@ -837,7 +838,7 @@ const CabTypeGrid = memo(({ onSelectType }) => {
                     <p className="text-xs sm:text-sm md:text-base text-gray-600">{type.desc}</p>
                   </div>
                 </div>
-                <motion.div 
+                <motion.div
                   whileHover={{ x: 5 }}
                   className="flex items-center text-blue-600 font-medium text-xs sm:text-sm md:text-base mt-4"
                 >
@@ -867,37 +868,37 @@ const VehicleSelector = memo(({ onSelectVehicle }) => {
   };
 
   const vehicles = useMemo(() => [
-    { 
-      type: "Hatchback", 
-      capacity: 4, 
+    {
+      type: "Hatchback",
+      capacity: 4,
       features: ["AC", "GPS", "Economical", "City Rides"],
       icon: "🚗",
       tag: "Popular for City"
     },
-    { 
-      type: "Sedan", 
-      capacity: 4, 
+    {
+      type: "Sedan",
+      capacity: 4,
       features: ["Premium AC", "Extra Comfort", "Business", "Airport"],
       icon: "🚘",
       tag: "Comfort"
     },
-    { 
-      type: "SUV", 
-      capacity: 6, 
+    {
+      type: "SUV",
+      capacity: 6,
       features: ["Family", "Luggage Space", "Long Distance", "Groups"],
       icon: "🚙",
       tag: "Spacious"
     },
-    { 
-      type: "Luxury", 
-      capacity: 4, 
+    {
+      type: "Luxury",
+      capacity: 4,
       features: ["VIP Service", "Premium", "Executive", "Events"],
       icon: "🏎️",
       tag: "Premium"
     },
-    { 
-      type: "Traveller", 
-      capacity: 12, 
+    {
+      type: "Traveller",
+      capacity: 12,
       features: ["Large Groups", "Tours", "Family Trips", "Corporate"],
       icon: "🚌",
       tag: "Group"
@@ -911,7 +912,7 @@ const VehicleSelector = memo(({ onSelectVehicle }) => {
       <div className="w-full">
         <AnimatedSection direction="up">
           <div className="text-center mb-8 sm:mb-10 md:mb-12">
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.05 }}
               className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-purple-50 rounded-full px-4 sm:px-5 py-2 sm:py-2.5 mb-3 sm:mb-4"
             >
@@ -926,7 +927,7 @@ const VehicleSelector = memo(({ onSelectVehicle }) => {
             </p>
           </div>
         </AnimatedSection>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 sm:gap-6 md:gap-8">
           {vehicles.map((vehicle, idx) => (
             <motion.div
@@ -935,26 +936,24 @@ const VehicleSelector = memo(({ onSelectVehicle }) => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, amount: 0.1 }}
               transition={{ delay: (idx % 5) * 0.1, duration: 0.6, type: "spring", bounce: 0.4 }}
-              whileHover={{ 
+              whileHover={{
                 scale: 1.05,
                 boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)"
               }}
               onClick={() => {
                 setSelected(idx);
                 onSelectVehicle(vehicle.type);
-                document.getElementById('enquiry-form')?.scrollIntoView({behavior: 'smooth'});
+                document.getElementById('enquiry-form')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className={`group relative cursor-pointer transform transition-all duration-300 ${
-                selected === idx ? 'scale-105' : ''
-              } h-full`}
+              className={`group relative cursor-pointer transform transition-all duration-300 ${selected === idx ? 'scale-105' : ''
+                } h-full`}
             >
-              <div className={`relative ${getVehicleColor(idx)} rounded-xl sm:rounded-2xl p-5 sm:p-6 border-2 transition-all shadow-md h-full flex flex-col overflow-hidden ${
-                selected === idx 
-                  ? 'border-blue-500' 
+              <div className={`relative ${getVehicleColor(idx)} rounded-xl sm:rounded-2xl p-5 sm:p-6 border-2 transition-all shadow-md h-full flex flex-col overflow-hidden ${selected === idx
+                  ? 'border-blue-500'
                   : 'border-gray-200/50 hover:border-blue-300'
-              }`}>
+                }`}>
                 {vehicle.tag && (
-                  <motion.div 
+                  <motion.div
                     whileHover={{ scale: 1.1 }}
                     className="absolute -top-2 left-3 sm:left-4"
                   >
@@ -963,9 +962,9 @@ const VehicleSelector = memo(({ onSelectVehicle }) => {
                     </span>
                   </motion.div>
                 )}
-                
+
                 <div className="text-center mb-3 sm:mb-4">
-                  <motion.div 
+                  <motion.div
                     whileHover={{ scale: 1.2, rotate: 5 }}
                     className="text-4xl sm:text-5xl md:text-6xl mb-1 sm:mb-2"
                   >
@@ -973,15 +972,15 @@ const VehicleSelector = memo(({ onSelectVehicle }) => {
                   </motion.div>
                   <h3 className="font-bold text-lg sm:text-xl md:text-2xl text-gray-900">{vehicle.type} Cab</h3>
                 </div>
-                
+
                 <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                   <Users size={14} className="sm:w-4 sm:h-4 text-gray-500" />
                   <span className="text-xs sm:text-sm md:text-base font-medium text-gray-700">Up to {vehicle.capacity} passengers</span>
                 </div>
-                
+
                 <div className="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4 flex-1">
                   {vehicle.features.map((feature, fIdx) => (
-                    <motion.div 
+                    <motion.div
                       key={fIdx}
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
@@ -994,15 +993,14 @@ const VehicleSelector = memo(({ onSelectVehicle }) => {
                     </motion.div>
                   ))}
                 </div>
-                
-                <motion.button 
+
+                <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`w-full py-1.5 sm:py-2 rounded-md font-medium text-xs sm:text-sm transition-all mt-auto ${
-                    selected === idx
+                  className={`w-full py-1.5 sm:py-2 rounded-md font-medium text-xs sm:text-sm transition-all mt-auto ${selected === idx
                       ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
                       : 'bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700 group-hover:from-blue-100 group-hover:to-purple-100'
-                  }`}
+                    }`}
                 >
                   {selected === idx ? '✓ Selected' : 'Select This Cab'}
                 </motion.button>
@@ -1010,8 +1008,8 @@ const VehicleSelector = memo(({ onSelectVehicle }) => {
             </motion.div>
           ))}
         </div>
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }} // Changed to once
@@ -1071,7 +1069,7 @@ const BenefitsSection = memo(() => {
       <div className="w-full">
         <AnimatedSection direction="up">
           <div className="text-center mb-8 sm:mb-10 md:mb-12">
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.05 }}
               className="inline-flex items-center gap-2 bg-gradient-to-r from-green-50 to-blue-50 rounded-full px-4 sm:px-5 py-2 sm:py-2.5 mb-3 sm:mb-4"
             >
@@ -1086,16 +1084,16 @@ const BenefitsSection = memo(() => {
             </p>
           </div>
         </AnimatedSection>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 md:gap-8 lg:gap-10">
           {benefits.map((benefit, idx) => (
-            <motion.div 
+            <motion.div
               key={idx}
               initial={{ opacity: 0, x: idx % 2 === 0 ? -120 : 120 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, amount: 0.1 }}
               transition={{ delay: (idx % 2) * 0.1, duration: 0.6, type: "spring", bounce: 0.4 }}
-              whileHover={{ 
+              whileHover={{
                 scale: 1.02,
                 boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)"
               }}
@@ -1103,7 +1101,7 @@ const BenefitsSection = memo(() => {
             >
               <div className={`relative ${getBenefitColor(idx)} rounded-xl sm:rounded-2xl p-5 sm:p-6 border border-gray-200/50 transition-all shadow-md hover:border-green-300 h-full flex flex-col overflow-hidden`}>
                 <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
-                  <motion.div 
+                  <motion.div
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.6 }}
                     className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-white flex-shrink-0"
@@ -1117,7 +1115,7 @@ const BenefitsSection = memo(() => {
                 </div>
                 <div className="space-y-1.5 sm:space-y-2 mt-4">
                   {benefit.features.map((feature, fIdx) => (
-                    <motion.div 
+                    <motion.div
                       key={fIdx}
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
@@ -1162,14 +1160,14 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
 
   const validateStep = useCallback(() => {
     const newErrors = {};
-    
+
     if (step === 1) {
       if (!form.pickupLocation.trim()) newErrors.pickupLocation = "Pickup location is required";
       if (!form.dropLocation.trim()) newErrors.dropLocation = "Destination is required";
       if (!form.date) newErrors.date = "Travel date is required";
       if (!form.time) newErrors.time = "Time is required";
     }
-    
+
     if (step === 3) {
       if (!form.name.trim()) newErrors.name = "Name is required";
       if (!form.phone.trim()) newErrors.phone = "Phone number is required";
@@ -1177,16 +1175,16 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
         newErrors.phone = "Valid 10-digit phone number required";
       }
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }, [step, form]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateStep()) return;
-    
+
     setIsSubmitting(true);
     try {
       const response = await API.post("/cabs", {
@@ -1199,15 +1197,15 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
         phone: form.phone,
         email: form.email || "",
       });
-      
+
       console.log("✅ Form submitted successfully:", response.data);
-      
+
       const message = `🚕 New Cab Enquiry from GoTravio!\n\n👤 Name: ${form.name}\n📞 Phone: ${form.phone}\n📍 From: ${form.pickupLocation}\n🎯 To: ${form.dropLocation}\n📅 Date: ${form.date}\n⏰ Time: ${form.time}\n🚗 Vehicle: ${form.carType || "Sedan"}\n👥 Passengers: ${form.passengers}`;
       const whatsappUrl = `https://wa.me/919023884833?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, '_blank');
-      
+
       onSubmit("🎉 Thank you! Our travel expert will contact you within 15 minutes with the best cab price.");
-      
+
       setForm({
         pickupLocation: "",
         dropLocation: "",
@@ -1263,7 +1261,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
       <div className="max-w-7xl mx-auto">
         <AnimatedSection direction="up">
           <div className="text-center mb-8 sm:mb-10 md:mb-12">
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.05 }}
               className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-purple-50 rounded-full px-4 sm:px-5 py-2 sm:py-2.5 mb-3 sm:mb-4"
             >
@@ -1278,8 +1276,8 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
             </p>
           </div>
         </AnimatedSection>
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }} // Changed to once
@@ -1299,39 +1297,37 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                 <span className="text-xs font-medium text-white">Quick Response</span>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between relative">
               {steps.map((stepItem, idx) => (
-                <motion.div 
-                  key={idx} 
+                <motion.div
+                  key={idx}
                   whileHover={{ scale: 1.1 }}
                   className="flex flex-col items-center relative z-10"
                 >
-                  <motion.div 
-                    animate={{ 
+                  <motion.div
+                    animate={{
                       scale: step > stepItem.number ? [1, 1.2, 1] : 1,
                       backgroundColor: step > stepItem.number ? "#10b981" : step === stepItem.number ? "#ffffff" : "rgba(255,255,255,0.2)"
                     }}
                     transition={{ duration: 0.5 }}
-                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 ${
-                      step > stepItem.number ? 'bg-green-500 text-white shadow-lg' :
-                      step === stepItem.number ? 'bg-white text-blue-700 shadow-lg' :
-                      'bg-white/20 text-white'
-                    }`}
+                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 ${step > stepItem.number ? 'bg-green-500 text-white shadow-lg' :
+                        step === stepItem.number ? 'bg-white text-blue-700 shadow-lg' :
+                          'bg-white/20 text-white'
+                      }`}
                   >
                     {step > stepItem.number ? '✓' : stepItem.icon}
                   </motion.div>
-                  <span className={`text-[10px] sm:text-xs mt-1.5 font-medium transition-colors ${
-                    step >= stepItem.number ? 'text-white' : 'text-blue-200'
-                  }`}>
+                  <span className={`text-[10px] sm:text-xs mt-1.5 font-medium transition-colors ${step >= stepItem.number ? 'text-white' : 'text-blue-200'
+                    }`}>
                     {stepItem.title}
                   </span>
                 </motion.div>
               ))}
               <div className="absolute top-4 sm:top-5 left-0 right-0 h-0.5 sm:h-1 bg-white/20 -z-10">
-                <motion.div 
+                <motion.div
                   initial={{ width: "0%" }}
-                  animate={{ width: `${((step-1) * 50)}%` }}
+                  animate={{ width: `${((step - 1) * 50)}%` }}
                   transition={{ duration: 0.5 }}
                   className="h-full bg-gradient-to-r from-green-500 to-green-400"
                 />
@@ -1351,7 +1347,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                   className="space-y-5 sm:space-y-6"
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
-                    <motion.div 
+                    <motion.div
                       whileHover={{ scale: 1.01 }}
                       className="space-y-1.5 sm:space-y-2"
                     >
@@ -1367,7 +1363,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                         className={`w-full rounded-lg sm:rounded-xl border ${errors.pickupLocation ? 'border-red-500' : 'border-gray-300'} px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-200 outline-none transition-all`}
                       />
                       {errors.pickupLocation && (
-                        <motion.p 
+                        <motion.p
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           className="text-red-500 text-[10px] sm:text-xs mt-0.5"
@@ -1377,7 +1373,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                       )}
                     </motion.div>
 
-                    <motion.div 
+                    <motion.div
                       whileHover={{ scale: 1.01 }}
                       className="space-y-1.5 sm:space-y-2"
                     >
@@ -1393,7 +1389,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                         className={`w-full rounded-lg sm:rounded-xl border ${errors.dropLocation ? 'border-red-500' : 'border-gray-300'} px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-200 outline-none`}
                       />
                       {errors.dropLocation && (
-                        <motion.p 
+                        <motion.p
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           className="text-red-500 text-[10px] sm:text-xs mt-0.5"
@@ -1404,7 +1400,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                     </motion.div>
                   </div>
 
-                  <motion.div 
+                  <motion.div
                     whileHover={{ scale: 1.1 }}
                     className="flex justify-center"
                   >
@@ -1420,7 +1416,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                   </motion.div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
-                    <motion.div 
+                    <motion.div
                       whileHover={{ scale: 1.01 }}
                       className="space-y-1.5 sm:space-y-2"
                     >
@@ -1436,7 +1432,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                         className={`w-full rounded-lg sm:rounded-xl border ${errors.date ? 'border-red-500' : 'border-gray-300'} px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-200 outline-none`}
                       />
                       {errors.date && (
-                        <motion.p 
+                        <motion.p
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           className="text-red-500 text-[10px] sm:text-xs mt-0.5"
@@ -1446,7 +1442,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                       )}
                     </motion.div>
 
-                    <motion.div 
+                    <motion.div
                       whileHover={{ scale: 1.01 }}
                       className="space-y-1.5 sm:space-y-2"
                     >
@@ -1462,7 +1458,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                         className={`w-full rounded-lg sm:rounded-xl border ${errors.time ? 'border-red-500' : 'border-gray-300'} px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-200 outline-none`}
                       />
                       {errors.time && (
-                        <motion.p 
+                        <motion.p
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           className="text-red-500 text-[10px] sm:text-xs mt-0.5"
@@ -1500,7 +1496,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                   transition={{ duration: 0.3 }}
                   className="space-y-5 sm:space-y-6"
                 >
-                  <motion.div 
+                  <motion.div
                     whileHover={{ scale: 1.01 }}
                     className="space-y-1.5 sm:space-y-2"
                   >
@@ -1514,7 +1510,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                       onChange={handleChange}
                       className="w-full rounded-lg sm:rounded-xl border border-gray-300 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-200 outline-none appearance-none bg-white"
                     >
-                      {[1,2,3,4,5,6,7,8,9,10,11,12].map(num => (
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(num => (
                         <option key={num} value={num}>
                           {num} {num === 1 ? 'Passenger' : 'Passengers'}
                         </option>
@@ -1522,7 +1518,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                     </select>
                   </motion.div>
 
-                  <motion.div 
+                  <motion.div
                     whileHover={{ scale: 1.01 }}
                     className="space-y-1.5 sm:space-y-2"
                   >
@@ -1537,12 +1533,11 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                           whileTap={{ scale: 0.95 }}
                           type="button"
                           key={type}
-                          onClick={() => setForm({...form, carType: type})}
-                          className={`p-2 sm:p-3 rounded-lg border-2 transition-all text-xs sm:text-sm ${
-                            form.carType === type 
-                              ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700' 
+                          onClick={() => setForm({ ...form, carType: type })}
+                          className={`p-2 sm:p-3 rounded-lg border-2 transition-all text-xs sm:text-sm ${form.carType === type
+                              ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700'
                               : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
-                          }`}
+                            }`}
                         >
                           <span className="font-medium truncate block">{type}</span>
                         </motion.button>
@@ -1550,7 +1545,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                     </div>
                   </motion.div>
 
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.2, duration: 0.3 }}
@@ -1601,7 +1596,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                   className="space-y-5 sm:space-y-6"
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
-                    <motion.div 
+                    <motion.div
                       whileHover={{ scale: 1.01 }}
                       className="space-y-1.5 sm:space-y-2"
                     >
@@ -1616,7 +1611,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                         className={`w-full rounded-lg sm:rounded-xl border ${errors.name ? 'border-red-500' : 'border-gray-300'} px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-200 outline-none`}
                       />
                       {errors.name && (
-                        <motion.p 
+                        <motion.p
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           className="text-red-500 text-[10px] sm:text-xs mt-0.5"
@@ -1626,7 +1621,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                       )}
                     </motion.div>
 
-                    <motion.div 
+                    <motion.div
                       whileHover={{ scale: 1.01 }}
                       className="space-y-1.5 sm:space-y-2"
                     >
@@ -1641,7 +1636,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                         className={`w-full rounded-lg sm:rounded-xl border ${errors.phone ? 'border-red-500' : 'border-gray-300'} px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-200 outline-none`}
                       />
                       {errors.phone && (
-                        <motion.p 
+                        <motion.p
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           className="text-red-500 text-[10px] sm:text-xs mt-0.5"
@@ -1654,7 +1649,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
 
                   <AnimatePresence>
                     {showEmail ? (
-                      <motion.div 
+                      <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
@@ -1687,7 +1682,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                     )}
                   </AnimatePresence>
 
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.2, duration: 0.3 }}
@@ -1726,7 +1721,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
                     >
                       {isSubmitting ? (
                         <>
-                          <motion.div 
+                          <motion.div
                             animate={{ rotate: 360 }}
                             transition={{ duration: 1, repeat: Infinity }}
                             className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
@@ -1747,7 +1742,7 @@ const EnquiryForm = memo(({ initialData, onSubmit }) => {
           </form>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }} // Changed to once
@@ -1780,7 +1775,7 @@ const FloatingWhatsApp = memo(() => {
       className="fixed bottom-5 sm:bottom-6 right-5 sm:right-6 z-50 group"
     >
       <div className="relative">
-        <motion.div 
+        <motion.div
           animate={{ scale: [1, 1.2, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
           className="absolute inset-0 bg-green-500 rounded-full blur-lg group-hover:blur-xl transition-all opacity-70"
@@ -1810,7 +1805,7 @@ const InfiniteMarquee = memo(() => {
   return (
     <div className="w-full bg-white py-6 sm:py-8 overflow-hidden relative border-y border-gray-100">
       <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-      
+
       <motion.div
         className="flex w-max"
         animate={{
@@ -1823,22 +1818,22 @@ const InfiniteMarquee = memo(() => {
         }}
       >
         {[...images, ...images].map((src, index) => (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className="w-40 h-28 sm:w-48 sm:h-32 md:w-56 md:h-36 lg:w-64 lg:h-40 flex-shrink-0 pr-4 md:pr-6"
           >
             <div className="w-full h-full rounded-xl overflow-hidden shadow-sm border border-gray-100/50 group">
-              <img 
-                src={src} 
-                alt="Travel Destinations" 
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+              <img
+                src={src}
+                alt="Travel Destinations"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 loading="lazy"
               />
             </div>
           </div>
         ))}
       </motion.div>
-      
+
       <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
     </div>
   );
@@ -1861,7 +1856,7 @@ const Cylinder3DCarousel = memo(() => {
   return (
     <div className="w-full bg-slate-900 pt-10 pb-24 sm:py-12 overflow-hidden relative" style={{ perspective: "1500px" }}>
       <div className="text-center mb-0 sm:mb-8 px-4 relative z-10">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
@@ -1873,7 +1868,7 @@ const Cylinder3DCarousel = memo(() => {
       </div>
 
       <div className="w-full flex justify-center items-center h-[260px] sm:h-[340px] md:h-[380px] mt-8 sm:mt-0 mb-6 sm:mb-16">
-        <div 
+        <div
           className="transform scale-[0.6] sm:scale-75 md:scale-100 flex justify-center items-center w-full h-full"
           style={{ transformStyle: "preserve-3d", transform: "rotateX(-8deg)" }}
         >
@@ -1998,17 +1993,17 @@ const Cabs = () => {
   }, []);
 
   const handleSelectType = useCallback((type) => {
-    setFormData(prev => ({...prev, tripType: type}));
+    setFormData(prev => ({ ...prev, tripType: type }));
   }, []);
 
   const handleSelectVehicle = useCallback((vehicle) => {
-    setFormData(prev => ({...prev, carType: vehicle}));
+    setFormData(prev => ({ ...prev, carType: vehicle }));
   }, []);
 
   return (
     <>
       <OptimizedStyles />
-      <SEO 
+      <SEO
         title="Online Cab Booking in India | Local & Outstation Taxi Service - GoTravio"
         description="Book reliable and affordable cab services across India with GoTravio. Verified drivers, transparent pricing, and 24/7 support for local city rides, outstation trips, and airport transfers. Get your custom quote now!"
         keywords="cab booking India, taxi service, outstation cab, airport taxi, car rental India, local cab service, Delhi to Manali cab, Delhi to Shimla taxi, Goa cab service, verified drivers, GoTravio cabs"
@@ -2022,38 +2017,38 @@ const Cabs = () => {
         <InfiniteMarquee />
         <QuickStats />
         <CabTypeGrid onSelectType={handleSelectType} />
+        <FanCarousel />
         <BenefitsSection />
         <VehicleSelector onSelectVehicle={handleSelectVehicle} />
-        
+
         {/* 3D Cylinder Carousel */}
         <Cylinder3DCarousel />
-        
+
         {/* Enquiry Form */}
-        <EnquiryForm 
+        <EnquiryForm
           initialData={formData}
           onSubmit={handleFormSubmit}
         />
-        
+
         {/* Image Carousel */}
         <ImageCarousel />
-        
+
         {/* FAQ Section */}
         <FAQSection />
 
         <AnimatePresence>
           {formMessage && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -50 }}
               transition={{ duration: 0.3 }}
               className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[90%] sm:w-auto"
             >
-              <div className={`px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg shadow-2xl text-xs sm:text-sm ${
-                formMessage.includes('🎉') 
-                  ? 'bg-gradient-to-r from-green-500 to-green-600 text-white' 
+              <div className={`px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg shadow-2xl text-xs sm:text-sm ${formMessage.includes('🎉')
+                  ? 'bg-gradient-to-r from-green-500 to-green-600 text-white'
                   : 'bg-gradient-to-r from-red-500 to-red-600 text-white'
-              }`}>
+                }`}>
                 {formMessage}
               </div>
             </motion.div>

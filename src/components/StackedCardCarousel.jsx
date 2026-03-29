@@ -92,17 +92,11 @@ const StackedCardCarousel = () => {
   }, [cycleTop]);
 
   const handleCardClick = (stackPosition) => {
-    if (isAnimating) return;
+    // stackPosition: index in `order` array (last = top)
+    if (stackPosition === order.length - 1 || isAnimating) return; // already top
     clearInterval(timerRef.current);
 
-    // If top card is tapped → just cycle forward (auto-advance)
-    if (stackPosition === order.length - 1) {
-      cycleTop();
-      timerRef.current = setInterval(cycleTop, 3000);
-      return;
-    }
-
-    // Bring clicked back-card to top by rotating order
+    // Bring clicked card to top by rotating order
     const stepsNeeded = order.length - 1 - stackPosition;
     let newOrder = [...order];
     for (let i = 0; i < stepsNeeded; i++) {
@@ -170,10 +164,10 @@ const StackedCardCarousel = () => {
       </motion.div>
 
       {/* Main Layout: Stack (left) + Description (right) */}
-      <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-20">
+      <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-20">
         {/* ── Stacked Card Carousel ── */}
         <div
-          className="relative flex-shrink-0"
+          className="relative flex-shrink-0 mb-20 lg:mb-0"
           style={{ width: "260px", height: "360px", perspective: "1200px" }}
         >
           {order.map((destIndex, stackPos) => {
@@ -262,28 +256,28 @@ const StackedCardCarousel = () => {
                   </motion.div>
                 )}
 
-                {/* Label at bottom */}
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: "20px",
-                    left: "20px",
-                    right: "20px",
-                  }}
-                >
-                  <p
+                {/* Label at bottom — only for top card */}
+                {isTop && (
+                  <div
                     style={{
-                      color: "#fff",
-                      fontWeight: 800,
-                      fontSize: "18px",
-                      lineHeight: 1.2,
-                      letterSpacing: "-0.02em",
-                      textShadow: "0 2px 8px rgba(0,0,0,0.5)",
+                      position: "absolute",
+                      bottom: "20px",
+                      left: "20px",
+                      right: "20px",
                     }}
                   >
-                    {dest.label}
-                  </p>
-                  {isTop && (
+                    <p
+                      style={{
+                        color: "#fff",
+                        fontWeight: 800,
+                        fontSize: "18px",
+                        lineHeight: 1.2,
+                        letterSpacing: "-0.02em",
+                        textShadow: "0 2px 8px rgba(0,0,0,0.5)",
+                      }}
+                    >
+                      {dest.label}
+                    </p>
                     <p
                       style={{
                         color: "rgba(255,255,255,0.75)",
@@ -294,8 +288,8 @@ const StackedCardCarousel = () => {
                     >
                       {dest.subtitle}
                     </p>
-                  )}
-                </div>
+                  </div>
+                )}
 
                 {/* Glare highlight on top card */}
                 {isTop && (
@@ -318,12 +312,13 @@ const StackedCardCarousel = () => {
           <div
             style={{
               position: "absolute",
-              bottom: "-40px",
+              bottom: "-68px",
               left: "50%",
               transform: "translateX(-50%)",
               display: "flex",
               gap: "8px",
               alignItems: "center",
+              zIndex: 9999,
             }}
           >
             {destinations.map((dest) => (
