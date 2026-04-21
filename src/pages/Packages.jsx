@@ -1775,7 +1775,7 @@ const getDemoPackages = () => [
     days: 7,
     priceFrom: 25000,
     tag: "Honeymoon Package",
-    imageUrl: "https://media.istockphoto.com/id/498628231/photo/lake-of-blue-water.webp?a=1&b=1&s=612x612&w=0&k=20&c=JWajlJmK-qq7ITeu1m0KJeqA-hUu731rQpgJ3g2rAyY=",
+    imageUrl: "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     highlights: ["Houseboat Stay", "Shikara Ride", "Skiing in Gulmarg", "Pahalgam Valley"]
   },
   {

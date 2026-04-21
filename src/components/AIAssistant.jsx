@@ -14,8 +14,10 @@ import {
   WifiOff
 } from "lucide-react";
 
+import { API_CONFIG } from "../config/api";
+
 // API Configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://gotravio-backend.onrender.com';
+const API_BASE_URL = API_CONFIG.baseURL;
 
 // Timeout for Render cold starts
 const API_TIMEOUT = 30000; // 30 seconds
@@ -115,7 +117,7 @@ const AIAssistant = () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
       
-      const response = await fetch(`${API_BASE_URL}/api/aiBooking/test`, {
+      const response = await fetch(`${API_BASE_URL}/api/ai/test`, {
         signal: controller.signal,
         headers: { 'Content-Type': 'application/json' }
       });
@@ -151,7 +153,7 @@ const AIAssistant = () => {
 
   const addMessage = (type, text) => {
     const newMessage = {
-      id: messages.length + 1,
+      id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
       type: type,
       text: text,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -208,7 +210,7 @@ const AIAssistant = () => {
       }
       
       // Use the single endpoint that exists in your backend
-      const endpoint = `${API_BASE_URL}/api/aiBooking/process`;
+      const endpoint = `${API_BASE_URL}/api/ai/process`;
       
       // Create a unified payload structure that your backend expects
       const payload = {
@@ -531,7 +533,7 @@ const AIAssistant = () => {
             
             // Try to send to backend, but save locally if it fails
             try {
-              await fetch(`${API_BASE_URL}/api/aiBooking/process`, {
+              await fetch(`${API_BASE_URL}/api/ai/process`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

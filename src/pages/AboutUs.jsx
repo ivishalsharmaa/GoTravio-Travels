@@ -949,7 +949,7 @@ const AboutUs = () => {
                     className="relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white aspect-square md:aspect-[4/3] lg:aspect-square z-10"
                   >
                     <img 
-                      src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=800"
+                      src="https://plus.unsplash.com/premium_photo-1697729690458-2d64ca777c04?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                       alt="Travel Principles"
                       className="w-full h-full object-cover"
                     />
@@ -962,7 +962,7 @@ const AboutUs = () => {
                     transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                     className="absolute -bottom-8 -left-8 w-32 h-32 sm:w-48 sm:h-48 rounded-[2rem] overflow-hidden shadow-2xl border-[6px] border-white z-20 hidden md:block"
                   >
-                    <img src="https://images.unsplash.com/photo-1503220317375-aaad61436b1b?auto=format&fit=crop&w=400&q=80" className="w-full h-full object-cover" alt="Travel vibe"/>
+                    <img src="https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" className="w-full h-full object-cover" alt="Travel vibe"/>
                   </motion.div>
 
                   {/* Floating Image 2 */}
@@ -1196,7 +1196,7 @@ const AboutUs = () => {
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                     className="absolute -bottom-6 -left-8 w-32 h-32 sm:w-48 sm:h-48 rounded-[2rem] overflow-hidden shadow-2xl border-[6px] border-white z-20 hidden md:block"
                   >
-                    <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=400&q=80" className="w-full h-full object-cover" alt="Travel Bag"/>
+                    <img src="http://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=686&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" className="w-full h-full object-cover" alt="Travel Bag"/>
                   </motion.div>
 
                   {/* Floating Image 2 */}

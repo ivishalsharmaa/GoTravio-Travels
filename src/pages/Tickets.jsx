@@ -1869,7 +1869,7 @@ const Tickets = () => {
                         style={{ willChange: 'opacity, transform' }}
                       >
                         <img 
-                          src="https://images.unsplash.com/photo-1587595431973-160d0d94add1?auto=format&fit=crop&q=80&w=1200" 
+                          src="https://plus.unsplash.com/premium_photo-1697730286559-98b1a193eef6?q=80&w=1018&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
                           alt="Jaipur, Rajasthan" 
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
